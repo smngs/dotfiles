@@ -1,0 +1,13 @@
+[user]
+	email = s.minegishi@mail.mine-313.com
+	name = Syota Minegishi
+[core]
+	quotepath = false
+    editor = nvim 
+[credential]
+	helper = cache
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f

@@ -1,0 +1,18 @@
+
+# Created by http://gitignore.io
+
+### Emacs ###
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+/elpa
+.elc
+auto-save-list
+tramp
+kkcrc
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
