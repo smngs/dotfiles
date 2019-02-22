@@ -63,8 +63,8 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <down> gj
 nnoremap <up> gk
-noremap ; :
-noremap : ;
+" noremap ; :
+" noremap : ;
 
 set backspace=indent,eol,start
 
@@ -88,3 +88,23 @@ if &term=~ "xterm"
 
     inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
 endif 
+
+" Plugins
+let g:lightline = {'colorscheme': 'wombat'}
+
+" previm
+let g:previm_disable_default_css = 1
+let g:previm_custom_css_path = '~/Dotfiles/.config/nvim/markdown.css'
+
+" vimtex
+let g:vimtex_fold_envs = 0
+let g:vimtex_view_general_viewer = 'evince'
+let g:vimtex_view_general_options = '-r @line @pdf @tex'
+let g:vimtex_compiler_latexmk = {
+      \ 'options' : [
+      \   '-verbose',
+      \   '-file-line-error',
+      \   '-synctex=1',
+      \   '-interaction=nonstopmode',
+      \ ]}
+let g:vimtex_compiler_progname = 'nvr'

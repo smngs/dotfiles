@@ -213,5 +213,4 @@ exec_always --no-startup-id blueman-applet --enable=ldac
 
 # Power managements
 exec_always sudo tlp start
-exec_always sudo powertop --auto-tune
 
