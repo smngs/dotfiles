@@ -63,8 +63,8 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <down> gj
 nnoremap <up> gk
-noremap ; :
-noremap : ;
+" noremap ; :
+" noremap : ;
 
 set backspace=indent,eol,start
 
