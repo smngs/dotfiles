@@ -16,24 +16,16 @@ repo = 'edkolev/tmuxline.vim'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
-    let g:lightline = {'colorscheme': 'wombat'}
 '''
 
 # LaTeX
 [[plugins]]
 repo = 'lervag/vimtex'
-hook_source = '''
-let g:vimtex_fold_envs = 0
-let g:vimtex_view_general_viewer = 'evince'
-let g:vimtex_view_general_options = '-r @line @pdf @tex'
-let g:vimtex_compiler_latexmk = {
-      \ 'options' : [
-      \   '-verbose',
-      \   '-file-line-error',
-      \   '-synctex=1',
-      \   '-interaction=nonstopmode',
-      \ ]}
-let g:vimtex_compiler_progname = 'nvr'
-'''
 
-
+# markdown
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+[[plugins]]
+repo = 'kannokanno/previm'
+[[plugins]]
+repo = 'tyru/open-browser.vim'
