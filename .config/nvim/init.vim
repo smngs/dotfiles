@@ -90,7 +90,14 @@ if &term=~ "xterm"
 endif 
 
 " Plugins
+" lightline
 let g:lightline = {'colorscheme': 'wombat'}
+
+" vim-markdown
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal = 0
+let g:tex_conceal = 0
+let g:vim_markdown_math = 1
 
 " previm
 let g:previm_disable_default_css = 1
@@ -108,3 +115,27 @@ let g:vimtex_compiler_latexmk = {
       \   '-interaction=nonstopmode',
       \ ]}
 let g:vimtex_compiler_progname = 'nvr'
+
+" snippets
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" " For conceal markers.
+" if has('conceal')
+"   set conceallevel=2 concealcursor=niv
+" endif
+
+let g:tex_flavor='latex' 
+
+"set snippet file dir
+let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/,~/.vim/snippets'
