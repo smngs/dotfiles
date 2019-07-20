@@ -1,0 +1,14 @@
+{
+	"windowPosition": [
+		963,
+		41
+	],
+	"windowSize": [
+		945,
+		1027
+	],
+	"hyper": {
+		"plugins": "{\"plugins\":[\"hyper-iceberg\",\"hyper-tab-icons-plus\"],\"localPlugins\":[]}",
+		"plugin-versions": "[[\"hyper-iceberg\",\"0.2.0\"],[\"hyper-tab-icons-plus\",\"2.2.7\"]]"
+	}
+}
