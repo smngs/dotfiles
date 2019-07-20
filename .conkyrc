@@ -1,0 +1,198 @@
+#==============================================================================
+#                               conky Simple
+# Date    : 07/08/2016
+# Author  : AndeOn
+# Version : v0.1
+# License : Distributed under the terms of GNU GPL version 2 
+# 
+# 
+# conky:		https://github.com/brndnmtthws/conky
+# conky Manager:	http://www.teejeetech.in/p/conky-manager.html
+#==============================================================================
+# conky configuration
+
+# Set to yes if you want Conky to be forked in the background
+background yes
+
+# Update interval in seconds
+update_interval 1
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+# number of net samples to average
+# set to 1 to disable averaging
+net_avg_samples 2
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+double_buffer yes
+text_buffer_size 2048
+
+# Add spaces to keep things from moving about?  This only affects certain objects.
+use_spacer right
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 60
+gap_y 100
+
+# Minimum size of text area
+minimum_size 30 0
+maximum_width 2000
+
+
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+own_window_type override
+own_window_transparent yes
+own_window_argb_visual yes
+own_window_argb_visual no
+own_window_colour 000000
+own_window_argb_value 0
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders no
+draw_graph_borders no
+
+# Stippled borders?
+stippled_borders 0
+
+# border margins
+border_margin 4
+
+# border width
+border_width 1
+
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+# Use Xft?
+use_xft yes
+
+# Xft font when Xft is enabled
+font Misc Tamsyn:style=Regular:size=8
+
+# Text alpha when using Xft
+xftalpha 0.5
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# Default colors and also border colors
+default_color white
+default_shade_color black
+default_outline_color white
+# Shades of Gray
+color1 DDDDDD
+color2 AAAAAA
+color3 888888
+color4 ffa54f # Orange
+color5 77B753 # Green
+color6 3a5153 # DarkGrey
+
+# Header with base system info
+# stuff after 'TEXT' will be formatted on screen
+own_window_argb_value 0
+own_window_argb_visual yes
+own_window_colour 000000
+
+TEXT
+#SYSTEM DETAILS:
+${color4}SYSTEM ${color6}${hr 2}
+${color}OS: ${alignr}Arch Linux
+KERNEL: $alignr$sysname $kernel ($machine)
+UPTIME: $alignr$uptime
+BATTERY: $alignr ${battery BAT0} (${battery_time BAT0})
+RUNNING PROCESSES: ${alignr}$processes (${color4}$running_processes Executing${color})
+
+${color4}CPU USAGE ${color6}${hr 2 }
+${color}
+
+${color}MODEL: ${execi 1000 cat /proc/cpuinfo | grep 'model name' | sed -e 's/model name.*: //'| uniq}
+${color}FREQUENCY: ${alignr}${freq} MHz ${color3}(${cpu cpu1}%)
+${color}TEMPERTURE: ${alignr}${acpitemp}°C
+
+${color0}CPU Usage:
+$color $cpu% ${color6}${cpubar}$color
+
+${color0}1:${color}${cpugraph cpu1, 40,210 ffff00 ff0000 -t}${alignr}${color0}2:${color}${cpugraph cpu2, 40,210 ffff00 ff0000 -t}
+${color0}3:${color}${cpugraph cpu3, 40,210 ffff00 ff0000 -t}${alignr}${color0}4:${color}${cpugraph cpu4, 40,210 ffff00 ff0000 -t}
+${color0}5:${color}${cpugraph cpu5, 40,210 ffff00 ff0000 -t}${alignr}${color0}6:${color}${cpugraph cpu6, 40,210 ffff00 ff0000 -t}
+${color0}7:${color}${cpugraph cpu7, 40,210 ffff00 ff0000 -t}${alignr}${color0}8:${color}${cpugraph cpu8, 40,210 ffff00 ff0000 -t}
+
+${color3} NAME              PID    CPU %   MEM$color
+${color2} ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}$color
+ ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+ ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+ ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
+ ${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
+
+${color4}MEMORY USAGE ${color6}${hr 2 }${color}
+
+${color0}RAM Usage: ${color}$mem / $memmax
+$color $memperc% ${color6}${membar}$color
+
+${color0}Swap Usage: ${color}$swap / $swapmax
+$color $swapperc% ${color6}${swapbar}$color
+
+${color0}${memgraph 40,450 ffff00 ff0000 -t}
+
+${color3} NAME              PID    CPU %   MEM$color
+${color2} ${top_mem name 1} ${top_mem pid 1} ${top_mem cpu 1} ${top_mem mem 1}$color
+ ${top_mem name 2} ${top_mem pid 2} ${top_mem cpu 2} ${top_mem mem 2}
+ ${top_mem name 3} ${top_mem pid 3} ${top_mem cpu 3} ${top_mem mem 3}
+ ${top_mem name 4} ${top_mem pid 4} ${top_mem cpu 4} ${top_mem mem 4}
+ ${top_mem name 5} ${top_mem pid 5} ${top_mem cpu 5} ${top_mem mem 5}
+
+${color4}DISK USAGE ${color6}${hr 2 }
+
+${color}/: ${alignr}${fs_used /}/${fs_size /}
+$color ${fs_used_perc /}% ${color6}${fs_bar}$color
+
+${color}/home: ${alignr}${fs_used /home}/${fs_size /home}
+$color ${fs_used_perc /home}% ${color6}${fs_bar}$color
+
+${color0}Reads: $color$diskio_read/s${alignr}${color0}Writes: $color$diskio_write/s
+${color8}${diskiograph_read 40,210 33FF00 FF3333 scale -t}$color${alignr}${color8}${diskiograph_write 40,210 33FF00 FF3333 scale -t}$color
+
+${color4}INTERNET ${color6}${hr 2 }
+
+${color}WIRELESS:
+${color}SSID: ${alignr} ${color}${wireless_essid wlp2s0}
+${color}SIGNAL STRENGTH: ${alignr} ${color1}${wireless_link_qual wlp2s0}%
+${color}WLAN IP: ${alignr} ${color}${addr wlp2s0}
+${color}VPN IP: ${alignr} ${color}${addr tun0}
+${color}MAC: ${alignr} ${color}${wireless_ap wlp2s0}
+
+${color0}Wireless (${addr wlp2s0})
+${color0}Down:$color ${downspeed wlp2s0}/s ${alignr}${color0}Up:$color ${upspeed wlp2s0}/s
+${color0}Total:$color ${totaldown wlp2s0} ${alignr}${color0}Total: $color${totalup wlp2s0}
+${color0}${downspeedgraph wlp2s0 40,210 000000 00ff00} ${alignr}${upspeedgraph wlp2s0 40,210 000000 ff0000}$color
+
+${color0}VPN (${addr tun0})
+${color0}Down:$color ${downspeed tun0}/s ${alignr}${color0}Up:$color ${upspeed tun0}/s
+${color0}Total:$color ${totaldown tun0} ${alignr}${color0}Total: $color${totalup tun0}
+${color0}${downspeedgraph tun0 40,210 000000 00ff00} ${alignr}${upspeedgraph tun0 40,210 000000 ff0000}$color
+
+${color}${font :size=10:style=Bold}${alignc} "Laziness, Impatience, and Hubris"
+${color}${font :size=9}${alignc} By Larry Wall

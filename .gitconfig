@@ -4,6 +4,7 @@
 [core]
 	quotepath = false
     editor = nvim 
+	precomposeunicode = true
 [credential]
 	helper = cache
 [filter "lfs"]

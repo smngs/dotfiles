@@ -8,6 +8,16 @@ repo = 'cespare/vim-toml'
 [[plugins]]
 repo = 'Yggdroot/indentLine'
 
+# snippet
+[[plugins]]
+repo = 'Shougo/neocomplete.vim'
+[[plugins]]
+repo = 'Shougo/neocomplcache.vim'
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+[[plugins]]
+repo = 'shougo/neosnippet-snippets'
+
 # Appearance
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
@@ -15,12 +25,21 @@ repo = 'cocopon/iceberg.vim'
 repo = 'edkolev/tmuxline.vim'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
-hook_add = '''
-'''
+
+# Git
+[[plugins]]
+repo = "airblade/vim-gitgutter"
+[[plugins]]
+repo = "tpope/vim-fugitive"
+
 
 # LaTeX
 [[plugins]]
 repo = 'lervag/vimtex'
+
+# yaml
+[[plugins]]
+repo = 'chase/vim-ansible-yaml'
 
 # markdown
 [[plugins]]
@@ -29,3 +48,5 @@ repo = 'plasticboy/vim-markdown'
 repo = 'kannokanno/previm'
 [[plugins]]
 repo = 'tyru/open-browser.vim'
+[[plugins]]
+repo = 'dhruvasagar/vim-table-mode'

@@ -172,18 +172,21 @@ gaps inner 6
 
 # App Settings
 for_window [class="Pavucontrol"] floating enable, resize set 1200 800
+for_window [class="conky"] floating enable, resize set 1200 800
 for_window [class="Fcitx-config-gtk3"] floating enable, resize set 1200 800
 for_window [class="mozc_tool"] floating enable, resize set 1200 800
 for_window [class="Blueman-manager"] floating enable, resize set 1200 800
+for_window [class="system-config-printer"] floating enable, resize set 1200 800
+for_window [class="Lxappearance"] floating enable, resize set 600 400
 
 set $Locker light-locker-command -l && sleep 1
-set $mode_system System (l) lock, (e) logout, (h) hybrid-sleep, (r) reboot, (s) shutdown
+set $mode_system System (l) lock, (e) logout, (h) hybrid-sleep, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
     bindsym l exec --no-startup-id $Locker, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
     bindsym h exec systemctl hybrid-sleep, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym s exec --no-startup-id systemctl poweroff -i, mode "default"
+    bindsym shift+s exec --no-startup-id sudo shutdown now, mode "default"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
@@ -194,22 +197,30 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pulseaudio-ctl up +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id pulseaudio-ctl down 5%
 bindsym XF86AudioMute exec --no-startup-id pulseaudio-ctl mute
 
+# Screen brightness controls
+bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
+bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
+
 # Applications
-exec_always --no-startup-id hyper
 bindsym $Mod+i exec google-chrome-stable
+
+assign [class="(?i)slack" ] 9
 
 # Daemons
 exec_always --no-startup-id xrandr --output eDP-1 --brightness 0.75
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id compton -c
+exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
 exec_always --no-startup-id light-locker --lock-on-suspend
 exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/wallpaper.jpg
 exec_always --no-startup-id fcitx
+exec_always --no-startup-id conky
 exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
+exec_always --no-startup-id slack
 
 # Applets
 exec_always --no-startup-id nm-applet
-exec_always --no-startup-id blueman-applet --enable=ldac
+exec_always --no-startup-id blueman-applet
+exec_always --no-startup-id system-config-printer-applet
 
 # Power managements
 exec_always sudo tlp start
