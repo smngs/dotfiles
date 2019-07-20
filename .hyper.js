@@ -139,7 +139,7 @@ module.exports = {
   //   `project#1.0.1`
 	plugins: [
 		"hyper-iceberg",
-		"hyper-tab-icons-plus"
+		"hyper-tab-icons-plus",
 	],
 
   // in development, you can create a directory under

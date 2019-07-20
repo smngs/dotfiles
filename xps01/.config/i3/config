@@ -172,9 +172,11 @@ gaps inner 6
 
 # App Settings
 for_window [class="Pavucontrol"] floating enable, resize set 1200 800
+for_window [class="conky"] floating enable, resize set 1200 800
 for_window [class="Fcitx-config-gtk3"] floating enable, resize set 1200 800
 for_window [class="mozc_tool"] floating enable, resize set 1200 800
 for_window [class="Blueman-manager"] floating enable, resize set 1200 800
+for_window [class="system-config-printer"] floating enable, resize set 1200 800
 for_window [class="Lxappearance"] floating enable, resize set 600 400
 
 set $Locker light-locker-command -l && sleep 1
@@ -201,20 +203,24 @@ bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
 # Applications
 bindsym $Mod+i exec google-chrome-stable
-bindsym $Mod+ctrl+c exec code
-bindsym $Mod+ctrl+a exec atom
+
+assign [class="(?i)slack" ] 9
+
 # Daemons
 exec_always --no-startup-id xrandr --output eDP-1 --brightness 0.75
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id compton -c
+exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
 exec_always --no-startup-id light-locker --lock-on-suspend
 exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/wallpaper.jpg
 exec_always --no-startup-id fcitx
+exec_always --no-startup-id conky
 exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
+exec_always --no-startup-id slack
 
 # Applets
 exec_always --no-startup-id nm-applet
-exec_always --no-startup-id blueman-applet --enable=ldac
+exec_always --no-startup-id blueman-applet
+exec_always --no-startup-id system-config-printer-applet
 
 # Power managements
 exec_always sudo tlp start

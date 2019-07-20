@@ -28,6 +28,8 @@ endfunction
 
 call s:load('plugins')
 
+filetype plugin on
+syntax on
 " Character code
 set fileencoding=utf-8
 set fileencodings=ucs-boms,utf-8,euc-jp,cp932
@@ -51,7 +53,6 @@ set hlsearch
 " Lightline
 set laststatus=2
 set t_Co=256
-syntax enable
 
 nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
 
