@@ -1,6 +1,6 @@
 DOTPATH    := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 CANDIDATES := $(wildcard .??*) bin
-EXCLUSIONS := .DS_Store .git .gitmodules pc01 xps01
+EXCLUSIONS := .DS_Store .git .gitmodules
 DOTFILES   := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
 
 .DEFAULT_GOAL := help
@@ -18,22 +18,13 @@ deploy: ## Create symlink to home directory
 init: ## Setup environment settings
 	@DOTPATH=$(DOTPATH) bash $(DOTPATH)/bin/init.sh
 
-init-pc01: ## Setup environment settings
-	@DOTPATH=$(DOTPATH) bash $(DOTPATH)/bin/init-pc01.sh
-
-init-xps01: ## Setup environment settings
-	@DOTPATH=$(DOTPATH) bash $(DOTPATH)/bin/init-xps01.sh
-
 update: ## Fetch changes for this repo
 	git pull origin master
 	git submodule init
 	git submodule update
 	git submodule foreach git pull origin master
 
-install-xps01: update deploy init-xps01 ## Run make update, deploy, init
-	@exec $$SHELL
-
-install-pc01: update deploy init-pc01 ## Run make update, deploy, init
+install: update deploy init ## Run make update, deploy, init
 	@exec $$SHELL
 
 clean: ## Remove Dotfiles from home directory
@@ -41,7 +32,7 @@ clean: ## Remove Dotfiles from home directory
 	@-$(foreach val, $(DOTFILES), rm -vrf $(HOME)/$(val);)
 
 destroy: clean ## Remove this repository
-	@echo 'Romove this repository.'
+	@echo 'Remove this repository.'
 	-rm -rf $(DOTPATH)
 
 help: ## Self-documented Makefile
