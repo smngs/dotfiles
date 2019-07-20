@@ -1,6 +1,8 @@
 DOTPATH    := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+DOTCONFIGPATH := .config
+HOME       := ~
 CANDIDATES := $(wildcard .??*) bin
-EXCLUSIONS := .DS_Store .git .gitmodules
+EXCLUSIONS := .DS_Store .git .gitmodules .config
 DOTFILES   := $(filter-out $(EXCLUSIONS), $(CANDIDATES))
 
 .DEFAULT_GOAL := help
@@ -14,6 +16,13 @@ deploy: ## Create symlink to home directory
 	@echo '==> Start to deploy dotfiles to home directory.'
 	@echo ''
 	@$(foreach val, $(DOTFILES), ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
+	@echo '==> Start to deploy .config to home directory.'
+	@echo ''
+	@cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
+	@for file in `\find . -maxdepth 8 -type f`; do \ 
+		ln -snfv $${DOTPATH}/$${DOTCONFIGPATH}/$${file:2} $${HOME}/$${DOT_CONFIG_DIRECTORY}/$${file:2} \
+	done
+	
 
 init: ## Setup environment settings
 	@DOTPATH=$(DOTPATH) bash $(DOTPATH)/bin/init.sh
