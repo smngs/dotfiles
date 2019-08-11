@@ -13,7 +13,7 @@
   '(
     powerline-evil
 	airline-themes
-	atom-one-dark-theme
+;	atom-one-dark-theme
 	dashboard
     yatex
     mozc
@@ -48,19 +48,21 @@
 (add-to-list 'default-frame-alist '(font . "CodeM-12" ))
 
 ; --- atom-one-dark --- ;
-(load-theme 'atom-one-dark t)
+(when window-system
+(load-theme 'iceberg t))
 
 ; --- evil-mode --- ;
 (require 'evil)
 (evil-mode 1)
 
-(with-eval-after-load 'evil-maps
-  (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-  (define-key evil-motion-state-map (kbd ";") 'evil-ex))
+;(with-eval-after-load 'evil-maps
+;   (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
+;   (define-key evil-motion-state-map (kbd ";") 'evil-ex)
+;)
 
 ; --- Powerline --- ;
 (require 'powerline-evil)
-
+ 
 (require 'airline-themes)
 (load-theme 'airline-powerlineish t)
 
