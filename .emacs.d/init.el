@@ -12,8 +12,8 @@
 (defvar installing-package-list
   '(
     powerline-evil
-	airline-themes
-;	atom-one-dark-theme
+    airline-themes
+	powerline
 	dashboard
     yatex
     mozc
@@ -23,7 +23,6 @@
     uuidgen
     markdown-mode
     magit
-	tabbar
     rainbow-delimiters
 	yaml-mode
 	docker-tramp
@@ -33,6 +32,7 @@
 	yasnippet
 	elpy
 	python-mode
+	diminish
 	flymake-cursor
 	flymake-python-pyflakes
     ))
@@ -47,24 +47,21 @@
 
 (add-to-list 'default-frame-alist '(font . "CodeM-12" ))
 
-; --- atom-one-dark --- ;
-(when window-system
-(load-theme 'iceberg t))
+; --- color-theme (iceberg) --- ;
+(load-theme 'iceberg t)
 
 ; --- evil-mode --- ;
 (require 'evil)
 (evil-mode 1)
 
-;(with-eval-after-load 'evil-maps
-;   (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-;   (define-key evil-motion-state-map (kbd ";") 'evil-ex)
-;)
-
 ; --- Powerline --- ;
 (require 'powerline-evil)
- 
+(powerline-evil-vim-theme)
 (require 'airline-themes)
-(load-theme 'airline-powerlineish t)
+(load-theme 'airline-dark t)
+
+(setq airline-helm-colors 0)
+(setq airline-cursor-colors 0)
 
 ; --- auto-complete --- ;
 (require 'auto-complete-config)
@@ -121,17 +118,6 @@
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-(require 'cl-lib)
-(require 'color)
-(defun rainbow-delimiters-using-stronger-colors ()
-  (interactive)
-  (cl-loop
-   for index from 1 to rainbow-delimiters-max-face-count
-   do
-   (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
-    (cl-callf color-saturate-name (face-foreground face) 30))))
-(add-hook 'emacs-startup-hook 'rainbow-delimiters-using-stronger-colors)
-
 ; --- Magit --- ;
 (global-set-key (kbd "C-c g") 'magit-status)
 
@@ -147,66 +133,27 @@
 ; --- yasnippet --- ;
 (yas-global-mode t)
 
-; --- tabbar --- ;
-(when window-system
-(require 'tabbar)
-(tabbar-mode 1)
+; --- diminished mode --- ;
 
-(tabbar-mwheel-mode -1)
-(setq tabbar-buffer-groups-function nil)
+(defmacro safe-diminish (file mode &optional new-name)
+  `(with-eval-after-load ,file
+     (diminish ,mode ,new-name)))
+(safe-diminish "abbrev" 'abbrev-mode)
+(safe-diminish "auto-complete" 'auto-complete-mode)
+(safe-diminish "eldoc" 'eldoc-mode)
+(safe-diminish "flycheck" 'flycheck-mode)
+(safe-diminish "flyspell" 'flyspell-mode)
+(safe-diminish "helm-mode" 'helm-mode)
+(safe-diminish "paredit" 'paredit-mode)
+(safe-diminish "projectile" 'projectile-mode)
+(safe-diminish "rainbow-mode" 'rainbow-mode)
+(safe-diminish "simple" 'auto-fill-function)
+(safe-diminish "smartparens" 'smartparens-mode)
+(safe-diminish "smooth-scroll" 'smooth-scroll-mode)
+(safe-diminish "undo-tree" 'undo-tree-mode)
+(safe-diminish "volatile-highlights" 'volatile-highlights-mode)
+(safe-diminish "yasnippet" 'yas-minor-mode)
 
-(dolist (btn '(tabbar-buffer-home-button
-               tabbar-scroll-left-button
-               tabbar-scroll-right-button))
-        (set btn (cons (cons "" nil)
-                 (cons "" nil))))
-
-(setq tabbar-auto-scroll-flag nil)
-(setq tabbar-separator '(1.5))
-
-(set-face-attribute
- 'tabbar-default nil
- :family "CodeM"
- :background "#282C34"
- :foreground "gray28"
- :height 0.9)
-(set-face-attribute
- 'tabbar-unselected nil
- :background "#282C34"
- :foreground "grey28"
- :box '(:line-width 3 :color "#282C34"))
-(set-face-attribute
- 'tabbar-selected nil
- :background "#282C34"
- :foreground "gray72"
- :box '(:line-width 3 :color "#282C34"))
-(set-face-attribute
- 'tabbar-button nil
- :box nil)
-
-(defvar my-tabbar-displayed-buffers
- '("scratch*" "*Messages*" "*Backtrace*" "*Colors*" "*Faces*")
-  "*Regexps matches buffer names always included tabs.")
-(defun my-tabbar-buffer-list ()
-  "Return the list of buffers to show in tabs.
-Exclude buffers whose name starts with a space or an asterisk.
-The current buffer and buffers matches `my-tabbar-displayed-buffers'
-are always included."
-  (let* ((hides (list ?\  ?\*))
-         (re (regexp-opt my-tabbar-displayed-buffers))
-         (cur-buf (current-buffer))
-         (tabs (delq nil
-                     (mapcar (lambda (buf)
-                               (let ((name (buffer-name buf)))
-                                 (when (or (string-match re name)
-                                           (not (memq (aref name 0) hides)))
-                                   buf)))
-                             (buffer-list)))))
-    (if (memq cur-buf tabs)
-        tabs
-      (cons cur-buf tabs))))
-(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
-)
 ; --- docker-tramp --- ;
 (require 'docker-tramp-compat)
 
@@ -268,10 +215,7 @@ are always included."
 (global-hl-line-mode)
 
 (setq-default tab-width 4)
-
-(cond(window-system
-      (setq x-select-enable-clipboard t)
-      ))
+(setq x-select-enable-clipboard t)
 
 (setq backup-directory-alist
   (cons (cons ".*" (expand-file-name "~/.emacs.d/backup"))
@@ -290,18 +234,3 @@ are always included."
 (setq inhibit-startup-screen t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-	(yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters powerline-evil mozc markdown-mode magit dockerfile-mode docker-tramp atom-one-dark-theme airline-themes))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
