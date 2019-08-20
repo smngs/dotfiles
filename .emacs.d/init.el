@@ -19,10 +19,12 @@
     mozc
 	evil
 	websocket
+	xclip
     web-server
     uuidgen
     markdown-mode
-    magit
+	magit
+    evil-magit
     rainbow-delimiters
 	yaml-mode
 	docker-tramp
@@ -119,6 +121,7 @@
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 ; --- Magit --- ;
+(require 'evil-magit)
 (global-set-key (kbd "C-c g") 'magit-status)
 
 ;  --- yaml-mode --- ;
@@ -134,7 +137,6 @@
 (yas-global-mode t)
 
 ; --- diminished mode --- ;
-
 (defmacro safe-diminish (file mode &optional new-name)
   `(with-eval-after-load ,file
      (diminish ,mode ,new-name)))
@@ -170,13 +172,13 @@
 )
 
 ; Time
-(setq display-time-string-forms
-      '((format "%s/%s/%s(%s) %s:%s" year month day dayname 24-hours minutes)
-        load
-        (if mail " Mail" "")))
-(setq display-time-kawakami-form t)
-(setq display-time-24hr-format t)
-(display-time)
+; (setq display-time-string-forms
+;       '((format "%s/%s/%s(%s) %s:%s" year month day dayname 24-hours minutes)
+;         load
+;         (if mail " Mail" "")))
+; (setq display-time-kawakami-form t)
+; (setq display-time-24hr-format t)
+; (display-time)
 
 ; Language
 (set-locale-environment nil)
@@ -187,6 +189,9 @@
 (setq default-buffer-file-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (prefer-coding-system 'utf-8)
+
+; Tab
+(setq default-tab-width 4)
 
 ; BackUp Files
 (setq create-lockfiles nil)
@@ -217,6 +222,9 @@
 (setq-default tab-width 4)
 (setq x-select-enable-clipboard t)
 
+(require 'xclip)
+(xclip-mode 1)
+
 (setq backup-directory-alist
   (cons (cons ".*" (expand-file-name "~/.emacs.d/backup"))
         backup-directory-alist))
@@ -234,3 +242,17 @@
 (setq inhibit-startup-screen t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+	(diminish yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters python-mode py-autopep8 powerline-evil mozc markdown-mode magit flymake-python-pyflakes flymake-cursor elpy dockerfile-mode docker-tramp dashboard auto-complete atom-one-dark-theme airline-themes))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
