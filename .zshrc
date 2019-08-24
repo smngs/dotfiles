@@ -6,7 +6,6 @@ setopt auto_list
 setopt auto_menu
 setopt auto_cd
 setopt correct
-eval `tset -s xterm-24bits`
 
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
@@ -75,8 +74,9 @@ alias gps='git push'
 
 # emacs
 alias e='emacsclient -nw -a ""'
-alias emacs='emacsclient -nw -a ""'
+alias emacs='emacs -nw'
 alias ekill="emacsclient -e '(kill-emacs)'"
+alias erestart="ekill && e"
 
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
