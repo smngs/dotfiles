@@ -6,7 +6,6 @@
 		("marmalade" . "http;//marmalade-repo.org/packages")
         ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
-
 (require 'cl)
 
 (defvar installing-package-list
@@ -14,10 +13,10 @@
     powerline-evil
     airline-themes
 	powerline
-	dashboard
     yatex
     mozc
 	evil
+	evil-collection
 	websocket
 	xclip
     web-server
@@ -25,18 +24,20 @@
     markdown-mode
 	magit
     evil-magit
+	git-gutter-fringe
     rainbow-delimiters
 	yaml-mode
 	docker-tramp
 	dockerfile-mode
-	auto-complete
+	helm
 	py-autopep8
 	yasnippet
+	helm-c-yasnippet
 	elpy
 	python-mode
 	diminish
-	flymake-cursor
-	flymake-python-pyflakes
+	flycheck
+	helm-flycheck
     ))
 
 (let ((not-installed (loop for x in installing-package-list
@@ -53,6 +54,13 @@
 (load-theme 'iceberg t)
 
 ; --- evil-mode --- ;
+(setq evil-want-integration t)
+(setq evil-want-keybinding nil)
+(require 'evil)
+(when (require 'evil-collection nil t)
+  (evil-collection-init))
+
+; --- evil-mode --- ;
 (require 'evil)
 (evil-mode 1)
 
@@ -60,33 +68,46 @@
 (require 'powerline-evil)
 (powerline-evil-vim-theme)
 (require 'airline-themes)
-(load-theme 'airline-dark t)
+(load-theme 'airline-powerlineish t)
 
 (setq airline-helm-colors 0)
 (setq airline-cursor-colors 0)
 
-; --- auto-complete --- ;
-(require 'auto-complete-config)
-(ac-config-default)
+; --- helm --- ;
+(require 'helm)
+(require 'helm-config)
 
-; --- pyflakes --- ;
-(add-hook 'find-file-hook 'flymake-find-file-hook)
-(when (load "flymake" t)
-  (defun flymake-pyflakes-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "/usr/bin/pyflakes"  (list local-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pyflakes-init)))
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
 
-(defun flymake-show-help ()
-  (when (get-char-property (point) 'flymake-overlay)
-    (let ((help (get-char-property (point) 'help-echo)))
-      (if help (message "%s" help)))))
-(add-hook 'post-command-hook 'flymake-show-help)
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z")  'helm-select-action)
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-split-window-in-side-p t
+      helm-move-to-line-cycle-in-source t
+      helm-ff-search-library-in-sexp t
+      helm-scroll-amount 8
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+(helm-autoresize-mode 1)
+(helm-mode 1)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-M-x-fuzzy-match t)
+
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+; --- flycheck --- ;
+(global-flycheck-mode)
 
 ; --- Yatex --- ;
 (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
@@ -124,6 +145,9 @@
 (require 'evil-magit)
 (global-set-key (kbd "C-c g") 'magit-status)
 
+; --- git-gutter --- ;
+(require 'git-gutter-fringe)
+
 ;  --- yaml-mode --- ;
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
@@ -134,7 +158,12 @@
 (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ; --- yasnippet --- ;
-(yas-global-mode t)
+(require 'yasnippet)
+(require 'helm-c-yasnippet)
+(setq helm-yas-space-match-any-greedy t)
+(global-set-key (kbd "C-c y") 'helm-yas-complete)
+(push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
+(yas-global-mode 1)
 
 ; --- diminished mode --- ;
 (defmacro safe-diminish (file mode &optional new-name)
@@ -151,7 +180,7 @@
 (safe-diminish "rainbow-mode" 'rainbow-mode)
 (safe-diminish "simple" 'auto-fill-function)
 (safe-diminish "smartparens" 'smartparens-mode)
-(safe-diminish "smooth-scroll" 'smooth-scroll-mode)
+
 (safe-diminish "undo-tree" 'undo-tree-mode)
 (safe-diminish "volatile-highlights" 'volatile-highlights-mode)
 (safe-diminish "yasnippet" 'yas-minor-mode)
@@ -249,7 +278,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(diminish yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters python-mode py-autopep8 powerline-evil mozc markdown-mode magit flymake-python-pyflakes flymake-cursor elpy dockerfile-mode docker-tramp dashboard auto-complete atom-one-dark-theme airline-themes))))
+	(dashboard-project-status diminish yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters python-mode py-autopep8 powerline-evil mozc markdown-mode magit flymake-python-pyflakes flymake-cursor elpy dockerfile-mode docker-tramp dashboard auto-complete atom-one-dark-theme airline-themes))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
