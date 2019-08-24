@@ -6,13 +6,16 @@ module.exports = {
   config: {
     // choose either `'stable'` for receiving highly polished,
     // or `'canary'` for less polished but more frequent updates
-    updateChannel: 'stable',
+    updateChannel: 'canary',
 
     // default font size in pixels for all tabs
-    fontSize: 12,
+    fontSize: 11,
 
     // font family with optional fallbacks
-    fontFamily: 'CodeM',
+    // fontFamily: 'CodeM',
+	//fontFamily: "'SauceCodePro', 'CodeM'",
+	  fontFamily: "'SauceCodePro Nerd Font Mono', 'Migu 1M'",
+    //fontFamily: 'Cica',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',

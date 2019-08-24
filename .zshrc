@@ -48,9 +48,9 @@ zplug load
 
 # alias
 # terminal
-alias ls='ls --color=auto'
-alias la='ls -a'
-alias ll='ls -la'
+alias ls='colorls --color=auto'
+alias la='colorls -a'
+alias ll='colorls -la'
 alias tree='tree -C'
 alias rm='rm -i'
 alias mv='mv -i'
@@ -146,7 +146,7 @@ function do_enter() {
     pwd
 	echo
     echo -e "\e[0;33m--- ls ---\e[0m"
-    ls
+    colorls
     if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
         echo                                     	
         echo -e "\e[0;33m--- git status ---\e[0m"   
