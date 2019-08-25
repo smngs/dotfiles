@@ -12,10 +12,7 @@ module.exports = {
     fontSize: 11,
 
     // font family with optional fallbacks
-    // fontFamily: 'CodeM',
-	//fontFamily: "'SauceCodePro', 'CodeM'",
-	  fontFamily: "'SauceCodePro Nerd Font Mono', 'Migu 1M'",
-    //fontFamily: 'Cica',
+    fontFamily: 'CodeM',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',
