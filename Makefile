@@ -4,8 +4,6 @@ DOT_DIRECTORY="${HOME}/dotfiles"
 all:
 
 deploy: ## Create symlink to home directory
-	@echo '==> start to deploy dotfiles to home directory.'
-	@echo ''
 	@sh $(DOT_DIRECTORY)/bin/deploy.sh
 
 init: ## Setup environment settings
@@ -14,13 +12,22 @@ init: ## Setup environment settings
 test: ## Test dotfiles and init scripts
 	@sh $(DOT_DIRECTORY)/bin/test.sh
 
+backup: ## Backup dotfiles
+	@sh $(DOT_DIRECTORY)/bin/backup.sh
+
+clean: ## Cleanup dotfiles
+	@sh $(DOT_DIRECTORY)/bin/clean.sh
+
+destroy: clean ## Destroy dotfiles
+	@sh rm -rf $(DOT_DIRECTORY)
+
 update: ## Fetch changes for this repo
 	git pull origin master
 	git submodule init
 	git submodule update
 	git submodule foreach git pull origin master
 
-install: update deploy init ## Run make update, deploy, init
+install: backup update deploy init ## Run make backup, update, deploy, init
 	@exec $$SHELL
 
 help: ## Self-documented Makefile
