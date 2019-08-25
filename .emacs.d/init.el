@@ -30,6 +30,7 @@
 	docker-tramp
 	dockerfile-mode
 	helm
+	which-key
 	py-autopep8
 	yasnippet
 	helm-c-yasnippet
@@ -48,7 +49,7 @@
     (dolist (pkg not-installed)
         (package-install pkg))))
 
-(add-to-list 'default-frame-alist '(font . "CodeM-12" ))
+(add-to-list 'default-frame-alist '(font . "CodeM-10" ))
 
 ; --- color-theme (iceberg) --- ;
 (load-theme 'iceberg t)
@@ -72,6 +73,15 @@
 
 (setq airline-helm-colors 0)
 (setq airline-cursor-colors 0)
+
+; --- doom-modeline --- ;
+; (defun setup-custom-doom-modeline ()
+;   (doom-modeline-set-modeline 'my-simple-line 'default))
+; 
+; (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline)
+; 
+; (require 'doom-modeline)
+; (doom-modeline-mode 1)
 
 ; --- helm --- ;
 (require 'helm)
@@ -107,9 +117,12 @@
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
 ; --- flycheck --- ;
+(which-key-mode)
+
+; --- flycheck --- ;
 (global-flycheck-mode)
 
-; --- Yatex --- ;
+; --- YaTeX --- ;
 (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
 (setq auto-mode-alist
       (append '(("\\.tex$" . yatex-mode)
@@ -123,7 +136,16 @@
            YateX-use-font-lock t)
          (setq tex-command "latexmk")
          (setq dvi2-command "evince")
-         (setq tex-pdfview-command "xdg-open")))
+         (setq tex-pdfview-command "xdg-open"))
+)
+(add-hook 'yatex-mode-hook
+		  (function
+           (lambda ()
+         (YaTeX-define-key "\C-c" '(lambda () (interactive) (YaTeX-typeset-menu nil ?j)))
+)))
+
+; --- RefTeX --- ;
+(add-hook 'yatex-mode-hook 'turn-on-reftex)
 
 ; --- Mozc --- ;
 (require 'mozc)
@@ -278,7 +300,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(dashboard-project-status diminish yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters python-mode py-autopep8 powerline-evil mozc markdown-mode magit flymake-python-pyflakes flymake-cursor elpy dockerfile-mode docker-tramp dashboard auto-complete atom-one-dark-theme airline-themes))))
+	(doom-modeline dashboard-project-status diminish yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters python-mode py-autopep8 powerline-evil mozc markdown-mode magit flymake-python-pyflakes flymake-cursor elpy dockerfile-mode docker-tramp dashboard auto-complete atom-one-dark-theme airline-themes))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
