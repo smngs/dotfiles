@@ -6,35 +6,39 @@
 		("marmalade" . "http;//marmalade-repo.org/packages")
         ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
-
 (require 'cl)
 
 (defvar installing-package-list
   '(
     powerline-evil
-	airline-themes
-	atom-one-dark-theme
-	dashboard
+    airline-themes
+	powerline
     yatex
     mozc
 	evil
+	evil-collection
 	websocket
+	xclip
     web-server
     uuidgen
     markdown-mode
-    magit
-	tabbar
+	magit
+    evil-magit
+	git-gutter-fringe
     rainbow-delimiters
 	yaml-mode
 	docker-tramp
 	dockerfile-mode
-	auto-complete
+	helm
+	which-key
 	py-autopep8
 	yasnippet
+	helm-c-yasnippet
 	elpy
 	python-mode
-	flymake-cursor
-	flymake-python-pyflakes
+	diminish
+	flycheck
+	helm-flycheck
     ))
 
 (let ((not-installed (loop for x in installing-package-list
@@ -45,49 +49,80 @@
     (dolist (pkg not-installed)
         (package-install pkg))))
 
-(add-to-list 'default-frame-alist '(font . "CodeM-12" ))
+(add-to-list 'default-frame-alist '(font . "CodeM-10" ))
 
-; --- atom-one-dark --- ;
-(load-theme 'atom-one-dark t)
+; --- color-theme (iceberg) --- ;
+(load-theme 'iceberg t)
+
+; --- evil-mode --- ;
+(setq evil-want-integration t)
+(setq evil-want-keybinding nil)
+(require 'evil)
+(when (require 'evil-collection nil t)
+  (evil-collection-init))
 
 ; --- evil-mode --- ;
 (require 'evil)
 (evil-mode 1)
 
-(with-eval-after-load 'evil-maps
-  (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-  (define-key evil-motion-state-map (kbd ";") 'evil-ex))
-
 ; --- Powerline --- ;
 (require 'powerline-evil)
-
+(powerline-evil-vim-theme)
 (require 'airline-themes)
 (load-theme 'airline-powerlineish t)
 
-; --- auto-complete --- ;
-(require 'auto-complete-config)
-(ac-config-default)
+(setq airline-helm-colors 0)
+(setq airline-cursor-colors 0)
 
-; --- pyflakes --- ;
-(add-hook 'find-file-hook 'flymake-find-file-hook)
-(when (load "flymake" t)
-  (defun flymake-pyflakes-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "/usr/bin/pyflakes"  (list local-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pyflakes-init)))
+; --- doom-modeline --- ;
+; (defun setup-custom-doom-modeline ()
+;   (doom-modeline-set-modeline 'my-simple-line 'default))
+; 
+; (add-hook 'doom-modeline-mode-hook 'setup-custom-doom-modeline)
+; 
+; (require 'doom-modeline)
+; (doom-modeline-mode 1)
 
-(defun flymake-show-help ()
-  (when (get-char-property (point) 'flymake-overlay)
-    (let ((help (get-char-property (point) 'help-echo)))
-      (if help (message "%s" help)))))
-(add-hook 'post-command-hook 'flymake-show-help)
+; --- helm --- ;
+(require 'helm)
+(require 'helm-config)
 
-; --- Yatex --- ;
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z")  'helm-select-action)
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-split-window-in-side-p t
+      helm-move-to-line-cycle-in-source t
+      helm-ff-search-library-in-sexp t
+      helm-scroll-amount 8
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+(helm-autoresize-mode 1)
+(helm-mode 1)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-M-x-fuzzy-match t)
+
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+; --- flycheck --- ;
+(which-key-mode)
+
+; --- flycheck --- ;
+(global-flycheck-mode)
+
+; --- YaTeX --- ;
 (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
 (setq auto-mode-alist
       (append '(("\\.tex$" . yatex-mode)
@@ -101,7 +136,16 @@
            YateX-use-font-lock t)
          (setq tex-command "latexmk")
          (setq dvi2-command "evince")
-         (setq tex-pdfview-command "xdg-open")))
+         (setq tex-pdfview-command "xdg-open"))
+)
+(add-hook 'yatex-mode-hook
+		  (function
+           (lambda ()
+         (YaTeX-define-key "\C-c" '(lambda () (interactive) (YaTeX-typeset-menu nil ?j)))
+)))
+
+; --- RefTeX --- ;
+(add-hook 'yatex-mode-hook 'turn-on-reftex)
 
 ; --- Mozc --- ;
 (require 'mozc)
@@ -119,19 +163,12 @@
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-(require 'cl-lib)
-(require 'color)
-(defun rainbow-delimiters-using-stronger-colors ()
-  (interactive)
-  (cl-loop
-   for index from 1 to rainbow-delimiters-max-face-count
-   do
-   (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
-    (cl-callf color-saturate-name (face-foreground face) 30))))
-(add-hook 'emacs-startup-hook 'rainbow-delimiters-using-stronger-colors)
-
 ; --- Magit --- ;
+(require 'evil-magit)
 (global-set-key (kbd "C-c g") 'magit-status)
+
+; --- git-gutter --- ;
+(require 'git-gutter-fringe)
 
 ;  --- yaml-mode --- ;
 (require 'yaml-mode)
@@ -143,68 +180,33 @@
 (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ; --- yasnippet --- ;
-(yas-global-mode t)
+(require 'yasnippet)
+(require 'helm-c-yasnippet)
+(setq helm-yas-space-match-any-greedy t)
+(global-set-key (kbd "C-c y") 'helm-yas-complete)
+(push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
+(yas-global-mode 1)
 
-; --- tabbar --- ;
-(when window-system
-(require 'tabbar)
-(tabbar-mode 1)
+; --- diminished mode --- ;
+(defmacro safe-diminish (file mode &optional new-name)
+  `(with-eval-after-load ,file
+     (diminish ,mode ,new-name)))
+(safe-diminish "abbrev" 'abbrev-mode)
+(safe-diminish "auto-complete" 'auto-complete-mode)
+(safe-diminish "eldoc" 'eldoc-mode)
+(safe-diminish "flycheck" 'flycheck-mode)
+(safe-diminish "flyspell" 'flyspell-mode)
+(safe-diminish "helm-mode" 'helm-mode)
+(safe-diminish "paredit" 'paredit-mode)
+(safe-diminish "projectile" 'projectile-mode)
+(safe-diminish "rainbow-mode" 'rainbow-mode)
+(safe-diminish "simple" 'auto-fill-function)
+(safe-diminish "smartparens" 'smartparens-mode)
 
-(tabbar-mwheel-mode -1)
-(setq tabbar-buffer-groups-function nil)
+(safe-diminish "undo-tree" 'undo-tree-mode)
+(safe-diminish "volatile-highlights" 'volatile-highlights-mode)
+(safe-diminish "yasnippet" 'yas-minor-mode)
 
-(dolist (btn '(tabbar-buffer-home-button
-               tabbar-scroll-left-button
-               tabbar-scroll-right-button))
-        (set btn (cons (cons "" nil)
-                 (cons "" nil))))
-
-(setq tabbar-auto-scroll-flag nil)
-(setq tabbar-separator '(1.5))
-
-(set-face-attribute
- 'tabbar-default nil
- :family "CodeM"
- :background "#282C34"
- :foreground "gray28"
- :height 0.9)
-(set-face-attribute
- 'tabbar-unselected nil
- :background "#282C34"
- :foreground "grey28"
- :box '(:line-width 3 :color "#282C34"))
-(set-face-attribute
- 'tabbar-selected nil
- :background "#282C34"
- :foreground "gray72"
- :box '(:line-width 3 :color "#282C34"))
-(set-face-attribute
- 'tabbar-button nil
- :box nil)
-
-(defvar my-tabbar-displayed-buffers
- '("scratch*" "*Messages*" "*Backtrace*" "*Colors*" "*Faces*")
-  "*Regexps matches buffer names always included tabs.")
-(defun my-tabbar-buffer-list ()
-  "Return the list of buffers to show in tabs.
-Exclude buffers whose name starts with a space or an asterisk.
-The current buffer and buffers matches `my-tabbar-displayed-buffers'
-are always included."
-  (let* ((hides (list ?\  ?\*))
-         (re (regexp-opt my-tabbar-displayed-buffers))
-         (cur-buf (current-buffer))
-         (tabs (delq nil
-                     (mapcar (lambda (buf)
-                               (let ((name (buffer-name buf)))
-                                 (when (or (string-match re name)
-                                           (not (memq (aref name 0) hides)))
-                                   buf)))
-                             (buffer-list)))))
-    (if (memq cur-buf tabs)
-        tabs
-      (cons cur-buf tabs))))
-(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
-)
 ; --- docker-tramp --- ;
 (require 'docker-tramp-compat)
 
@@ -221,13 +223,13 @@ are always included."
 )
 
 ; Time
-(setq display-time-string-forms
-      '((format "%s/%s/%s(%s) %s:%s" year month day dayname 24-hours minutes)
-        load
-        (if mail " Mail" "")))
-(setq display-time-kawakami-form t)
-(setq display-time-24hr-format t)
-(display-time)
+; (setq display-time-string-forms
+;       '((format "%s/%s/%s(%s) %s:%s" year month day dayname 24-hours minutes)
+;         load
+;         (if mail " Mail" "")))
+; (setq display-time-kawakami-form t)
+; (setq display-time-24hr-format t)
+; (display-time)
 
 ; Language
 (set-locale-environment nil)
@@ -238,6 +240,9 @@ are always included."
 (setq default-buffer-file-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (prefer-coding-system 'utf-8)
+
+; Tab
+(setq default-tab-width 4)
 
 ; BackUp Files
 (setq create-lockfiles nil)
@@ -266,10 +271,10 @@ are always included."
 (global-hl-line-mode)
 
 (setq-default tab-width 4)
+(setq x-select-enable-clipboard t)
 
-(cond(window-system
-      (setq x-select-enable-clipboard t)
-      ))
+(require 'xclip)
+(xclip-mode 1)
 
 (setq backup-directory-alist
   (cons (cons ".*" (expand-file-name "~/.emacs.d/backup"))
@@ -288,7 +293,6 @@ are always included."
 (setq inhibit-startup-screen t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -296,7 +300,7 @@ are always included."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters powerline-evil mozc markdown-mode magit dockerfile-mode docker-tramp atom-one-dark-theme airline-themes))))
+	(doom-modeline dashboard-project-status diminish yatex yaml-mode websocket web-server uuidgen tabbar rainbow-delimiters python-mode py-autopep8 powerline-evil mozc markdown-mode magit flymake-python-pyflakes flymake-cursor elpy dockerfile-mode docker-tramp dashboard auto-complete atom-one-dark-theme airline-themes))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

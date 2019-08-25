@@ -13,7 +13,7 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 export TERMINAL='hyper'
-export EDITOR='nvim' 
+export EDITOR='emacsclient -nw' 
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
@@ -47,9 +47,9 @@ zplug load
 
 # alias
 # terminal
-alias ls='ls --color=auto'
-alias la='ls -a'
-alias ll='ls -la'
+alias ls='colorls --color=auto'
+alias la='colorls -a'
+alias ll='colorls -la'
 alias tree='tree -C'
 alias rm='rm -i'
 alias mv='mv -i'
@@ -71,6 +71,12 @@ alias gpl='git pull'
 alias gc='git commit'
 alias gch='git checkout'
 alias gps='git push'
+
+# emacs
+alias e='emacsclient -nw -a ""'
+alias emacs='emacs -nw'
+alias ekill="emacsclient -e '(kill-emacs)'"
+alias erestart="ekill && e"
 
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
@@ -129,3 +135,29 @@ function tmux_automatically_attach_session()
     fi
 }
 tmux_automatically_attach_session
+
+function do_enter() {
+    if [ -n "$BUFFER" ]; then
+        zle accept-line
+        return 0
+    fi
+	echo
+    echo -e "\e[0;33m--- pwd ---\e[0m"
+    pwd
+	echo
+    echo -e "\e[0;33m--- ls ---\e[0m"
+    colorls
+    if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
+        echo                                     	
+        echo -e "\e[0;33m--- git status ---\e[0m"   
+        git status -sb
+    fi
+	echo
+	echo
+    zle reset-prompt
+    return 0
+}
+
+zle -N do_enter
+bindkey '^m' do_enter
+

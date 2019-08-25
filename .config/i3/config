@@ -216,6 +216,7 @@ exec_always --no-startup-id fcitx
 exec_always --no-startup-id conky
 exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
 exec_always --no-startup-id slack
+exec_always --no-startup-id emacs --daemon
 
 # Applets
 exec_always --no-startup-id nm-applet
@@ -224,4 +225,3 @@ exec_always --no-startup-id system-config-printer-applet
 
 # Power managements
 exec_always sudo tlp start
-
