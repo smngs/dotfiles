@@ -11,6 +11,7 @@
 auto-save-list
 tramp
 kkcrc
+/transient
 .\#*
 
 # Org-mode
