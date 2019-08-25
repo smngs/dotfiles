@@ -11,7 +11,7 @@ do
     [ "$f" = ".git" ] && continue
     [ "$f" = "bin" ] && continue
     [ "$f" = ".config" ] && continue
-    [ "$f" = ".Xresources" ] && continue
+    [ "$f" = "host" ] && continue
 
     ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
 done
@@ -20,13 +20,11 @@ done
 cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
 for file in `\find . -maxdepth 1 -type d`; do
     # make .config directory if not exists.
+    [ "$file" = ".config" ] && continue
+
     if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
     	mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
     fi
-
-    [ "$file" = ".config" ] && continue
-    [ "$file" = "i3" ] && continue
-    [ "$file" = "polybar" ] && continue
 
     ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
 done
@@ -34,14 +32,14 @@ done
 # Link home directory dotfiles and .config directory dotfiles which is enviroment dependent.
 case `hostname -s` in
     "arcturus") 
-        ln -snfv ${DOT_DIRECTORY}/arcturus/.Xresources ${HOME}/.Xresources
-        ln -snfv ${DOT_DIRECTORY}/arcturus/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-        ln -snfv ${DOT_DIRECTORY}/arcturus/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
+        ln -snfv ${DOT_DIRECTORY}/host/arcturus/.Xresources ${HOME}/.Xresources
+        ln -snfv ${DOT_DIRECTORY}/host/arcturus/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
+        ln -snfv ${DOT_DIRECTORY}/host/arcturus/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
     ;;
     "spica") 
-        ln -snfv ${DOT_DIRECTORY}/spica/.Xresources ${HOME}/.Xresources
-        ln -snfv ${DOT_DIRECTORY}/spica/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-        ln -snfv ${DOT_DIRECTORY}/spica/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
+        ln -snfv ${DOT_DIRECTORY}/host/spica/.Xresources ${HOME}/.Xresources
+        ln -snfv ${DOT_DIRECTORY}/host/spica/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
+        ln -snfv ${DOT_DIRECTORY}/host/spica/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
     ;;
     *)
     ;;
