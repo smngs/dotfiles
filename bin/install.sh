@@ -5,6 +5,8 @@ DOT_DIRECTORY="${HOME}/dotfiles"
 DOT_CONFIG_DIRECTORY=".config"
 DOT_URL="https://git.mine-313.com/syota/dotfiles.git"
 
+var1=$1
+var2=$2
 dotfiles_logo='
      _       _    __ _ _           
   __| | ___ | |_ / _(_) | ___  ___ 
@@ -70,58 +72,62 @@ download () {
 
 deploy () {
 	# Deploy home directory dotfiles.
-	cd ${DOT_DIRECTORY}
-	for f in .??*
-	do
-		[ "$f" = ".git" ] && continue
-		[ "$f" = "bin" ] && continue
-		[ "$f" = ".config" ] && continue
-		[ "$f" = "host" ] && continue
-
-		ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
-	done
-	echo -e "\033[0;32mINFO:\033[0;39m Deploy home directory dotfiles complete!"
-
-	# Deploy .config directory dotfiles.
-	cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
-	for file in `\find . -maxdepth 1 -type d`; do
-		# make .config directory if not exists.
-		[ "$file" = ".config" ] && continue
-
-		if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
-			mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
-		fi
-
-		ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
-	done
-	echo -e "\033[0;32mINFO:\033[0;39m Deploy .config dotfiles complete!"
-
-	# Deploy home directory dotfiles and .config directory dotfiles which is enviroment dependent.
-	case `hostname -s` in
-		"arcturus") 
-			echo -e "\033[0;32mINFO:\033[0;39m hostname == arcturus, Install depended dotfiles."
-			ln -snfv ${DOT_DIRECTORY}/host/arcturus/.Xresources ${HOME}/.Xresources
-			ln -snfv ${DOT_DIRECTORY}/host/arcturus/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-			ln -snfv ${DOT_DIRECTORY}/host/arcturus/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
-			echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
+	case "$var2" in
+		"-m" )
+			ln -snfv ${DOT_DIRECTORY}/.zshrc ${HOME}/.zshrc
+			ln -snfv ${DOT_DIRECTORY}/.emacs.d ${HOME}/.emacs.d
+			echo -e "\033[0;32mINFO:\033[0;39m Deploy .zshrc and .emacs.d complete!"
+			exit 0
 		;;
-		"spica") 
-			echo -e "\033[0;32mINFO:\033[0;39m hostname == spica, Install depended dotfiles."
-			ln -snfv ${DOT_DIRECTORY}/host/spica/.Xresources ${HOME}/.Xresources
-			ln -snfv ${DOT_DIRECTORY}/host/spica/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-			ln -snfv ${DOT_DIRECTORY}/host/spica/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
-			echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
-		;;
-		*)
-		;;
-	esac
 
-}
+		* )
+			cd ${DOT_DIRECTORY}
+			for f in .??*
+			do
+				[ "$f" = ".git" ] && continue
+				[ "$f" = "bin" ] && continue
+				[ "$f" = ".config" ] && continue
+				[ "$f" = "host" ] && continue
 
-deploy_minimum () {
-	ln -snfv ${DOT_DIRECTORY}/.zshrc ${HOME}/.zshrc
-	ln -snfv ${DOT_DIRECTORY}/.emacs.d ${HOME}/.emacs.d
-	echo -e "\033[0;32mINFO:\033[0;39m Deploy .zshrc and .emacs.d complete!"
+				ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
+			done
+			echo -e "\033[0;32mINFO:\033[0;39m Deploy home directory dotfiles complete!"
+
+			# Deploy .config directory dotfiles.
+			cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
+			for file in `\find . -maxdepth 1 -type d`; do
+				# make .config directory if not exists.
+				[ "$file" = ".config" ] && continue
+
+				if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
+					mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
+				fi
+
+				ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
+			done
+			echo -e "\033[0;32mINFO:\033[0;39m Deploy .config dotfiles complete!"
+
+			# Deploy home directory dotfiles and .config directory dotfiles which is enviroment dependent.
+			case `hostname -s` in
+				"arcturus") 
+					echo -e "\033[0;32mINFO:\033[0;39m hostname == arcturus, Install depended dotfiles."
+					ln -snfv ${DOT_DIRECTORY}/host/arcturus/.Xresources ${HOME}/.Xresources
+					ln -snfv ${DOT_DIRECTORY}/host/arcturus/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
+					ln -snfv ${DOT_DIRECTORY}/host/arcturus/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
+					echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
+				;;
+				"spica") 
+					echo -e "\033[0;32mINFO:\033[0;39m hostname == spica, Install depended dotfiles."
+					ln -snfv ${DOT_DIRECTORY}/host/spica/.Xresources ${HOME}/.Xresources
+					ln -snfv ${DOT_DIRECTORY}/host/spica/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
+					ln -snfv ${DOT_DIRECTORY}/host/spica/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
+					echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
+				;;
+				*)
+				;;
+			esac
+			;;
+		esac
 }
 
 clean () {
@@ -173,7 +179,11 @@ install () {
 	case $answer in
 		"" | [Yy]* )
 			download
-			deploy
+			if [[ $var2 == "-m" ]]; then
+				deploy_minimam
+			else
+				deploy
+			fi
 			init
 			;;
 		* )
@@ -187,23 +197,22 @@ help () {
 $(basename ${0}) is a tool for deploy dotfiles.
 
 Usage:
-	$(basename ${0}) [<options>]
+	$(basename ${0}) [<options>] [-m]
 
 Options:
 	--install (default)     Run Backup, Update, Deploy, Init
 	--help, -h              Show helpfile
 	--deploy, -d            Create symlink to home directory 
-	--deploy-minimal, -dm   Create symlink to home directory minimal (.zshrc and .emacs.d)
 	--backup, -b            Backup dotfiles
 	--clean, -c             Cleanup dotfiles
 	--init, -i              Setup environment settings
+
+	-m                      Install and Deploy minimal (only .zshrc and .emacs.d)
 EOF
 }
-case $1 in
+case $var1 in
 	"--deploy" ) deploy ;;
 	"-d" ) deploy ;;
-	"--deploy-minimal" ) deploy_minimal ;;
-	"-dm" ) deploy_minimal ;;
 	"--backup" ) backup ;;
 	"-b" ) backup ;;
 	"--clean" ) clean ;;
@@ -211,7 +220,7 @@ case $1 in
 	"--init" ) init ;;
 	"-i" ) init ;;
 	"--help" ) help ;;
-	"-" ) help ;;
+	"-h" ) help ;;
 	"--install" ) install ;;
 	* ) install ;;
 esac
