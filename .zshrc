@@ -12,8 +12,15 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-export TERMINAL='hyper'
-export EDITOR='emacsclient -nw' 
+if [ -x "`which hyper`" ]; then
+	export TERMINAL='hyper'
+fi
+
+if [ -x "`which emacs`" ]; then
+	export EDITOR='emacsclient -nw'
+else
+	export EDITOR='vim'
+fi
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
@@ -47,9 +54,11 @@ zplug load
 
 # alias
 # terminal
-alias ls='colorls --color=auto'
-alias la='colorls -a'
-alias ll='colorls -la'
+if [ -x "`which colorls`" ]; then
+	alias ls='colorls --color=auto'
+	alias la='colorls -a'
+	alias ll='colorls -la'
+fi
 alias tree='tree -C'
 alias rm='rm -i'
 alias mv='mv -i'
@@ -99,8 +108,7 @@ function tmux_automatically_attach_session()
     else
         if shell_has_started_interactively && ! is_ssh_running; then
             if ! is_exists 'tmux'; then
-                echo 'Error: tmux command not found' 2>&1
-                return 1
+				:
             fi
 
             if tmux has-session >/dev/null 2>&1 && tmux list-sessions | grep -qE '.*]$'; then
@@ -146,7 +154,11 @@ function do_enter() {
     pwd
 	echo
     echo -e "\e[0;33m--- ls ---\e[0m"
-    colorls
+	if [ -x "`which colorls`" ]; then
+		colorls
+	else
+		ls
+	fi
     if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
         echo                                     	
         echo -e "\e[0;33m--- git status ---\e[0m"   
