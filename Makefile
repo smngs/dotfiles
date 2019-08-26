@@ -4,22 +4,22 @@ DOT_DIRECTORY="${HOME}/dotfiles"
 all:
 
 deploy: ## Create symlink to home directory
-	@sh $(DOT_DIRECTORY)/bin/install.sh -d
+	@sh $(DOT_DIRECTORY)/bin/install.sh --deploy
+
+deploy-minimal: ## Create symlink to home directory
+	@sh $(DOT_DIRECTORY)/bin/install.sh --deploy -m
 
 init: ## Setup environment settings
-	@sh $(DOT_DIRECTORY)/bin/install.sh -i
+	@sh $(DOT_DIRECTORY)/bin/install.sh --init
 
 test: ## Test dotfiles and init scripts
-	@sh $(DOT_DIRECTORY)/bin/test.sh
+	@sh $(DOT_DIRECTORY)/bin/test.sh --test
 
 backup: ## Backup dotfiles
-	@sh $(DOT_DIRECTORY)/bin/install.sh -b
+	@sh $(DOT_DIRECTORY)/bin/install.sh --backup
 
 clean: ## Cleanup dotfiles
-	@sh $(DOT_DIRECTORY)/bin/install.sh -c
-
-destroy: clean ## Destroy dotfiles
-	@sh rm -rf $(DOT_DIRECTORY)
+	@sh $(DOT_DIRECTORY)/bin/install.sh --clean
 
 update: ## Fetch changes for this repo
 	git pull origin master
@@ -28,9 +28,8 @@ update: ## Fetch changes for this repo
 	git submodule foreach git pull origin master
 
 install: backup update deploy init ## Run make backup, update, deploy, init
-	@exec $$SHELL
+
+install-minimal: backup update deploy-minimal init ## Run make backup, update, deploy-minimal, init
 
 help: ## Self-documented Makefile
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-		| sort \
-		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@sh $(DOT_DIRECTORY)/bin/install.sh --help
