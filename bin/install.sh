@@ -17,7 +17,7 @@ backup () {
 	# Backup home directory dotfiles.
 	cd ${DOT_DIRECTORY}
 	if [ -e "${HOME}/dotfiles-backup" ]; then
-		echo -e -n "\033[0;33mWARN:\033[0;39m ${HOME}/dotfiles-backup is already exist. Do you want to overwrite? [y/N]:"
+		echo -e -n "\033[0;33mWARN:\033[0;39m ${HOME}/dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
 		read answer
 		case $answer in
 			"" | [Yy]* )
@@ -130,7 +130,7 @@ clean () {
 	read answer
 	
 	case $answer in
-		"" | [Yy]* )
+		[Yy]* )
 			cd ${DOT_DIRECTORY}
 			for f in .??*
 			do
@@ -167,7 +167,7 @@ init () {
 
 install () {
 	echo -e "$dotfiles_logo"
-	echo -e -n "\033[0;33mWARN:\033[0;39m Are you sure you want to install dotfiles? [y/N]:"
+	echo -e -n "\033[0;33mWARN:\033[0;39m Are you sure you want to install dotfiles? [Y/n]:"
 	read answer
 
 	case $answer in
