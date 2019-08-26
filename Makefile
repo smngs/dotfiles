@@ -4,19 +4,19 @@ DOT_DIRECTORY="${HOME}/dotfiles"
 all:
 
 deploy: ## Create symlink to home directory
-	@sh $(DOT_DIRECTORY)/bin/deploy.sh
+	@sh $(DOT_DIRECTORY)/bin/install.sh -d
 
 init: ## Setup environment settings
-	@sh $(DOT_DIRECTORY)/bin/init.sh
+	@sh $(DOT_DIRECTORY)/bin/install.sh -i
 
 test: ## Test dotfiles and init scripts
 	@sh $(DOT_DIRECTORY)/bin/test.sh
 
 backup: ## Backup dotfiles
-	@sh $(DOT_DIRECTORY)/bin/backup.sh
+	@sh $(DOT_DIRECTORY)/bin/install.sh -b
 
 clean: ## Cleanup dotfiles
-	@sh $(DOT_DIRECTORY)/bin/clean.sh
+	@sh $(DOT_DIRECTORY)/bin/install.sh -c
 
 destroy: clean ## Destroy dotfiles
 	@sh rm -rf $(DOT_DIRECTORY)
