@@ -29,27 +29,28 @@ backup () {
 		fi
 	done
 
-	echo "Backup dotfiles complete!"
+	echo -e "\033[0;32mINFO:\033[0;39m Backup dotfiles complete!"
 }
 
 download () {
 	if [ -d "$DOT_DIRECTORY" ]; then
-		echo "[ERROR] $DOTPATH: Already exists."
+		echo -e "\033[0;31mERROR:\033[0;39m dotfiles already exists. -> $DOT_DIRECTORY"
 		exit 1
 	fi
 
-	echo "Downloading dotfiles ..."
+	echo -e "\033[0;32mINFO:\033[0;39m Downloading dotfiles..."
 	
 	if [ -x "`which git`" ]; then
 		git clone --recursive "$DOT_URL" "DOT_DIRECTORY"
+		echo -e "\033[0;32mINFO:\033[0;39m Download dotfiles complete!"
 	else
-		echo "[ERROR] Please install Git."
+		echo -e "\033[0;31mERROR:\033[0;39m Require Git."
 		exit 1
 	fi
 }
 
 deploy () {
-	# Link home directory dotfiles.
+	# Deploy home directory dotfiles.
 	cd ${DOT_DIRECTORY}
 	for f in .??*
 	do
@@ -60,8 +61,9 @@ deploy () {
 
 		ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
 	done
+	echo -e "\033[0;32mINFO:\033[0;39m Deploy home directory dotfiles complete!"
 
-	# Link .config directory dotfiles.
+	# Deploy .config directory dotfiles.
 	cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
 	for file in `\find . -maxdepth 1 -type d`; do
 		# make .config directory if not exists.
@@ -73,61 +75,80 @@ deploy () {
 
 		ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
 	done
+	echo -e "\033[0;32mINFO:\033[0;39m Deploy .config dotfiles complete!"
 
-	# Link home directory dotfiles and .config directory dotfiles which is enviroment dependent.
+	# Deploy home directory dotfiles and .config directory dotfiles which is enviroment dependent.
 	case `hostname -s` in
 		"arcturus") 
+			echo -e "\033[0;32mINFO:\033[0;39m hostname == arcturus, Install depended dotfiles."
 			ln -snfv ${DOT_DIRECTORY}/host/arcturus/.Xresources ${HOME}/.Xresources
 			ln -snfv ${DOT_DIRECTORY}/host/arcturus/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
 			ln -snfv ${DOT_DIRECTORY}/host/arcturus/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
+			echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
 		;;
 		"spica") 
+			echo -e "\033[0;32mINFO:\033[0;39m hostname == spica, Install depended dotfiles."
 			ln -snfv ${DOT_DIRECTORY}/host/spica/.Xresources ${HOME}/.Xresources
 			ln -snfv ${DOT_DIRECTORY}/host/spica/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
 			ln -snfv ${DOT_DIRECTORY}/host/spica/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
+			echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
 		;;
 		*)
 		;;
 	esac
 
-	echo "linked dotfiles complete!"
 }
 
 deploy_minimum () {
 	ln -snfv ${DOT_DIRECTORY}/.zshrc ${HOME}/.zshrc
 	ln -snfv ${DOT_DIRECTORY}/.emacs.d ${HOME}/.emacs.d
+	echo -e "\033[0;32mINFO:\033[0;39m Deploy .zshrc and .emacs.d complete!"
 }
 
 clean () {
 	# Delete home directory dotfiles.
-	cd ${DOT_DIRECTORY}
-	for f in .??*
-	do
-		[ "$f" = ".git" ] && continue
-		[ "$f" = "bin" ] && continue
-		[ "$f" = ".config" ] && continue
-		[ "$f" = "host" ] && continue
+	echo -e -n "\033[0;33mWARN:\033[0;39m DEPRECATED!! Are you sure you want to clean dotfiles? [y/N]:"
+	read answer
+	
+	case $answer in
+		"" | [Yy]* )
+			cd ${DOT_DIRECTORY}
+			for f in .??*
+			do
+				[ "$f" = ".git" ] && continue
+				[ "$f" = "bin" ] && continue
+				[ "$f" = ".config" ] && continue
+				[ "$f" = "host" ] && continue
 
-		rm -rf "${HOME}/${f}"
-	done
+				rm -rf "${HOME}/${f}"
+			done
 
-	# Delete .config directory dotfiles.
-	cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
-	for file in `\find . -maxdepth 1 -type d`; do
-		[ -n "$f" ] && continue
-		rm -rf "${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}"
-	done
+			# Delete .config directory dotfiles.
+			cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
+			for file in `\find . -maxdepth 1 -type d`; do
+				[ "$f" == "./" ] && continue
+				rm -rf "${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}"
+			done
 
-	rm -rf ${HOME}/.Xresources
-	rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-	rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
+			rm -rf ${HOME}/.Xresources
+			rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
+			rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
 
-	echo "Deleted dotfiles complete!"
+			echo -e "\033[0;32mINFO:\033[0;39m Clean dotfiles complete!"
+			;;
+		* )
+			echo -e "\033[0;31mERROR:\033[0;39m Clean cancelled."
+			;;
+	esac
+}
+
+init () {
+	:
 }
 
 install () {
-	echo "$dotfiles_logo"
-	echo -n "Are you sure install dotfile? [Y/n]:"
+	echo -e "$dotfiles_logo"
+	echo -e -n "\033[0;33mWARN:\033[0;39m Are you sure you want to install dotfiles? [y/N]:"
 	read answer
 
 	case $answer in
@@ -137,25 +158,41 @@ install () {
 			init
 			;;
 		* )
-			echo "[ERROR] Install cancelled."
+			echo -e "\033[0;31mERROR:\033[0;39m Install cancelled."
 			;;
 	esac
 }
 		
 help () {
-	echo "<usage> -d -dm -b -c"
-}
+	cat <<EOF
+$(basename ${0}) is a tool for deploy dotfiles.
 
-if [[ $1 == "-d" ]]; then
-	deploy
-elif [[ $1 == "-dm" ]]; then
-	deploy_minimum
-elif [[ $1 == "-b" ]]; then
-	backup
-elif [[ $1 == "-c" ]]; then
-	clean
-elif [[ $1 == "-i" ]]; then
-	install
-else
-	help
-fi
+Usage:
+	$(basename ${0}) [<options>]
+
+Options:
+	--install (default)     Run Backup, Update, Deploy, Init
+	--help, -h              Show helpfile
+	--deploy, -d            Create symlink to home directory 
+	--deploy-minimal, -dm   Create symlink to home directory minimal (.zshrc and .emacs.d)
+	--backup, -b            Backup dotfiles
+	--clean, -c             Cleanup dotfiles
+	--init, -i              Setup environment settings
+EOF
+}
+case $1 in
+	"--deploy" ) deploy ;;
+	"-d" ) deploy ;;
+	"--deploy-minimal" ) deploy_minimal ;;
+	"-dm" ) deploy_minimal ;;
+	"--backup" ) backup ;;
+	"-b" ) backup ;;
+	"--clean" ) clean ;;
+	"-c" ) clean ;;
+	"--init" ) init ;;
+	"-i" ) init ;;
+	"--help" ) help ;;
+	"-" ) help ;;
+	"--install" ) install ;;
+	* ) install ;;
+esac
