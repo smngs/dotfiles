@@ -19,6 +19,7 @@ done
 # Delete .config directory dotfiles.
 cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
 for file in `\find . -maxdepth 1 -type d`; do
+    [ -n "$f" ] && continue
     rm -rf "${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}"
 done
 
