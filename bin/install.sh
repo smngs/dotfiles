@@ -16,16 +16,35 @@ dotfiles_logo='
 backup () {
 	# Backup home directory dotfiles.
 	cd ${DOT_DIRECTORY}
+	if [ -e "${HOME}/dotfiles-backup" ]; then
+		echo -e -n "\033[0;33mWARN:\033[0;39m ${HOME}/dotfiles-backup is already exist. Do you want to overwrite? [y/N]:"
+		read answer
+		case $answer in
+			"" | [Yy]* )
+				rm -rf "${HOME}/dotfiles-backup/*"
+				mkdir "${HOME}/dotfiles-backup/*"
+				echo -e "\033[0;32mINFO:\033[0;39m Rewrite ${HOME}/dotfiles-backup."
+				;;
+			* )
+				echo -e "\033[0;31mERROR:\033[0;39m Backup cancelled."
+				exit 0
+				;;
+		esac
+	else
+		mkdir "${HOME}/dotfiles-backup"
+		echo -e "\033[0;32mINFO:\033[0;39m Make ${HOME}/dotfiles-backup."
+	fi
+
 	for f in .??*
 	do
 		[ "$f" = ".git" ] && continue
 		[ "$f" = "bin" ] && continue
-
 		if [ -e "${HOME}/$f" ]; then
-			if [ ! -e "${HOME}/dotfiles-backup" ]; then
-				mkdir "${HOME}/dotfiles-backup"
+			sudo cp -r "${HOME}/$f" "${HOME}/dotfiles-backup/" 
+			if [ ! $? == 0 ]; then
+				echo -e "\033[0;31mERROR:\033[0;39m Backup aborted!"
+				exit 1
 			fi
-			cp -r "${HOME}/$f" "${HOME}/dotfiles-backup" 
 		fi
 	done
 

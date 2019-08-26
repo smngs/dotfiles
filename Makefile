@@ -24,8 +24,7 @@ update: ## Fetch changes for this repo
 	git submodule update
 	git submodule foreach git pull origin master
 
-install: ## Run make backup, update, deploy, init
-	@sh $(DOT_DIRECTORY)/bin/install.sh --install
+install: backup update deploy init ## Run make backup, update, deploy, init
 
 help: ## Self-documented Makefile
 	@sh $(DOT_DIRECTORY)/bin/install.sh --help
