@@ -1,0 +1,3 @@
+#!/bin/bash
+
+hyper -e "sudo pacman -Syu"
