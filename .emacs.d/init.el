@@ -49,7 +49,7 @@
     (dolist (pkg not-installed)
         (package-install pkg))))
 
-(add-to-list 'default-frame-alist '(font . "CodeM-10" ))
+(add-to-list 'default-frame-alist '(font . "CodeM-11" ))
 
 ; --- color-theme (iceberg) --- ;
 (load-theme 'iceberg t)
