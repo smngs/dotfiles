@@ -202,8 +202,9 @@ bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
 # Applications
-bindsym $Mod+i exec google-chrome-stable
+bindsym $Mod+i exec firefox
 bindsym $mod+Shift+e exec emacs
+bindsym $mod+Shift+p exec enpass showassistant
 
 assign [class="(?i)slack" ] 9
 
