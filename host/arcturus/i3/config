@@ -208,8 +208,9 @@ bindsym $mod+Shift+e exec emacs
 assign [class="(?i)slack" ] 9
 
 # Daemons
-exec_always --no-startup-id xrandr --output HDMI-2
-exec_always --no-startup-id xrandr --output HDMI-1 --right-of HDMI-2
+exec_always --no-startup-id xrandr --output HDMI-1 
+exec_always --no-startup-id xrandr --output HDMI-3 --right-of HDMI-1
+exec_always --no-startup-id xrandr --output HDMI-2 --right-of HDMI-3
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
 exec_always --no-startup-id light-locker --lock-on-suspend
