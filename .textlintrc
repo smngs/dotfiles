@@ -1,6 +1,14 @@
 {
-  "filters": {},
-  "rules": {
-    "preset-ja-technical-writing": true
-    }
+	"filters": {},
+	"rules": {
+//	"preset-jtf-style": true,
+		"preset-ja-technical-writing": {
+			"ja-no-mixed-period": {
+				"periodMark": "．",
+				"allowPeriodMarks": ["。"],
+				"allowEmojiAtEnd": false,
+				"forceAppendPeriod": false
+			}
+		}
+	}
 }
