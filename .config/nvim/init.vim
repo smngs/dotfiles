@@ -30,6 +30,14 @@ call s:load('plugins')
 
 filetype plugin on
 syntax on
+
+" Colorscheme
+set termguicolors
+colorscheme iceberg
+
+" Clipboard
+set clipboard+=unnamedplus
+
 " Character code
 set fileencoding=utf-8
 set fileencodings=ucs-boms,utf-8,euc-jp,cp932
@@ -52,7 +60,6 @@ set hlsearch
 
 " Lightline
 set laststatus=2
-set t_Co=256
 
 nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
 
@@ -70,73 +77,29 @@ nnoremap <up> gk
 set backspace=indent,eol,start
 
 set showmatch
-source $VIMRUNTIME/macros/matchit.vim
 
-set guifont=CodeM
 set wildmenu
 set history=5000
-colorscheme iceberg
 
-if &term=~ "xterm"
-    let &t_SI .= "\e[?2004h"
-    let &t_EI .= "\e[?2004l"
-    let &pastetoggle = "\e[201~"
+function! s:auto_mkdir(dir, force) abort " {{{
+  if !isdirectory(a:dir) && (a:force || input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &enc, &tenc), 'p')
+  endif
+endfunction " }}}
+autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 
-    function XTermPasteBegin(ret)
-        set paste
-        return a:ret
-    endfunction
+function! s:comma_period(line1, line2) abort range " {{{
+  let cursor = getcurpos()
+  execute 'silent keepjumps keeppatterns' a:line1 ',' a:line2 's/、/，/ge'
+  execute 'silent keepjumps keeppatterns' a:line1 ',' a:line2 's/。/．/ge'
+  call setpos('.', cursor)
+endfunction " }}}
+command! -bar -range=% CommaPeriod  call s:comma_period(<line1>, <line2>)
 
-    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
-endif 
-
-" Plugins
-" lightline
-let g:lightline = {'colorscheme': 'wombat'}
-
-" vim-markdown
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal = 0
-let g:tex_conceal = 0
-let g:vim_markdown_math = 1
-
-" previm
-let g:previm_disable_default_css = 1
-let g:previm_custom_css_path = '~/Dotfiles/.config/nvim/markdown.css'
-
-" vimtex
-let g:vimtex_fold_envs = 0
-let g:vimtex_view_general_viewer = 'evince'
-let g:vimtex_view_general_options = '-r @line @pdf @tex'
-let g:vimtex_compiler_latexmk = {
-      \ 'options' : [
-      \   '-verbose',
-      \   '-file-line-error',
-      \   '-synctex=1',
-      \   '-interaction=nonstopmode',
-      \ ]}
-let g:vimtex_compiler_progname = 'nvr'
-
-" snippets
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-"imap <expr><TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ neosnippet#expandable_or_jumpable() ?
-" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" " For conceal markers.
-" if has('conceal')
-"   set conceallevel=2 concealcursor=niv
-" endif
-
-let g:tex_flavor='latex' 
-
-"set snippet file dir
-let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/,~/.vim/snippets'
+function! s:kutouten(line1, line2) abort range " {{{
+  let cursor = getcurpos()
+  execute 'silent keepjumps keeppatterns' a:line1 ',' a:line2 's/，/、/ge'
+  execute 'silent keepjumps keeppatterns' a:line1 ',' a:line2 's/．/。/ge'
+  call setpos('.', cursor)
+endfunction " }}}
+command! -bar -range=% Kutouten  call s:kutouten(<line1>, <line2>)

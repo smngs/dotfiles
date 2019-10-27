@@ -15,8 +15,27 @@ repo = 'Shougo/neocomplete.vim'
 repo = 'Shougo/neocomplcache.vim'
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
+hook_add = '''
+    " snippets
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+    " SuperTab like snippets behavior.
+    "imap <expr><TAB>
+    " \ pumvisible() ? "\<C-n>" :
+    " \ neosnippet#expandable_or_jumpable() ?
+    " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+    "set snippet file dir
+    let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/,~/.vim/snippets'
+    '''
 [[plugins]]
 repo = 'shougo/neosnippet-snippets'
+depends = ['Shougo/neosnippet.vim']
 
 # Appearance
 [[plugins]]
@@ -25,6 +44,9 @@ repo = 'cocopon/iceberg.vim'
 repo = 'edkolev/tmuxline.vim'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
+hook_add = '''
+    let g:lightline = {'colorscheme': 'wombat'}
+    '''
 
 # Git
 [[plugins]]
@@ -36,6 +58,19 @@ repo = "tpope/vim-fugitive"
 # LaTeX
 [[plugins]]
 repo = 'lervag/vimtex'
+hook_add = '''
+    let g:vimtex_fold_envs = 0
+    let g:vimtex_view_general_viewer = 'evince'
+    let g:vimtex_view_general_options = '-r @line @pdf @tex'
+    let g:vimtex_compiler_latexmk = {
+          \ 'options' : [
+          \   '-verbose',
+          \   '-file-line-error',
+          \   '-synctex=1',
+          \   '-interaction=nonstopmode',
+          \ ]}
+    let g:vimtex_compiler_progname = 'nvr'
+    '''
 
 # yaml
 [[plugins]]
@@ -44,8 +79,21 @@ repo = 'chase/vim-ansible-yaml'
 # markdown
 [[plugins]]
 repo = 'plasticboy/vim-markdown'
+hook_add = '''
+    let g:vim_markdown_folding_disabled = 1
+    let g:vim_markdown_conceal = 0
+    let g:tex_conceal = 0
+    let g:vim_markdown_math = 1
+    let g:tex_flavor='latex' 
+    '''
+
 [[plugins]]
 repo = 'kannokanno/previm'
+hook_add = '''
+    let g:previm_disable_default_css = 1
+    let g:previm_custom_css_path = '~/Dotfiles/.config/nvim/markdown.css'
+    '''
+
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 [[plugins]]
