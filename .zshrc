@@ -81,11 +81,9 @@ alias gc='git commit'
 alias gch='git checkout'
 alias gps='git push'
 
-# emacs
-alias e='emacsclient -nw -a ""'
-alias emacs='emacs -nw'
-alias ekill="emacsclient -e '(kill-emacs)'"
-alias erestart="ekill && e"
+# vim
+alias n='nvim'
+alias v='nvim'
 
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
 function is_osx() { [[ $OSTYPE == darwin* ]]; }

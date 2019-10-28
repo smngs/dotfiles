@@ -3,7 +3,7 @@
 	name = Syota Minegishi
 [core]
 	quotepath = false
-    editor = emacsclient -nw
+    editor = nvim
 	precomposeunicode = true
 [credential]
 	helper = cache
