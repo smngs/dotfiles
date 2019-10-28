@@ -8,6 +8,20 @@ repo = 'cespare/vim-toml'
 [[plugins]]
 repo = 'Yggdroot/indentLine'
 
+# submode
+[[plugins]]
+repo = 'kana/vim-submode'
+hook_add = '''
+    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
+    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
+    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>+')
+    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>-')
+    call submode#map('winsize', 'n', '', '>', '<C-w>>')
+    call submode#map('winsize', 'n', '', '<', '<C-w><')
+    call submode#map('winsize', 'n', '', '+', '<C-w>+')
+    call submode#map('winsize', 'n', '', '-', '<C-w>-')
+    '''
+
 # snippet
 [[plugins]]
 repo = 'Shougo/neocomplete.vim'
@@ -93,7 +107,6 @@ hook_add = '''
     let g:previm_disable_default_css = 1
     let g:previm_custom_css_path = '~/Dotfiles/.config/nvim/markdown.css'
     '''
-
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 [[plugins]]
