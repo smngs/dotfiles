@@ -12,11 +12,12 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-if [ -x "`which hyper`" ]; then
+if type hyper > /dev/null 2>&1; then
 	export TERMINAL='hyper'
 fi
 
-if [ -x "`which emacs`" ]; then
+if type emacs > /dev/null 2>&1; then
+	export TERMINAL='hyper'
 	export EDITOR='emacsclient -nw'
 else
 	export EDITOR='vim'
@@ -54,7 +55,7 @@ zplug load
 
 # alias
 # terminal
-if [ -x "`which colorls`" ]; then
+if type colorls > /dev/null 2>&1; then
 	alias ls='colorls --color=auto'
 	alias la='colorls -a'
 	alias ll='colorls -la'
@@ -152,7 +153,7 @@ function do_enter() {
     pwd
 	echo
     echo -e "\e[0;33m--- ls ---\e[0m"
-	if [ -x "`which colorls`" ]; then
+    if type colorls > /dev/null 2>&1; then
 		colorls
 	else
 		ls
