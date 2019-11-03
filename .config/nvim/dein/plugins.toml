@@ -7,6 +7,10 @@ repo = 'Shougo/dein.vim'
 repo = 'cespare/vim-toml'
 [[plugins]]
 repo = 'Yggdroot/indentLine'
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+[[plugins]]
+repo = 'sheerun/vim-polyglot'
 
 # submode
 [[plugins]]
@@ -20,7 +24,7 @@ hook_add = '''
     call submode#map('winsize', 'n', '', '<', '<C-w><')
     call submode#map('winsize', 'n', '', '+', '<C-w>+')
     call submode#map('winsize', 'n', '', '-', '<C-w>-')
-    '''
+'''
 
 # snippet
 [[plugins]]
@@ -46,21 +50,24 @@ hook_add = '''
 
     "set snippet file dir
     let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/,~/.vim/snippets'
-    '''
+'''
 [[plugins]]
 repo = 'shougo/neosnippet-snippets'
 depends = ['Shougo/neosnippet.vim']
+[[plugins]]
+repo = 'shougo/context_filetype.vim'
 
 # Appearance
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
 [[plugins]]
-repo = 'edkolev/tmuxline.vim'
+repo = 'vim-airline/vim-airline-themes'
+depends = ['vim-airline/vim-airline']
 [[plugins]]
-repo = 'itchyny/lightline.vim'
+repo = 'vim-airline/vim-airline'
 hook_add = '''
-    let g:lightline = {'colorscheme': 'wombat'}
-    '''
+    let g:airline_theme='deus'
+'''
 
 # Git
 [[plugins]]
@@ -84,7 +91,7 @@ hook_add = '''
           \   '-interaction=nonstopmode',
           \ ]}
     let g:vimtex_compiler_progname = 'nvr'
-    '''
+'''
 
 # yaml
 [[plugins]]
@@ -98,15 +105,15 @@ hook_add = '''
     let g:vim_markdown_conceal = 0
     let g:tex_conceal = 0
     let g:vim_markdown_math = 1
-    let g:tex_flavor='latex' 
-    '''
+    let g:tex_flavor='latex'
+'''
 
 [[plugins]]
 repo = 'kannokanno/previm'
 hook_add = '''
     let g:previm_disable_default_css = 1
     let g:previm_custom_css_path = '~/Dotfiles/.config/nvim/markdown.css'
-    '''
+'''
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 [[plugins]]
