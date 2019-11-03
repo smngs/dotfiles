@@ -12,7 +12,9 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-export TERMINAL='hyper'
+if type hyper > /dev/null 2>&1; then
+	export TERMINAL='hyper'
+fi
 export EDITOR='vim'
 
 HISTFILE=$HOME/.zsh-history
@@ -51,10 +53,10 @@ zplug load
 
 # alias
 # terminal
-if [ -x "`which colorls`" ]; then
-    alias ls='colorls --color=auto'
-    alias la='colorls -a'
-    alias ll='colorls -la'
+if type colorls > /dev/null 2>&1; then
+	alias ls='colorls --color=auto'
+	alias la='colorls -a'
+	alias ll='colorls -la'
 fi
 alias tree='tree -C'
 alias rm='rm -i'
@@ -99,11 +101,11 @@ function do_enter() {
     pwd
     echo
     echo -e "\e[0;33m--- ls ---\e[0m"
-    if [ -x "`which colorls`" ]; then
-        colorls
-    else
-        ls
-    fi
+    if type colorls > /dev/null 2>&1; then
+		colorls
+	else
+		ls
+	fi
     if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
         echo
         echo -e "\e[0;33m--- git status ---\e[0m"
