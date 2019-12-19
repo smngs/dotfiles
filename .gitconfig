@@ -1,6 +1,7 @@
 [user]
-	email = s.minegishi@mail.mine-313.com
+	email = syota@mine-313.com
 	name = Syota Minegishi
+	signingkey = 20339E01EA12A4E5
 [core]
 	quotepath = false
     editor = nvim
@@ -12,3 +13,7 @@
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
+[gpg]
+	program = /usr/bin/gpg
+[commit]
+	gpgsign = true
