@@ -6,13 +6,13 @@ module.exports = {
   config: {
     // choose either `'stable'` for receiving highly polished,
     // or `'canary'` for less polished but more frequent updates
-    updateChannel: 'canary',
+    updateChannel: 'stable',
 
     // default font size in pixels for all tabs
     fontSize: 11,
 
     // font family with optional fallbacks
-    fontFamily: 'CodeM',
+    fontFamily: 'Source Code Pro',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',
@@ -137,10 +137,10 @@ module.exports = {
   //   `hyperpower`
   //   `@company/project`
   //   `project#1.0.1`
-	plugins: [
-		"hyper-iceberg",
-		"hyper-tab-icons-plus",
-	],
+    plugins: [
+        "hyper-iceberg",
+        "hyper-tab-icons-plus",
+    ],
 
   // in development, you can create a directory under
   // `~/.hyper_plugins/local/` and include it here

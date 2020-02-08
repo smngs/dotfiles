@@ -1,14 +1,16 @@
 {
 	"filters": {},
 	"rules": {
-//	"preset-jtf-style": true,
 		"preset-ja-technical-writing": {
 			"ja-no-mixed-period": {
 				"periodMark": "．",
 				"allowPeriodMarks": ["。"],
 				"allowEmojiAtEnd": false,
 				"forceAppendPeriod": false
-			}
-		}
-	}
+			},
+		    "sentence-length": {
+                max: 300
+		    }
+	    }
+    }
 }

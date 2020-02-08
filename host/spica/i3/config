@@ -67,6 +67,9 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
+bindsym $mod+Tab workspace prev
+bindsym $mod+Shift+Tab workspace next
+
 # split in horizontal orientation
 bindsym $mod+n split h
 
@@ -218,6 +221,7 @@ exec_always --no-startup-id fcitx
 exec_always --no-startup-id ~/.config/conky/launch.sh
 exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
 exec_always --no-startup-id slack
+exec_always --no-startup-id libinput-gestures-setup start
 
 # Applets
 exec_always --no-startup-id nm-applet
