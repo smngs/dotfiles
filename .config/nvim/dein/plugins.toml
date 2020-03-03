@@ -91,6 +91,10 @@ hook_add = '''
           \   '-interaction=nonstopmode',
           \ ]}
     let g:vimtex_compiler_progname = 'nvr'
+    augroup set_latex_compiler
+      autocmd!
+      autocmd BufNewFile,BufRead *.tex nmap <C-c> <C-c> <plug>(vimtex-compile)
+    augroup END
 '''
 
 # yaml
@@ -112,9 +116,13 @@ hook_add = '''
 repo = 'kannokanno/previm'
 hook_add = '''
     let g:previm_disable_default_css = 1
-    let g:previm_custom_css_path = '~/Dotfiles/.config/nvim/markdown.css'
+    let g:previm_custom_css_path = '~/dotfiles/.config/nvim/markdown.css'
 '''
 [[plugins]]
 repo = 'tyru/open-browser.vim'
 [[plugins]]
 repo = 'dhruvasagar/vim-table-mode'
+
+# ALE
+[[plugins]]
+repo = 'w0rp/ale'

@@ -12,6 +12,7 @@ inoremap <Down> <Nop>
 inoremap <Left> <Nop>
 inoremap <Right> <Nop>
 cnoremap w!! w !sudo tee > /dev/null %<CR> :e!<CR>
+nnoremap x "_x
 
 " ENV
 let $CACHE = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_HOME
@@ -103,3 +104,7 @@ function! s:kutouten(line1, line2) abort range " {{{
   call setpos('.', cursor)
 endfunction " }}}
 command! -bar -range=% Kutouten  call s:kutouten(<line1>, <line2>)
+
+let g:yankring_n_keys = 'Y D'
+" default
+" let g:yankring_n_keys = 'Y D x X'

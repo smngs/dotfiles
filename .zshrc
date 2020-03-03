@@ -13,9 +13,9 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 if type hyper > /dev/null 2>&1; then
-	export TERMINAL='hyper'
+    export TERMINAL='hyper'
 fi
-export EDITOR='vim'
+export EDITOR='nvim'
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
@@ -36,7 +36,6 @@ zplug "zsh-users/zsh-completions"
 
 zplug "arks22/tmuximum", as:command
 zplug "supercrabtree/k"
-zplug "b4b4r07/enhancd", use:"init.sh"
 zplug "chrissicool/zsh-256color"
 zplug "docker/cli", use:"contrib/completion/zsh/_docker"
 
@@ -54,9 +53,9 @@ zplug load
 # alias
 # terminal
 if type colorls > /dev/null 2>&1; then
-	alias ls='colorls --color=auto'
-	alias la='colorls -a'
-	alias ll='colorls -la'
+    alias ls='colorls --color=auto'
+    alias la='colorls -a'
+    alias ll='colorls -la'
 fi
 alias tree='tree -C'
 alias rm='rm -i'
@@ -81,10 +80,7 @@ alias gps='git push'
 alias n='nvim'
 alias v='nvim'
 
-# enhancd
-if [ -f ~/enhancd/enhancd.sh ]; then
-    source ~/enhancd/enhancd.sh
-fi
+alias r='ranger'
 
 if [ -z $TMUX ]; then
   tmuximum
@@ -102,10 +98,10 @@ function do_enter() {
     echo
     echo -e "\e[0;33m--- ls ---\e[0m"
     if type colorls > /dev/null 2>&1; then
-		colorls
-	else
-		ls
-	fi
+        colorls
+    else
+        ls
+    fi
     if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
         echo
         echo -e "\e[0;33m--- git status ---\e[0m"
