@@ -52,17 +52,28 @@ zplug load
 
 # alias
 # terminal
-if type colorls > /dev/null 2>&1; then
-    alias ls='colorls --color=auto'
-    alias la='colorls -a'
-    alias ll='colorls -la'
-fi
+#if type colorls > /dev/null 2>&1; then
+#    alias ls='colorls --color=auto'
+#    alias la='colorls -a'
+#    alias ll='colorls -la'
+#fi
+
+alias ls='ls --color=auto'
+alias la='ls --color=auto -a'
+alias ll='ls --color=auto -lh'
+alias lla='ls --color=auto -lah'
+
 alias tree='tree -C'
 alias rm='rm -i'
 alias mv='mv -i'
 alias df='df -h'
 alias q='exit'
 alias c='clear'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 # tmux
 alias t='tmuximum'
@@ -75,6 +86,8 @@ alias gpl='git pull'
 alias gc='git commit'
 alias gch='git checkout'
 alias gps='git push'
+alias gb='git branch'
+alias gf='git fetch'
 
 # vim
 alias n='nvim'
@@ -97,11 +110,11 @@ function do_enter() {
     pwd
     echo
     echo -e "\e[0;33m--- ls ---\e[0m"
-    if type colorls > /dev/null 2>&1; then
-        colorls
-    else
+#    if type colorls > /dev/null 2>&1; then
+#        colorls
+#    else
         ls
-    fi
+#    fi
     if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
         echo
         echo -e "\e[0;33m--- git status ---\e[0m"
