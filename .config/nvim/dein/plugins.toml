@@ -12,69 +12,57 @@ repo = 'junegunn/fzf.vim'
 [[plugins]]
 repo = 'sheerun/vim-polyglot'
 
-# submode
+# LSP (Language Server Protocol)
 [[plugins]]
-repo = 'kana/vim-submode'
+repo = 'prabirshrestha/vim-lsp'
 hook_add = '''
-    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
-    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
-    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>+')
-    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>-')
-    call submode#map('winsize', 'n', '', '>', '<C-w>>')
-    call submode#map('winsize', 'n', '', '<', '<C-w><')
-    call submode#map('winsize', 'n', '', '+', '<C-w>+')
-    call submode#map('winsize', 'n', '', '-', '<C-w>-')
-'''
+    nmap <silent> gd :LspDefinition<CR>
+    nmap <silent> <f2> :LspRename<CR>
+    nmap <silent> <Leader>d :LspTypeDefinition<CR>
+    nmap <silent> <Leader>r :LspReferences<CR>
+    nmap <silent> <Leader>i :LspImplementation<CR>
+    nmap <silent> <Leader>h :LspHover<CR>
 
-# snippet
+    autocmd BufWritePre <buffer> LspDocumentFormatSync
+
+    let g:lsp_diagnostics_enabled = 1
+    let g:lsp_signs_enabled = 1
+    let g:lsp_diagnostics_echo_cursor = 1
+    let g:asyncomplete_auto_popup = 1
+    let g:lsp_signs_error = {'text': '✗'}
+    let g:lsp_signs_warning = {'text': '‼'}
+'''
 [[plugins]]
-repo = 'Shougo/neocomplete.vim'
+repo = 'prabirshrestha/async.vim'
 [[plugins]]
-repo = 'Shougo/neocomplcache.vim'
+repo = 'prabirshrestha/asyncomplete.vim'
 [[plugins]]
-repo = 'Shougo/neosnippet.vim'
-hook_add = '''
-    " snippets
-    " Plugin key-mappings.
+repo = 'prabirshrestha/asyncomplete-lsp.vim'
+[[plugins]]
+repo='prabirshrestha/asyncomplete-neosnippet.vim'
+depends = ['Shougo/neosnippet.vim']
+hook_add='''
+    call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+        \ 'name': 'neosnippet',
+        \ 'whitelist': ['*'],
+        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+        \ }))
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
     xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-    " SuperTab like snippets behavior.
-    "imap <expr><TAB>
-    " \ pumvisible() ? "\<C-n>" :
-    " \ neosnippet#expandable_or_jumpable() ?
-    " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-    "set snippet file dir
-    let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/,~/.vim/snippets'
 '''
 [[plugins]]
-repo = 'shougo/neosnippet-snippets'
-depends = ['Shougo/neosnippet.vim']
-[[plugins]]
-repo = 'shougo/context_filetype.vim'
+repo = 'mattn/vim-lsp-settings'
 
-# Appearance
-[[plugins]]
-repo = 'cocopon/iceberg.vim'
-[[plugins]]
-repo = 'vim-airline/vim-airline-themes'
-depends = ['vim-airline/vim-airline']
-[[plugins]]
-repo = 'vim-airline/vim-airline'
-hook_add = '''
-    let g:airline_theme='deus'
-'''
+# ALE
+# [[plugins]]
+# repo = 'w0rp/ale'
 
-# Git
+# Python
 [[plugins]]
-repo = "airblade/vim-gitgutter"
+repo = 'lambdalisue/vim-django-support'
 [[plugins]]
-repo = "tpope/vim-fugitive"
-
+repo = 'jmcantrell/vim-virtualenv'
 
 # LaTeX
 [[plugins]]
@@ -123,6 +111,68 @@ repo = 'tyru/open-browser.vim'
 [[plugins]]
 repo = 'dhruvasagar/vim-table-mode'
 
-# ALE
+# snippet
 [[plugins]]
-repo = 'w0rp/ale'
+repo = 'Shougo/neocomplete.vim'
+[[plugins]]
+repo = 'Shougo/neocomplcache.vim'
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+hook_add = '''
+    " snippets
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+    " SuperTab like snippets behavior.
+    "imap <expr><TAB>
+    " \ pumvisible() ? "\<C-n>" :
+    " \ neosnippet#expandable_or_jumpable() ?
+    " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+    "set snippet file dir
+    let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/,~/.vim/snippets'
+'''
+[[plugins]]
+repo = 'shougo/neosnippet-snippets'
+depends = ['Shougo/neosnippet.vim']
+[[plugins]]
+repo = 'shougo/context_filetype.vim'
+
+# submode
+[[plugins]]
+repo = 'kana/vim-submode'
+hook_add = '''
+    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
+    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
+    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>+')
+    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>-')
+    call submode#map('winsize', 'n', '', '>', '<C-w>>')
+    call submode#map('winsize', 'n', '', '<', '<C-w><')
+    call submode#map('winsize', 'n', '', '+', '<C-w>+')
+    call submode#map('winsize', 'n', '', '-', '<C-w>-')
+'''
+
+# Appearance
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
+depends = ['vim-airline/vim-airline']
+[[plugins]]
+repo = 'vim-airline/vim-airline'
+hook_add = '''
+    let g:airline_theme='deus'
+    let g:airline_section_warning = '%{lsp#get_buffer_diagnostics_counts()["warning"]}'
+    let g:airline_section_error = '%{lsp#get_buffer_diagnostics_counts()["error"]}%{lsp#get_buffer_first_error_line()? "-".lsp#get_buffer_first_error_line():""}'
+'''
+
+# Git
+[[plugins]]
+repo = "airblade/vim-gitgutter"
+[[plugins]]
+repo = "tpope/vim-fugitive"
+

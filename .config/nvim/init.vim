@@ -11,8 +11,12 @@ inoremap <Up> <Nop>
 inoremap <Down> <Nop>
 inoremap <Left> <Nop>
 inoremap <Right> <Nop>
+
 cnoremap w!! w !sudo tee > /dev/null %<CR> :e!<CR>
 nnoremap x "_x
+
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
 " ENV
 let $CACHE = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_HOME
@@ -80,6 +84,7 @@ set backspace=indent,eol,start
 set showmatch
 
 set wildmenu
+set wildmode=full
 set history=5000
 
 function! s:auto_mkdir(dir, force) abort " {{{
