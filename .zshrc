@@ -39,8 +39,9 @@ zplug "supercrabtree/k"
 zplug "chrissicool/zsh-256color"
 zplug "docker/cli", use:"contrib/completion/zsh/_docker"
 
-zplug mafredri/zsh-async, from:github
-zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
+zplug "mafredri/zsh-async", from:github
+zplug "starship/starship", from:github
+export STARSHIP_CONFIG=~/.starshiprc
 
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
@@ -128,4 +129,6 @@ function do_enter() {
 
 zle -N do_enter
 bindkey '^m' do_enter
+
+eval "$(starship init zsh)"
 
