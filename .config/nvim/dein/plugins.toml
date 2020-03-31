@@ -55,8 +55,8 @@ hook_add='''
 repo = 'mattn/vim-lsp-settings'
 
 # ALE
-# [[plugins]]
-# repo = 'w0rp/ale'
+[[plugins]]
+repo = 'w0rp/ale'
 
 # Python
 [[plugins]]
@@ -166,8 +166,8 @@ depends = ['vim-airline/vim-airline']
 repo = 'vim-airline/vim-airline'
 hook_add = '''
     let g:airline_theme='deus'
-    let g:airline_section_warning = '%{lsp#get_buffer_diagnostics_counts()["warning"]}'
-    let g:airline_section_error = '%{lsp#get_buffer_diagnostics_counts()["error"]}%{lsp#get_buffer_first_error_line()? "-".lsp#get_buffer_first_error_line():""}'
+"    let g:airline_section_warning = '%{lsp#get_buffer_diagnostics_counts()["warning"]}'
+"    let g:airline_section_error = '%{lsp#get_buffer_diagnostics_counts()["error"]}%{lsp#get_buffer_first_error_line()? "-".lsp#get_buffer_first_error_line():""}'
 '''
 
 # Git
