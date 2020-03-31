@@ -1,4 +1,3 @@
-
 #!/bin/sh
 
 DOT_DIRECTORY="${HOME}/dotfiles"
@@ -29,7 +28,7 @@ backup () {
 				;;
 			* )
 				echo -e "\033[0;31mERROR:\033[0;39m Backup cancelled."
-				exit 0
+				exit 1
 				;;
 		esac
 	else
@@ -72,62 +71,40 @@ download () {
 
 deploy () {
 	# Deploy home directory dotfiles.
-	case "$var2" in
-		"-m" )
-			ln -snfv ${DOT_DIRECTORY}/.zshrc ${HOME}/.zshrc
-			ln -snfv ${DOT_DIRECTORY}/.emacs.d ${HOME}/.emacs.d
-			echo -e "\033[0;32mINFO:\033[0;39m Deploy .zshrc and .emacs.d complete!"
-			exit 0
-		;;
+    cd ${DOT_DIRECTORY}
+    for f in .??*
+    do
+        [ "$f" = ".git" ] && continue
+        [ "$f" = "bin" ] && continue
+        [ "$f" = ".config" ] && continue
+        [ "$f" = "host" ] && continue
 
-		* )
-			cd ${DOT_DIRECTORY}
-			for f in .??*
-			do
-				[ "$f" = ".git" ] && continue
-				[ "$f" = "bin" ] && continue
-				[ "$f" = ".config" ] && continue
-				[ "$f" = "host" ] && continue
+        ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
+    done
+    echo -e "\033[0;32mINFO:\033[0;39m Deploy home directory dotfiles complete!"
 
-				ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
-			done
-			echo -e "\033[0;32mINFO:\033[0;39m Deploy home directory dotfiles complete!"
+    # Deploy .config directory dotfiles.
+    cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
+    for file in `\find . -maxdepth 1 -type d | sed '1d'`; do
+        # make .config directory if not exists.
+        [ "$file" = ".config" ] && continue
 
-			# Deploy .config directory dotfiles.
-			cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
-			for file in `\find . -maxdepth 1 -type d`; do
-				# make .config directory if not exists.
-				[ "$file" = ".config" ] && continue
+        if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
+            mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
+        fi
 
-				if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
-					mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
-				fi
+        ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
+    done
+    echo -e "\033[0;32mINFO:\033[0;39m Deploy .config dotfiles complete!"
 
-				ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
-			done
-			echo -e "\033[0;32mINFO:\033[0;39m Deploy .config dotfiles complete!"
-
-			# Deploy home directory dotfiles and .config directory dotfiles which is enviroment dependent.
-			case `hostname -s` in
-				"arcturus") 
-					echo -e "\033[0;32mINFO:\033[0;39m hostname == arcturus, Install depended dotfiles."
-					ln -snfv ${DOT_DIRECTORY}/host/arcturus/.Xresources ${HOME}/.Xresources
-					ln -snfv ${DOT_DIRECTORY}/host/arcturus/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-					ln -snfv ${DOT_DIRECTORY}/host/arcturus/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
-					echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
-				;;
-				"spica") 
-					echo -e "\033[0;32mINFO:\033[0;39m hostname == spica, Install depended dotfiles."
-					ln -snfv ${DOT_DIRECTORY}/host/spica/.Xresources ${HOME}/.Xresources
-					ln -snfv ${DOT_DIRECTORY}/host/spica/i3 ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-					ln -snfv ${DOT_DIRECTORY}/host/spica/polybar ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
-					echo -e "\033[0;32mINFO:\033[0;39m Deploy depended dotfiles complete!"
-				;;
-				*)
-				;;
-			esac
-			;;
-		esac
+    if [ -d ${DOT_DIRECTORY}/host/`hostname -s` ]; then
+    echo -e "\033[0;32mINFO:\033[0;39m hostname == `hostname -s`, Install depended dotfiles."
+        cd ${DOT_DIRECTORY}/host/`hostname -s`
+        for file in `\find . -maxdepth 1 | sed '1d'`; do
+            ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
+        done
+    fi
+    echo -e "\033[0;32mINFO:\033[0;39m Deploy .config depended dotfiles complete!"
 }
 
 clean () {
@@ -150,7 +127,7 @@ clean () {
 
 			# Delete .config directory dotfiles.
 			cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
-			for file in `\find . -maxdepth 1 -type d`; do
+			for file in `\find . -maxdepth 1 -type d | sed '1d'`; do
 				[ "$f" == "./" ] && continue
 				rm -rf "${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}"
 			done
@@ -179,11 +156,7 @@ install () {
 	case $answer in
 		"" | [Yy]* )
 			download
-			if [[ $var2 == "-m" ]]; then
-				deploy_minimam
-			else
-				deploy
-			fi
+            deploy
 			init
 			;;
 		* )
@@ -206,8 +179,6 @@ Options:
 	--backup, -b            Backup dotfiles
 	--clean, -c             Cleanup dotfiles
 	--init, -i              Setup environment settings
-
-	-m                      Install and Deploy minimal (only .zshrc and .emacs.d)
 EOF
 }
 case $var1 in

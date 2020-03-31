@@ -6,9 +6,6 @@ all:
 deploy: ## Create symlink to home directory
 	@sh $(DOT_DIRECTORY)/bin/install.sh --deploy
 
-deploy-minimal: ## Create symlink to home directory
-	@sh $(DOT_DIRECTORY)/bin/install.sh --deploy -m
-
 init: ## Setup environment settings
 	@sh $(DOT_DIRECTORY)/bin/install.sh --init
 
@@ -28,8 +25,6 @@ update: ## Fetch changes for this repo
 	git submodule foreach git pull origin master
 
 install: backup update deploy init ## Run make backup, update, deploy, init
-
-install-minimal: backup update deploy-minimal init ## Run make backup, update, deploy-minimal, init
 
 help: ## Self-documented Makefile
 	@sh $(DOT_DIRECTORY)/bin/install.sh --help
