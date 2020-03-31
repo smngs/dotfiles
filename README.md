@@ -1,20 +1,10 @@
 Dotfiles
 ---
 
-## Usage (Client)
+## Usage
 
 ``` shell
-$ git clone https://git.mine-313.com/syota/dotfiles.git
-$ cd dotfiles
-$ make install
-```
-
-## Usage (Server/Docker)
-
-``` shell
-$ git clone https://git.mine-313.com/syota/dotfiles.git
-$ cd dotfiles
-$ make install-minimal
+$ bash -c "$(curl -L https://syota.pages.mine-313.com/dotfiles/install.sh)
 ```
 
 ## Require
