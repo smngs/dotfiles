@@ -4,7 +4,7 @@ pages:
   stage: deploy
   script:
     - mkdir public
-    - cp bin/install.sh public
+    - cp -r bin/install.sh public
   artifacts:
     paths:
       - public/
