@@ -61,7 +61,7 @@ download () {
 	echo -e "\033[0;32mINFO:\033[0;39m Downloading dotfiles..."
 	
 	if [ -x "`which git`" ]; then
-		git clone --recursive "$DOT_URL" "DOT_DIRECTORY"
+		git clone --recursive "$DOT_URL" "$DOT_DIRECTORY"
 		echo -e "\033[0;32mINFO:\033[0;39m Download dotfiles complete!"
 	else
 		echo -e "\033[0;31mERROR:\033[0;39m Require Git."
@@ -101,7 +101,7 @@ deploy () {
     echo -e "\033[0;32mINFO:\033[0;39m hostname == `hostname -s`, Install depended dotfiles."
         cd ${DOT_DIRECTORY}/host/`hostname -s`
         for file in `\find . -maxdepth 1 | sed '1d'`; do
-            ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
+            ln -snfv ${DOT_DIRECTORY}/host/`hostname -s`/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
         done
     fi
     echo -e "\033[0;32mINFO:\033[0;39m Deploy .config depended dotfiles complete!"
