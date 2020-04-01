@@ -4,7 +4,7 @@ Dotfiles
 ## Usage
 
 ``` shell
-$ bash -c "$(curl -L https://syota.pages.mine-313.com/dotfiles/install.sh)
+$ bash -c "$(curl -L https://syota.pages.mine-313.com/dotfiles/install.sh)"
 ```
 
 ## Require

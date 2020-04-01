@@ -170,7 +170,7 @@ help () {
 $(basename ${0}) is a tool for deploy dotfiles.
 
 Usage:
-	$(basename ${0}) [<options>] [-m]
+	$(basename ${0}) [<options>]
 
 Options:
 	--install (default)     Run Backup, Update, Deploy, Init
@@ -181,6 +181,7 @@ Options:
 	--init, -i              Setup environment settings
 EOF
 }
+
 case $var1 in
 	"--deploy" ) deploy ;;
 	"-d" ) deploy ;;
