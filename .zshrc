@@ -7,6 +7,8 @@ setopt auto_menu
 setopt auto_cd
 setopt correct
 
+export TERM=screen-256color
+
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
