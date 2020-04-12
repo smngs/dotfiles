@@ -12,7 +12,7 @@ module.exports = {
     fontSize: 11,
 
     // font family with optional fallbacks
-    fontFamily: 'Source Code Pro',
+    fontFamily: 'SauceCodePro Nerd Font Mono',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',

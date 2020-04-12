@@ -17,3 +17,5 @@
 	program = /usr/bin/gpg
 [commit]
 	gpgsign = true
+[color]
+	ui = true

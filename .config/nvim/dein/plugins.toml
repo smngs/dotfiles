@@ -159,15 +159,22 @@ hook_add = '''
 # Appearance
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
+# [[plugins]]
+# repo = 'vim-airline/vim-airline-themes'
+# depends = ['vim-airline/vim-airline']
+# [[plugins]]
+# repo = 'vim-airline/vim-airline'
+# hook_add = '''
+#     let g:airline_theme='deus'
+# "    let g:airline_section_warning = '%{lsp#get_buffer_diagnostics_counts()["warning"]}'
+# "    let g:airline_section_error = '%{lsp#get_buffer_diagnostics_counts()["error"]}%{lsp#get_buffer_first_error_line()? "-".lsp#get_buffer_first_error_line():""}'
+# '''
 [[plugins]]
-repo = 'vim-airline/vim-airline-themes'
-depends = ['vim-airline/vim-airline']
+repo = 'gkeep/iceberg-dark'
 [[plugins]]
-repo = 'vim-airline/vim-airline'
+repo = 'itchyny/lightline.vim'
 hook_add = '''
-    let g:airline_theme='deus'
-"    let g:airline_section_warning = '%{lsp#get_buffer_diagnostics_counts()["warning"]}'
-"    let g:airline_section_error = '%{lsp#get_buffer_diagnostics_counts()["error"]}%{lsp#get_buffer_first_error_line()? "-".lsp#get_buffer_first_error_line():""}'
+    let g:lightline = { 'colorscheme': 'icebergDark' }
 '''
 
 # Git
