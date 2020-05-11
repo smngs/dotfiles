@@ -21,14 +21,10 @@ hook_add = '''
     nmap <silent> gy <Plug>(coc-type-definition)
     nmap <silent> gi <Plug>(coc-implementation)
     nmap <silent> gr <Plug>(coc-references)
+    nmap <leader> rn <Plug>(coc-rename)
 
-    " Remap for rename current word
-    nmap <leader>rn <Plug>(coc-rename)
-
-    " Highlight symbol under cursor on CursorHold
     autocmd CursorHold * silent call CocActionAsync('highlight')
 
-    " Use K for show documentation in preview window
     nnoremap <silent> K :call <SID>show_documentation()<CR>
         function! s:show_documentation()
         if &filetype == 'vim'
@@ -38,11 +34,25 @@ hook_add = '''
         endif
     endfunction
 
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
     let g:coc_global_extensions = [
         \ 'coc-clangd'
         \, 'coc-css'
         \, 'coc-eslint'
         \, 'coc-git'
+        \, 'coc-html'
         \, 'coc-java'
         \, 'coc-json'
         \, 'coc-markdownlint'
@@ -131,25 +141,25 @@ repo = 'lambdalisue/vim-django-support'
 repo = 'jmcantrell/vim-virtualenv'
 
 # LaTeX
-# [[plugins]]
-# repo = 'lervag/vimtex'
-# hook_add = '''
-#     let g:vimtex_fold_envs = 0
-#     let g:vimtex_view_general_viewer = 'evince'
-#     let g:vimtex_view_general_options = '-r @line @pdf @tex'
-#     let g:vimtex_compiler_latexmk = {
-#           \ 'options' : [
-#           \   '-verbose',
-#           \   '-file-line-error',
-#           \   '-synctex=1',
-#           \   '-interaction=nonstopmode',
-#           \ ]}
-#     let g:vimtex_compiler_progname = 'nvr'
-#     augroup set_latex_compiler
-#       autocmd!
-#       autocmd BufNewFile,BufRead *.tex nmap <C-c> <C-c> <plug>(vimtex-compile)
-#     augroup END
-# '''
+[[plugins]]
+repo = 'lervag/vimtex'
+hook_add = '''
+    let g:vimtex_fold_envs = 0
+    let g:vimtex_view_general_viewer = 'evince'
+    let g:vimtex_view_general_options = '-r @line @pdf @tex'
+    let g:vimtex_compiler_latexmk = {
+          \ 'options' : [
+          \   '-verbose',
+          \   '-file-line-error',
+          \   '-synctex=1',
+          \   '-interaction=nonstopmode',
+          \ ]}
+    let g:vimtex_compiler_progname = 'nvr'
+    augroup set_latex_compiler
+      autocmd!
+      autocmd BufNewFile,BufRead *.tex nmap <C-c> <C-c> <plug>(vimtex-compile)
+    augroup END
+'''
 
 # yaml
 [[plugins]]
