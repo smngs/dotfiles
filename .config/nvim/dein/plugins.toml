@@ -14,49 +14,115 @@ repo = 'sheerun/vim-polyglot'
 
 # LSP (Language Server Protocol)
 [[plugins]]
-repo = 'prabirshrestha/vim-lsp'
+repo = 'neoclide/coc.nvim'
+rev = 'release'
 hook_add = '''
-    nmap <silent> gd :LspDefinition<CR>
-    nmap <silent> <f2> :LspRename<CR>
-    nmap <silent> <Leader>d :LspTypeDefinition<CR>
-    nmap <silent> <Leader>r :LspReferences<CR>
-    nmap <silent> <Leader>i :LspImplementation<CR>
-    nmap <silent> <Leader>h :LspHover<CR>
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
 
-    autocmd BufWritePre <buffer> LspDocumentFormatSync
+    " Remap for rename current word
+    nmap <leader>rn <Plug>(coc-rename)
 
-    let g:lsp_diagnostics_enabled = 1
-    let g:lsp_signs_enabled = 1
-    let g:lsp_diagnostics_echo_cursor = 1
-    let g:asyncomplete_auto_popup = 1
-    let g:lsp_signs_error = {'text': '✗'}
-    let g:lsp_signs_warning = {'text': '‼'}
+    " Highlight symbol under cursor on CursorHold
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Use K for show documentation in preview window
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+        function! s:show_documentation()
+        if &filetype == 'vim'
+            execute 'h '.expand('<cword>')
+        else
+            call CocAction('doHover')
+        endif
+    endfunction
+
+    let g:coc_global_extensions = [
+        \ 'coc-clangd'
+        \, 'coc-css'
+        \, 'coc-eslint'
+        \, 'coc-git'
+        \, 'coc-java'
+        \, 'coc-json'
+        \, 'coc-markdownlint'
+        \, 'coc-python'
+        \, 'coc-r-lsp'
+        \, 'coc-vimtex'
+        \, 'coc-yaml'
+        \, 'coc-vimlsp'
+        \, 'coc-snippets'
+        \, 'coc-spell-checker'
+        \ ]
 '''
-[[plugins]]
-repo = 'prabirshrestha/async.vim'
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete.vim'
-[[plugins]]
-repo = 'prabirshrestha/asyncomplete-lsp.vim'
-[[plugins]]
-repo='prabirshrestha/asyncomplete-neosnippet.vim'
-depends = ['Shougo/neosnippet.vim']
-hook_add='''
-    call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-        \ 'name': 'neosnippet',
-        \ 'whitelist': ['*'],
-        \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-        \ }))
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
-'''
-[[plugins]]
-repo = 'mattn/vim-lsp-settings'
+
+# [[plugins]]
+# repo = 'Shougo/deoplete.nvim'
+# depends = 'context_filetype.vim'
+# on_i = 1
+# hook_source = '''
+#     let g:deoplete#enable_at_startup = 1
+#     let g:deoplete#enable_ignore_case = 1
+#     let g:deoplete#enable_smart_case = 1
+# 
+#     " <TAB>: completion.
+#     imap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
+#     function! s:check_back_space() abort
+#         let col = col('.') - 1
+#         return !col || getline('.')[col - 1]  =~ '\s'
+#     endfunction
+# 
+#     " <S-TAB>: completion back.
+#     inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
+# '''
+
+# [[plugins]]
+# repo = 'prabirshrestha/vim-lsp'
+# hook_add = '''
+#     nmap <silent> gd :LspDefinition<CR>
+#     nmap <silent> <f2> :LspRename<CR>
+#     nmap <silent> <Leader>d :LspTypeDefinition<CR>
+#     nmap <silent> <Leader>r :LspReferences<CR>
+#     nmap <silent> <Leader>i :LspImplementation<CR>
+#     nmap <silent> <Leader>h :LspHover<CR>
+# 
+#     autocmd BufWritePre <buffer> LspDocumentFormatSync
+# 
+#     let g:lsp_diagnostics_enabled = 1
+#     let g:lsp_signs_enabled = 1
+#     let g:lsp_diagnostics_echo_cursor = 1
+#     let g:asyncomplete_auto_popup = 1
+#     let g:lsp_signs_error = {'text': '✗'}
+#     let g:lsp_signs_warning = {'text': '‼'}
+# '''
+# [[plugins]]
+# repo = 'mattn/vim-lsp-settings'
+# [[plugins]]
+# repo = 'lighttiger2505/deoplete-vim-lsp'
+# [[plugins]]
+# repo = 'prabirshrestha/async.vim'
+
+# [[plugins]]
+# repo = 'prabirshrestha/asyncomplete.vim'
+# [[plugins]]
+# repo = 'prabirshrestha/asyncomplete-lsp.vim'
+# [[plugins]]
+# repo='prabirshrestha/asyncomplete-neosnippet.vim'
+# depends = ['Shougo/neosnippet.vim']
+# hook_add='''
+#     call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+#         \ 'name': 'neosnippet',
+#         \ 'whitelist': ['*'],
+#         \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+#         \ }))
+#     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+#     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+#     xmap <C-k>     <Plug>(neosnippet_expand_target)
+# '''
 
 # ALE
-[[plugins]]
-repo = 'w0rp/ale'
+# [[plugins]]
+# repo = 'w0rp/ale'
 
 # Python
 [[plugins]]
@@ -65,25 +131,25 @@ repo = 'lambdalisue/vim-django-support'
 repo = 'jmcantrell/vim-virtualenv'
 
 # LaTeX
-[[plugins]]
-repo = 'lervag/vimtex'
-hook_add = '''
-    let g:vimtex_fold_envs = 0
-    let g:vimtex_view_general_viewer = 'evince'
-    let g:vimtex_view_general_options = '-r @line @pdf @tex'
-    let g:vimtex_compiler_latexmk = {
-          \ 'options' : [
-          \   '-verbose',
-          \   '-file-line-error',
-          \   '-synctex=1',
-          \   '-interaction=nonstopmode',
-          \ ]}
-    let g:vimtex_compiler_progname = 'nvr'
-    augroup set_latex_compiler
-      autocmd!
-      autocmd BufNewFile,BufRead *.tex nmap <C-c> <C-c> <plug>(vimtex-compile)
-    augroup END
-'''
+# [[plugins]]
+# repo = 'lervag/vimtex'
+# hook_add = '''
+#     let g:vimtex_fold_envs = 0
+#     let g:vimtex_view_general_viewer = 'evince'
+#     let g:vimtex_view_general_options = '-r @line @pdf @tex'
+#     let g:vimtex_compiler_latexmk = {
+#           \ 'options' : [
+#           \   '-verbose',
+#           \   '-file-line-error',
+#           \   '-synctex=1',
+#           \   '-interaction=nonstopmode',
+#           \ ]}
+#     let g:vimtex_compiler_progname = 'nvr'
+#     augroup set_latex_compiler
+#       autocmd!
+#       autocmd BufNewFile,BufRead *.tex nmap <C-c> <C-c> <plug>(vimtex-compile)
+#     augroup END
+# '''
 
 # yaml
 [[plugins]]
@@ -111,37 +177,6 @@ repo = 'tyru/open-browser.vim'
 [[plugins]]
 repo = 'dhruvasagar/vim-table-mode'
 
-# snippet
-[[plugins]]
-repo = 'Shougo/neocomplete.vim'
-[[plugins]]
-repo = 'Shougo/neocomplcache.vim'
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-hook_add = '''
-    " snippets
-    " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-    " SuperTab like snippets behavior.
-    "imap <expr><TAB>
-    " \ pumvisible() ? "\<C-n>" :
-    " \ neosnippet#expandable_or_jumpable() ?
-    " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-    "set snippet file dir
-    let g:neosnippet#snippets_directory='~/.vim/bundle/neosnippet-snippets/snippets/,~/.vim/snippets'
-'''
-[[plugins]]
-repo = 'shougo/neosnippet-snippets'
-depends = ['Shougo/neosnippet.vim']
-[[plugins]]
-repo = 'shougo/context_filetype.vim'
-
 # submode
 [[plugins]]
 repo = 'kana/vim-submode'
@@ -159,16 +194,6 @@ hook_add = '''
 # Appearance
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
-# [[plugins]]
-# repo = 'vim-airline/vim-airline-themes'
-# depends = ['vim-airline/vim-airline']
-# [[plugins]]
-# repo = 'vim-airline/vim-airline'
-# hook_add = '''
-#     let g:airline_theme='deus'
-# "    let g:airline_section_warning = '%{lsp#get_buffer_diagnostics_counts()["warning"]}'
-# "    let g:airline_section_error = '%{lsp#get_buffer_diagnostics_counts()["error"]}%{lsp#get_buffer_first_error_line()? "-".lsp#get_buffer_first_error_line():""}'
-# '''
 [[plugins]]
 repo = 'gkeep/iceberg-dark'
 [[plugins]]
@@ -183,3 +208,10 @@ repo = "airblade/vim-gitgutter"
 [[plugins]]
 repo = "tpope/vim-fugitive"
 
+# Terminal
+[[plugins]]
+repo = 'Shougo/deol.nvim'
+hook_add = '''
+    nnoremap <silent><C-o> :<C-u>Deol -split=floating<CR>
+    tnoremap <ESC>   <C-\><C-n>
+'''
