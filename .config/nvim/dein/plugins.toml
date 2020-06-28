@@ -3,8 +3,8 @@
 repo = 'Shougo/dein.vim'
 
 # Completion
-[[plugins]]
-repo = 'cespare/vim-toml'
+#[[plugins]]
+#repo = 'cespare/vim-toml'
 [[plugins]]
 repo = 'Yggdroot/indentLine'
 [[plugins]]
@@ -17,6 +17,7 @@ repo = 'sheerun/vim-polyglot'
 repo = 'neoclide/coc.nvim'
 rev = 'release'
 hook_add = '''
+    nmap <silent> <space><space> :<C-u>CocList<cr>
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gy <Plug>(coc-type-definition)
     nmap <silent> gi <Plug>(coc-implementation)
@@ -47,24 +48,43 @@ hook_add = '''
       return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
 
+
     let g:coc_global_extensions = [
         \ 'coc-clangd'
         \, 'coc-css'
+        \, 'coc-dictionary'
         \, 'coc-eslint'
         \, 'coc-git'
         \, 'coc-html'
         \, 'coc-java'
         \, 'coc-json'
         \, 'coc-markdownlint'
+        \, 'coc-neosnippet'
+        \, 'coc-omni'
         \, 'coc-python'
         \, 'coc-r-lsp'
+        \, 'coc-sh'
+        \, 'coc-syntax'
+        \, 'coc-tag'
         \, 'coc-vimtex'
         \, 'coc-yaml'
         \, 'coc-vimlsp'
+        \, 'coc-word'
         \, 'coc-snippets'
         \, 'coc-spell-checker'
         \ ]
+
 '''
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+hook_add = '''
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+'''
+[[plugins]]
+repo = 'shougo/neosnippet-snippets'
+
 
 # [[plugins]]
 # repo = 'Shougo/deoplete.nvim'
@@ -73,7 +93,6 @@ hook_add = '''
 # hook_source = '''
 #     let g:deoplete#enable_at_startup = 1
 #     let g:deoplete#enable_ignore_case = 1
-#     let g:deoplete#enable_smart_case = 1
 # 
 #     " <TAB>: completion.
 #     imap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : deoplete#mappings#manual_complete()
@@ -85,7 +104,7 @@ hook_add = '''
 #     " <S-TAB>: completion back.
 #     inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
 # '''
-
+# 
 # [[plugins]]
 # repo = 'prabirshrestha/vim-lsp'
 # hook_add = '''
@@ -111,7 +130,7 @@ hook_add = '''
 # repo = 'lighttiger2505/deoplete-vim-lsp'
 # [[plugins]]
 # repo = 'prabirshrestha/async.vim'
-
+# 
 # [[plugins]]
 # repo = 'prabirshrestha/asyncomplete.vim'
 # [[plugins]]
@@ -135,10 +154,10 @@ hook_add = '''
 # repo = 'w0rp/ale'
 
 # Python
-[[plugins]]
-repo = 'lambdalisue/vim-django-support'
-[[plugins]]
-repo = 'jmcantrell/vim-virtualenv'
+# [[plugins]]
+# repo = 'lambdalisue/vim-django-support'
+# [[plugins]]
+# repo = 'jmcantrell/vim-virtualenv'
 
 # LaTeX
 [[plugins]]
@@ -147,18 +166,20 @@ hook_add = '''
     let g:vimtex_fold_envs = 0
     let g:vimtex_view_general_viewer = 'evince'
     let g:vimtex_view_general_options = '-r @line @pdf @tex'
+    let g:vimtex_quickfix_open_on_warning = 0
     let g:vimtex_compiler_latexmk = {
-          \ 'options' : [
-          \   '-verbose',
-          \   '-file-line-error',
-          \   '-synctex=1',
-          \   '-interaction=nonstopmode',
-          \ ]}
-    let g:vimtex_compiler_progname = 'nvr'
-    augroup set_latex_compiler
-      autocmd!
-      autocmd BufNewFile,BufRead *.tex nmap <C-c> <C-c> <plug>(vimtex-compile)
-    augroup END
+        \ 'background': 1,
+        \ 'build_dir': '',
+        \ 'continuous': 1,
+        \ 'options' : [
+            \   '-pdfdvi',
+        \   '-verbose',
+        \   '-file-line-error',
+        \   '-synctex=1',
+        \   '-interaction=nonstopmode',
+        \ ]}
+    let g:tex_conceal=''
+    nmap <localleader>ll <plug>(vimtex-compile-toggle)
 '''
 
 # yaml
@@ -166,24 +187,32 @@ hook_add = '''
 repo = 'chase/vim-ansible-yaml'
 
 # markdown
+# [[plugins]]
+# repo = 'plasticboy/vim-markdown'
+# hook_add = '''
+#     let g:vim_markdown_folding_disabled = 1
+#     let g:vim_markdown_conceal = 0
+#     let g:tex_conceal = 0
+#     let g:vim_markdown_math = 1
+#     let g:tex_flavor='latex'
+# '''
 [[plugins]]
-repo = 'plasticboy/vim-markdown'
+repo = 'iamcco/markdown-preview.nvim'
+build = 'cd app && yarn install'
 hook_add = '''
-    let g:vim_markdown_folding_disabled = 1
-    let g:vim_markdown_conceal = 0
-    let g:tex_conceal = 0
-    let g:vim_markdown_math = 1
-    let g:tex_flavor='latex'
+    let g:mkdp_auto_start = 1
+    let g:mkdp_auto_close = 1
+    let g:mkdp_browser = 'firefox'
 '''
 
-[[plugins]]
-repo = 'kannokanno/previm'
-hook_add = '''
-    let g:previm_disable_default_css = 1
-    let g:previm_custom_css_path = '~/dotfiles/.config/nvim/markdown.css'
-'''
-[[plugins]]
-repo = 'tyru/open-browser.vim'
+# [[plugins]]
+# repo = 'kannokanno/previm'
+# hook_add = '''
+#     let g:previm_disable_default_css = 1
+#     let g:previm_custom_css_path = '~/dotfiles/.config/nvim/markdown.css'
+# '''
+# [[plugins]]
+# repo = 'tyru/open-browser.vim'
 [[plugins]]
 repo = 'dhruvasagar/vim-table-mode'
 
@@ -209,7 +238,7 @@ repo = 'gkeep/iceberg-dark'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
-    let g:lightline = { 'colorscheme': 'icebergDark' }
+    let g:lightline = { 'colorscheme': 'icebergDark'}
 '''
 
 # Git

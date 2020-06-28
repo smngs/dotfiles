@@ -18,6 +18,10 @@ nnoremap x "_x
 cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
 cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
+inoremap <silent> jj <ESC>
+inoremap <silent> っｊ <ESC>
+inoremap <silent> っj <ESC>
+
 " ENV
 let $CACHE = empty($XDG_CACHE_HOME) ? expand('$HOME/.cache') : $XDG_CACHE_HOME
 let $CONFIG = empty($XDG_CONFIG_HOME) ? expand('$HOME/.config') : $XDG_CONFIG_HOME
@@ -33,7 +37,7 @@ endfunction
 
 call s:load('plugins')
 
-filetype plugin on
+filetype plugin indent on
 syntax on
 
 " Colorscheme
@@ -65,11 +69,11 @@ set ambiwidth=double
 
 " Tab / Indent
 set expandtab
-set tabstop=4
-set softtabstop=4
+set tabstop=2
+set softtabstop=2
 set autoindent
 set smartindent
-set shiftwidth=4
+set shiftwidth=2
 
 " Search
 set incsearch
@@ -127,3 +131,13 @@ command! -bar -range=% Kutouten  call s:kutouten(<line1>, <line2>)
 let g:yankring_n_keys = 'Y D'
 " default
 " let g:yankring_n_keys = 'Y D x X'
+"
+function! Fcitx2en()
+ let s:input_status = system("fcitx-remote")
+ if s:input_status == 2
+    let l:a = system("fcitx-remote -c")
+ endif
+endfunction
+
+set ttimeoutlen=150
+autocmd InsertLeave * call Fcitx2en()
