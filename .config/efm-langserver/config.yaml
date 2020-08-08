@@ -1,0 +1,9 @@
+languages:
+  markdown:
+    lint-command: 'npx textlint --format unix ${INPUT}'
+    lint-formats:
+      - '%f:%l:%n: %m'
+  tex:
+    lint-command: 'npx textlint --format unix ${INPUT}'
+    lint-formats:
+      - '%f:%l:%n: %m'
