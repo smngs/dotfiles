@@ -9,11 +9,22 @@ setopt correct
 
 export TERM=screen-256color
 
+zstyle ":anyframe:selector:" use fzf-tmux
+zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -p'
+export FZF_TMUX=1
+export FZF_TMUX_OPTS='-p'
+export ENHANCD_FILTER="fzf-tmux -p"
+export ENHANCD_DISABLE_DOT=1
+
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="/usr/local/bin:\
+  /usr/local/sbin:\
+  $HOME/.gem/ruby/2.7.0/bin:\
+  $PATH"
+
 if type hyper > /dev/null 2>&1; then
     export TERMINAL='hyper'
 fi
@@ -22,6 +33,7 @@ export EDITOR='nvim'
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
 SAVEHIST=1000000
+setopt share_history
 
 # Install zplug
 if [[ ! -d ~/.zplug ]];then
@@ -30,19 +42,34 @@ fi
 
 source ~/.zplug/init.zsh
 
+# plugin
+## syntax
 zplug
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-completions"
-
-zplug "arks22/tmuximum", as:command
-zplug "supercrabtree/k"
 zplug "chrissicool/zsh-256color"
+zplug "mafredri/zsh-async", from:github
+
+## theme
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+
+## tmux
+zplug "arks22/tmuximum", as:command
+
+## docker
 zplug "docker/cli", use:"contrib/completion/zsh/_docker"
 
-zplug "mafredri/zsh-async", from:github
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+## completion
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
+zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
+zplug "mollifier/anyframe"
+
+zplug "mollifier/cd-gitroot"
+zplug "plugins/git",   from:oh-my-zsh
+zplug "peterhurford/git-aliases.zsh"
+zplug "b4b4r07/enhancd", use:init.sh
 
 if ! zplug check --verbose; then
   printf "Install? [y/N]: "
@@ -53,13 +80,6 @@ fi
 zplug load
 
 # alias
-# terminal
-#if type colorls > /dev/null 2>&1; then
-#    alias ls='colorls --color=auto'
-#    alias la='colorls -a'
-#    alias ll='colorls -la'
-#fi
-
 alias ls='ls --color=auto'
 alias la='ls --color=auto -a'
 alias ll='ls --color=auto -lh'
@@ -81,6 +101,9 @@ alias .....='cd ../../../..'
 alias t='tmuximum'
 
 # git
+alias g='anyframe-source-ghq-repository \
+  | anyframe-selector-fzf-tmux \
+  | cd'
 alias gs='git status --short --branch'
 alias gd='git diff'
 alias ga='git add -A'
@@ -95,8 +118,10 @@ alias gf='git fetch'
 alias n='nvim'
 alias v='nvim'
 
+# ranger
 alias r='ranger'
 
+# tmuximum
 if [ -z $TMUX ]; then
   tmuximum
 fi
