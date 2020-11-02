@@ -80,10 +80,30 @@ fi
 zplug load
 
 # alias
-alias ls='ls --color=auto'
-alias la='ls --color=auto -a'
-alias ll='ls --color=auto -lh'
-alias lla='ls --color=auto -lah'
+# alias ls='ls --color=auto'
+# alias la='ls --color=auto -a'
+# alias ll='ls --color=auto -lh'
+# alias lla='ls --color=auto -lah'
+
+if [[ $(command -v exa) ]]; then
+  alias l='exa --icons'
+  alias ls='exa --icons'
+  alias la='exa --icons -a'
+  alias ll='ls --icons -lh'
+  alias lla='ls --icons -lah'
+fi
+
+if [[ $(command -v bat) ]]; then
+  alias cat='bat'
+fi
+
+if [[ $(command -v hexyl) ]]; then
+  alias od='hexyl'
+fi
+
+if [[ $(command -v procs) ]]; then
+  alias ps='procs'
+fi
 
 alias tree='tree -C'
 alias rm='rm -i'
@@ -93,9 +113,10 @@ alias q='exit'
 alias c='clear'
 
 alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
+alias ..2='cd ../..'
+alias ..3='cd ../../..'
+alias ..4='cd ../../../..'
+alias ..5='cd ../../../../..'
 
 # tmux
 alias t='tmuximum'
