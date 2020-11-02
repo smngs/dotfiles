@@ -1,4 +1,4 @@
-# Xft.dpi: 192 
+Xft.dpi: 192
 # Xft.autohint: 0
 # Xft.lcdfilter:  lcddefault
 # Xft.hintstyle:  hintfull
@@ -7,3 +7,4 @@ Xft.antialias: 1
 # Xft.rgba: rgb
 
 rofi.font: Noto Sans CJK JP 12
+rofi.dpi: 192

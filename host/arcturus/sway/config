@@ -164,8 +164,10 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-new_window none
-new_float none
+# new_window none
+default_border none
+# new_float none
+default_floating_border none
 gaps outer 6
 gaps inner 6
 
@@ -202,32 +204,46 @@ bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
 # Applications
-bindsym $Mod+i exec firefox
-bindsym $mod+Shift+e exec emacs
+bindsym $mod+i exec GDK_BACKEND=wayland firefox
+# bindsym $mod+Shift+e exec emacs
 
-assign [class="(?i)slack" ] 9
+# assign [class="(?i)slack" ] 9
 
 # Daemons
-# exec_always --no-startup-id xrandr --output HDMI3 --output HDMI1 --right-of HDMI3 --primary --output HDMI2 --right-of HDMI1
-exec_always --no-startup-id xrandr --output HDMI1 --mode 3840x2160 --pos 0x0 --output HDMI3 --scale 2x2 --pos 3840x0 --output HDMI2 --scale 2x2 --pos 7680x0 --primary
+# exec_always --no-startup-id xrandr --output HDMI1 --output HDMI2 --right-of HDMI1 --primary --output HDMI3 --right-of HDMI2
 # Use HDMI2 in 4K.
-# exec_always --no-startup-id xrandr --output HDMI2 --mode 3840x2160 --pos 0x0 --output HDMI1 --scale 2x2 --primary --pos 3840x0 --output HDMI3 --scale 2x2 --pos 7680x0 
+# exec_always --no-startup-id xrandr \
+#   --output HDMI1 --mode 3840x2160 --pos 0x0 \
+#   --output HDMI2 --scale 2x2 --primary --pos 3840x0 \
+#   --output HDMI3 --scale 2x2 --pos 7680x0 
 
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
-exec_always --no-startup-id light-locker --lock-on-suspend
-# exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/wallpaper.jpg
-exec_always --no-startup-id feh --bg-center ~/.config/i3/wallpaper.jpg
-exec_always --no-startup-id fcitx
-# exec_always --no-startup-id conky
-exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
-exec_always --no-startup-id slack
+# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+# exec_always --no-startup-id sudo compton
+# exec_always --no-startup-id light-locker --lock-on-suspend
+# # exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/wallpaper.jpg
+# exec_always --no-startup-id feh --bg-center ~/keyboard.jpg
+# exec_always --no-startup-id fcitx
+# # exec_always --no-startup-id conky
+# exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
+# exec_always --no-startup-id slack
 # exec_always --no-startup-id barrier
+# 
+# # Applets
+# exec_always --no-startup-id nm-applet
+# exec_always --no-startup-id blueman-applet
+# exec_always --no-startup-id system-config-printer-applet
+# 
+# # Power managements
+# exec_always sudo tlp start
 
-# Applets
-exec_always --no-startup-id nm-applet
-exec_always --no-startup-id blueman-applet
-exec_always --no-startup-id system-config-printer-applet
+exec_always --no-startup-id fcitx
 
-# Power managements
-exec_always sudo tlp start
+output {
+  "*" background ~/.config/sway/wallpaper.jpg fill
+  # "HDMI-A-1" scale 2
+  "HDMI-A-2" pos 3840 0 res 1920x1080
+  "HDMI-A-3" pos 1920 0 res 1920x1080
+  "HDMI-A-1" pos 0 0 scale 2
+}
+
+exec_always --no-startup-id waybar
