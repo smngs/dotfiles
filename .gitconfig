@@ -1,21 +1,25 @@
 [user]
-	email = syota@mine-313.com
-	name = Syota Minegishi
-	signingkey = 20339E01EA12A4E5
+  email = syota@mine-313.com
+  name = Syota Minegishi
+  signingkey = 20339E01EA12A4E5
 [core]
-	quotepath = false
-    editor = nvim
-	precomposeunicode = true
+  quotepath = false
+  editor = nvim
+  precomposeunicode = true
 [credential]
-	helper = cache
+  helper = cache
 [filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
 [gpg]
-	program = /usr/bin/gpg
+  program = /usr/bin/gpg
 [commit]
-	gpgsign = true
+  gpgsign = true
 [color]
-	ui = true
+  ui = true
+
+[ghq "git@git.mine-313.com:sophia/"]
+  vcs = git
+  root = ~/sophia
