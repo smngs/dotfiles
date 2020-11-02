@@ -94,7 +94,7 @@ repo = 'Shougo/neosnippet-snippets'
 repo = 'lervag/vimtex'
 hook_add = '''
     let g:vimtex_fold_envs = 0
-    let g:vimtex_view_general_viewer = 'evince'
+    let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_general_options = '-r @line @pdf @tex'
     let g:vimtex_quickfix_open_on_warning = 0
     let g:vimtex_compiler_latexmk = {
@@ -136,6 +136,9 @@ hook_add = '''
     let g:mkdp_browser = 'firefox'
     let g:mkdp_command_for_global = 1
 '''
+
+[[plugins]]
+repo = 'dhruvasagar/vim-marp'
 
 [[plugins]]
 repo = 'dhruvasagar/vim-table-mode'
