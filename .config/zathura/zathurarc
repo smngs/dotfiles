@@ -1,0 +1,14 @@
+map <C-i> recolor
+
+set default-bg "#161821"
+
+set recolor-darkcolor "#d2d4de"
+set recolor-lightcolor "#161821"
+set statusbar-fg "#d2d4de"
+set statusbar-bg "#161821"
+
+set recolor true
+
+set zoom-step 40
+set scroll-step 100
+set selection-clipboard clipboard
