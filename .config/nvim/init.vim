@@ -58,6 +58,12 @@ augroup TransparentBG
 	autocmd Colorscheme * highlight EndOfBuffer ctermbg=none 
 augroup END
 
+" Undo
+if has('persistent_undo')
+  set undodir=~/.config/nvim/undo
+  set undofile
+endif
+
 " Clipboard
 set clipboard+=unnamedplus
 

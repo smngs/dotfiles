@@ -208,10 +208,7 @@ bindsym $mod+Shift+e exec emacs
 assign [class="(?i)slack" ] 9
 
 # Daemons
-# exec_always --no-startup-id xrandr --output HDMI3 --output HDMI1 --right-of HDMI3 --primary --output HDMI2 --right-of HDMI1
-exec_always --no-startup-id xrandr --output HDMI1 --mode 3840x2160 --pos 0x0 --output HDMI3 --scale 2x2 --pos 3840x0 --output HDMI2 --scale 2x2 --pos 7680x0 --primary
-# Use HDMI2 in 4K.
-# exec_always --no-startup-id xrandr --output HDMI2 --mode 3840x2160 --pos 0x0 --output HDMI1 --scale 2x2 --primary --pos 3840x0 --output HDMI3 --scale 2x2 --pos 7680x0 
+exec_always --no-startup-id xrandr --output DP-2 --mode 3840x2160 --pos 0x0  --output DP-1 --scale 2x2 --pos 3840x0 --output HDMI-0 --scale 2x2 --pos 7680x0 --primary
 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b

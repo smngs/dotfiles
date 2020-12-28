@@ -3,7 +3,7 @@
     "efm": {
       "command": "efm-langserver",
       "args": [],
-      "filetypes": ["markdown", "tex", "plaintex"]
+      "filetypes": ["markdown"]
     }
   }
 }

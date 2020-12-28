@@ -8,11 +8,6 @@
   precomposeunicode = true
 [credential]
   helper = cache
-[filter "lfs"]
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
-  clean = git-lfs clean -- %f
 [gpg]
   program = /usr/bin/gpg
 [commit]
@@ -23,3 +18,8 @@
 [ghq "git@git.mine-313.com:sophia/"]
   vcs = git
   root = ~/sophia
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
