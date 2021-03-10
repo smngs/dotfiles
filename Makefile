@@ -19,10 +19,7 @@ clean: ## Cleanup dotfiles
 	@sh $(DOT_DIRECTORY)/bin/install.sh --clean
 
 update: ## Fetch changes for this repo
-	git pull origin master
-	git submodule init
-	git submodule update
-	git submodule foreach git pull origin master
+	@sh $(DOT_DIRECTORY)/bin/install.sh --update
 
 install: backup update deploy init ## Run make backup, update, deploy, init
 

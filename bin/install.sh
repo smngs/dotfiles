@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ${HOME}/dotfiles/bin/loglib.sh
+
 DOT_DIRECTORY="${HOME}/dotfiles"
 DOT_CONFIG_DIRECTORY=".config"
 DOT_URL="https://git.mine-313.com/syota/dotfiles.git"
@@ -18,22 +20,22 @@ backup () {
 	# Backup home directory dotfiles.
 	cd ${DOT_DIRECTORY}
 	if [ -e "${HOME}/dotfiles-backup" ]; then
-		echo -e -n "\033[0;33mWARN:\033[0;39m ${HOME}/dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
+    log_warn "dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
 		read answer
 		case $answer in
 			"" | [Yy]* )
 				rm -rf "${HOME}/dotfiles-backup/*"
 				mkdir "${HOME}/dotfiles-backup/*"
-				echo -e "\033[0;32mINFO:\033[0;39m Rewrite ${HOME}/dotfiles-backup."
+        log_info "Rewrite ${HOME}/dotfiles-backup."
 				;;
 			* )
-				echo -e "\033[0;31mERROR:\033[0;39m Backup cancelled."
+        log_error "Backup Cancelled"
 				exit 1
 				;;
 		esac
 	else
 		mkdir "${HOME}/dotfiles-backup"
-		echo -e "\033[0;32mINFO:\033[0;39m Make ${HOME}/dotfiles-backup."
+    log_info "Make ${HOME}/dotfiles-backup."
 	fi
 
 	for f in .??*
@@ -43,30 +45,34 @@ backup () {
 		if [ -e "${HOME}/$f" ]; then
 			sudo cp -r "${HOME}/$f" "${HOME}/dotfiles-backup/" 
 			if [ ! $? == 0 ]; then
-				echo -e "\033[0;31mERROR:\033[0;39m Backup aborted!"
+        log_error "Backup aborted!"
 				exit 1
 			fi
 		fi
 	done
 
-	echo -e "\033[0;32mINFO:\033[0;39m Backup dotfiles complete!"
+  log_info "Backup dotfiles completed!"
 }
 
 download () {
 	if [ -d "$DOT_DIRECTORY" ]; then
-		echo -e "\033[0;31mERROR:\033[0;39m dotfiles already exists. -> $DOT_DIRECTORY"
+    log_error "dotfiles already exists. -> $DOT_DIRECTORY"
 		exit 1
 	fi
 
-	echo -e "\033[0;32mINFO:\033[0;39m Downloading dotfiles..."
+  log_info "Downloading dotfiles..."
 	
 	if [ -x "`which git`" ]; then
 		git clone --recursive "$DOT_URL" "$DOT_DIRECTORY"
-		echo -e "\033[0;32mINFO:\033[0;39m Download dotfiles complete!"
+    log_info "Download dotfiles completed."
 	else
-		echo -e "\033[0;31mERROR:\033[0;39m Require Git."
+    log_error "Require Git."
 		exit 1
 	fi
+
+  log_info "Pull dotfiles submodules..."
+  git submodule update --init --recursive
+  log_info "pull dotfiles submodules completed."
 }
 
 deploy () {
@@ -81,7 +87,7 @@ deploy () {
 
         ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
     done
-    echo -e "\033[0;32mINFO:\033[0;39m Deploy home directory dotfiles complete!"
+    log_info "Deploy home directory dotfiles complete!"
 
     # Deploy .config directory dotfiles.
     cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
@@ -95,21 +101,21 @@ deploy () {
 
         ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
     done
-    echo -e "\033[0;32mINFO:\033[0;39m Deploy .config dotfiles complete!"
+    log_info "Deploy .config dotfiles complete."
 
     if [ -d ${DOT_DIRECTORY}/host/`hostname -s` ]; then
-    echo -e "\033[0;32mINFO:\033[0;39m hostname == `hostname -s`, Install depended dotfiles."
+    log_warn "hostname == `hostname -s`, Install depended dotfiles."
         cd ${DOT_DIRECTORY}/host/`hostname -s`
         for file in `\find . -maxdepth 1 | sed '1d'`; do
             ln -snfv ${DOT_DIRECTORY}/host/`hostname -s`/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
         done
     fi
-    echo -e "\033[0;32mINFO:\033[0;39m Deploy .config depended dotfiles complete!"
+    log_info "Deploy .config depended dotfiles complete!" 
 }
 
 clean () {
 	# Delete home directory dotfiles.
-	echo -e -n "\033[0;33mWARN:\033[0;39m DEPRECATED!! Are you sure you want to clean dotfiles? [y/N]:"
+  log_warn "DEPRECATED!! Are you sure you want to clean dotfiles? [y/N]:"
 	read answer
 	
 	case $answer in
@@ -136,10 +142,10 @@ clean () {
 			rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
 			rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
 
-			echo -e "\033[0;32mINFO:\033[0;39m Clean dotfiles complete!"
+      log_info "clean dotfiles complete!"
 			;;
 		* )
-			echo -e "\033[0;31mERROR:\033[0;39m Clean cancelled."
+      log_error "clean cancelled."
 			;;
 	esac
 }
@@ -150,21 +156,28 @@ init () {
 
 install () {
 	echo -e "$dotfiles_logo"
-	echo -e -n "\033[0;33mWARN:\033[0;39m Are you sure you want to install dotfiles? [Y/n]:"
+  log_warn "Are you sure you want to install dotfiles? [Y/n]:"
 	read answer
 
 	case $answer in
 		"" | [Yy]* )
 			download
-            deploy
+      deploy
 			init
 			;;
 		* )
-			echo -e "\033[0;31mERROR:\033[0;39m Install cancelled."
+      log_error "Install cancelled."
 			;;
 	esac
 }
 		
+update () {
+  log_info "Start dotfiles update."
+  git pull origin master
+  git submodule update
+  log_info "Finish dotfiles update."
+}
+
 help () {
 	cat <<EOF
 $(basename ${0}) is a tool for deploy dotfiles.
@@ -178,6 +191,7 @@ Options:
 	--deploy, -d            Create symlink to home directory 
 	--backup, -b            Backup dotfiles
 	--clean, -c             Cleanup dotfiles
+  --update, -u            Update dotfiles
 	--init, -i              Setup environment settings
 EOF
 }
@@ -189,6 +203,8 @@ case $var1 in
 	"-b" ) backup ;;
 	"--clean" ) clean ;;
 	"-c" ) clean ;;
+  "--update" ) update ;;
+  "-u" ) update ;;
 	"--init" ) init ;;
 	"-i" ) init ;;
 	"--help" ) help ;;
