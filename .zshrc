@@ -1,89 +1,54 @@
-# zplug
-source ~/.zplug/init.zsh
-autoload -Uz compinit && compinit
+#            _
+#    _______| |__  _ __ ___
+#   |_  / __| '_ \| '__/ __|
+#  _ / /\__ \ | | | | | (__
+# (_)___|___/_| |_|_|  \___|
 
+# zplug の設定読み込み．
+source ~/.zplugrc
+
+# 補完を有効化．
+autoload -Uz compinit && compinit
 setopt auto_list
 setopt auto_menu
 setopt auto_cd
 setopt correct
 
+# 256 色表示できるように．
 export TERM=screen-256color
 
+# anyframe の設定．
 zstyle ":anyframe:selector:" use fzf-tmux
 zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -p'
 export FZF_TMUX=1
 export FZF_TMUX_OPTS='-p'
+
+# enhancd の設定．
 export ENHANCD_FILTER="fzf-tmux -p"
 export ENHANCD_DISABLE_DOT=1
 
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
-export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-export PATH="/usr/local/bin:\
-  /usr/local/sbin:\
-  $HOME/.gem/ruby/2.7.0/bin:\
-  $PATH"
+# export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+# export PATH="/usr/local/bin:\
+#   /usr/local/sbin:\
+#   $HOME/.gem/ruby/2.7.0/bin:\
+#   $PATH"
 
 if type hyper > /dev/null 2>&1; then
     export TERMINAL='hyper'
 fi
-export EDITOR='nvim'
+if type nvim > /dev/null 2>&1; then
+  export EDITOR='nvim'
+fi
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt share_history
 
-# Install zplug
-if [[ ! -d ~/.zplug ]];then
-  git clone https://github.com/zplug/zplug ~/.zplug
-fi
-
-source ~/.zplug/init.zsh
-
-# plugin
-## syntax
-zplug
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-history-substring-search"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-completions"
-zplug "chrissicool/zsh-256color"
-zplug "mafredri/zsh-async", from:github
-
-## theme
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-
-## tmux
-zplug "arks22/tmuximum", as:command
-
-## docker
-zplug "docker/cli", use:"contrib/completion/zsh/_docker"
-
-## completion
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
-zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
-zplug "mollifier/anyframe"
-
-zplug "mollifier/cd-gitroot"
-zplug "plugins/git",   from:oh-my-zsh
-zplug "peterhurford/git-aliases.zsh"
-zplug "b4b4r07/enhancd", use:init.sh
-
-if ! zplug check --verbose; then
-  printf "Install? [y/N]: "
-  if read -q; then
-    echo; zplug install
-  fi
-fi
-zplug load
-
-# alias
-# alias ls='ls --color=auto'
-# alias la='ls --color=auto -a'
-# alias ll='ls --color=auto -lh'
-# alias lla='ls --color=auto -lah'
+# ----------------- alias --------------------
 
 if [[ $(command -v exa) ]]; then
   alias l='exa --icons'
@@ -142,6 +107,9 @@ alias v='nvim'
 # ranger
 alias r='ranger'
 
+# --------------------------------------------
+
+# ----------------- function -----------------
 # tmuximum
 if [ -z $TMUX ]; then
   tmuximum
@@ -176,3 +144,4 @@ function do_enter() {
 
 zle -N do_enter
 bindkey '^m' do_enter
+# --------------------------------------------
