@@ -9,11 +9,30 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'deton/jasegment.vim'
+hook_add = '''
+    let g:jasegment#model = 'knbc_bunsetu'
+    let g:jasegment#highlight = 2
+    let g:jasegment#splitpat = '[^[:space:]　][?!、。，．・]\+\zs'
+'''
+
+[[plugins]]
 repo = 'junegunn/fzf.vim'
 
 # Syntax-highlight
 [[plugins]]
 repo = 'sheerun/vim-polyglot'
+
+# Resizer
+[[plugins]]
+repo = 'simeji/winresizer'
+hook_add = '''
+    let g:winresizer_vert_resize = 3
+    let g:winresizer_horiz_resize = 3
+'''
+
+# HTML
+repo = 'tpope/vim-surround'
 
 # LSP (Language Server Protocol)
 [[plugins]]
@@ -79,13 +98,14 @@ hook_add = '''
 
 '''
 
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-hook_add = '''
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k> <Plug>(neosnippet_expand_target)
-'''
+# [[plugins]]
+# repo = 'Shougo/neosnippet.vim'
+# hook_add = '''
+#   imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+#   smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+#   xmap <C-k>     <Plug>(neosnippet_expand_target)
+# '''
+
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
 
@@ -173,13 +193,11 @@ hook_add = '''
 [[plugins]]
 repo = 'nvim-treesitter/nvim-treesitter'
 hook_add = '''
-" treesitter
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   highlight = {
     enable = true,              -- false will disable the whole extension
-    disable = { "vue", "ruby" },  -- list of language that will be disabled
   },
 }
 EOF
@@ -197,4 +215,101 @@ repo = 'Shougo/deol.nvim'
 hook_add = '''
     nnoremap <silent><C-o> :<C-u>Deol -split=floating<CR>
     tnoremap <ESC>   <C-\><C-n>
+'''
+
+# Cheat Sheet
+[[plugins]]
+repo = 'reireias/vim-cheatsheet'
+hook_add = '''
+  let g:cheatsheet#cheat_file = '~/.config/nvim/cheat.txt'
+  let g:cheatsheet#float_window = 1
+  let g:cheatsheet#float_window_width_ratio = 0.6
+  let g:cheatsheet#float_window_height_ratio = 0.6
+'''
+
+# Filer
+[[plugins]]
+repo = 'Shougo/defx.nvim'
+hook_add = '''
+	autocmd FileType defx call s:defx_my_settings()
+	function! s:defx_my_settings() abort
+	  " Define mappings
+	  nnoremap <silent><buffer><expr> <CR>
+	  \ defx#do_action('drop')
+	  nnoremap <silent><buffer><expr> c
+	  \ defx#do_action('copy')
+	  nnoremap <silent><buffer><expr> m
+	  \ defx#do_action('move')
+	  nnoremap <silent><buffer><expr> p
+	  \ defx#do_action('paste')
+	  nnoremap <silent><buffer><expr> l
+	  \ defx#do_action('drop')
+	  nnoremap <silent><buffer><expr> E
+	  \ defx#do_action('drop', 'vsplit')
+	  nnoremap <silent><buffer><expr> P
+	  \ defx#do_action('preview')
+	  nnoremap <silent><buffer><expr> o
+	  \ defx#do_action('open_tree', 'toggle')
+	  nnoremap <silent><buffer><expr> K
+	  \ defx#do_action('new_directory')
+	  nnoremap <silent><buffer><expr> N
+	  \ defx#do_action('new_file')
+	  nnoremap <silent><buffer><expr> M
+	  \ defx#do_action('new_multiple_files')
+	  nnoremap <silent><buffer><expr> C
+	  \ defx#do_action('toggle_columns',
+	  \                'mark:indent:icon:filename:type:size:time')
+	  nnoremap <silent><buffer><expr> S
+	  \ defx#do_action('toggle_sort', 'time')
+	  nnoremap <silent><buffer><expr> d
+	  \ defx#do_action('remove')
+	  nnoremap <silent><buffer><expr> r
+	  \ defx#do_action('rename')
+	  nnoremap <silent><buffer><expr> !
+	  \ defx#do_action('execute_command')
+	  nnoremap <silent><buffer><expr> x
+	  \ defx#do_action('execute_system')
+	  nnoremap <silent><buffer><expr> yy
+	  \ defx#do_action('yank_path')
+	  nnoremap <silent><buffer><expr> .
+	  \ defx#do_action('toggle_ignored_files')
+	  nnoremap <silent><buffer><expr> ;
+	  \ defx#do_action('repeat')
+	  nnoremap <silent><buffer><expr> h
+	  \ defx#do_action('cd', ['..'])
+	  nnoremap <silent><buffer><expr> ~
+	  \ defx#do_action('cd')
+	  nnoremap <silent><buffer><expr> q
+	  \ defx#do_action('quit')
+	  nnoremap <silent><buffer><expr> <Space>
+	  \ defx#do_action('toggle_select') . 'j'
+	  nnoremap <silent><buffer><expr> *
+	  \ defx#do_action('toggle_select_all')
+	  nnoremap <silent><buffer><expr> j
+	  \ line('.') == line('$') ? 'gg' : 'j'
+	  nnoremap <silent><buffer><expr> k
+	  \ line('.') == 1 ? 'G' : 'k'
+	  nnoremap <silent><buffer><expr> <C-l>
+	  \ defx#do_action('redraw')
+	  nnoremap <silent><buffer><expr> <C-g>
+	  \ defx#do_action('print')
+	  nnoremap <silent><buffer><expr> cd
+	  \ defx#do_action('change_vim_cwd')
+	endfunction
+
+  autocmd VimEnter * execute 'Defx'
+  nnoremap <silent> <Leader>f :<C-u> Defx <CR>
+
+call defx#custom#option('_', {
+  \ 'winwidth': 40,
+  \ 'split': 'vertical',
+  \ 'direction': 'topleft',
+  \ 'show_ignored_files': 0,
+  \ 'buffer_name': 'explorer',
+  \ 'toggle': 1,
+  \ 'resume': 1,
+  \ 'focus': 0,
+  \ 'floating_preview': 1,
+  \ })
+
 '''
