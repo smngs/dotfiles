@@ -10,8 +10,8 @@
   helper = cache
 [gpg]
   program = /usr/bin/gpg
-[commit]
-  gpgsign = true
+# [commit]
+#   gpgsign = true
 [color]
   ui = true
 
