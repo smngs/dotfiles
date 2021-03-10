@@ -1,0 +1,58 @@
+#            _
+#  _____ __ | |_   _  __ _
+# |_  / '_ \| | | | |/ _` |
+#  / /| |_) | | |_| | (_| |
+# /___| .__/|_|\__,_|\__, |
+#     |_|            |___/
+
+# zplug がインストールされていない場合，自動インストールする．
+if [[ ! -d ~/.zplug ]];then
+  git clone https://github.com/zplug/zplug ~/.zplug
+fi
+
+# zplug の設定を読み込み．
+source ~/.zplug/init.zsh
+
+# plugin の設定．
+
+# 補完周り．
+zplug
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-completions"
+zplug "chrissicool/zsh-256color"
+zplug "mafredri/zsh-async", from:github
+
+# zsh の theme．
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+
+# tmux の自動起動とか．
+zplug "arks22/tmuximum", as:command
+
+# docker の補完．
+zplug "docker/cli", use:"contrib/completion/zsh/_docker"
+
+# あいまい検索．
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
+zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
+zplug "mollifier/anyframe"
+
+# git の補完．
+zplug "mollifier/cd-gitroot"
+zplug "plugins/git",   from:oh-my-zsh
+zplug "peterhurford/git-aliases.zsh"
+
+# cd の強化．
+zplug "b4b4r07/enhancd", use:init.sh
+
+# プラグインがインストールされていないとき，自動インストールする．
+if ! zplug check --verbose; then
+  printf "Install? [y/N]: "
+  if read -q; then
+    echo; zplug install
+  fi
+fi
+
+# zplug を load する．
+zplug load
