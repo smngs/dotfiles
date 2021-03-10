@@ -208,7 +208,7 @@ bindsym $mod+Shift+e exec emacs
 assign [class="(?i)slack" ] 9
 
 # Daemons
-exec_always --no-startup-id xrandr --output DP-2 --mode 3840x2160 --pos 0x0  --output DP-1 --scale 2x2 --pos 3840x0 --output HDMI-0 --scale 2x2 --pos 7680x0 --primary
+exec_always --no-startup-id xrandr --output DP-4 --mode 3840x2160 --pos 0x0 --output HDMI-0 --scale 2x2 --pos 3840x0 --output DP-1 --scale 2x2 --pos 7680x0 --primary
 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
