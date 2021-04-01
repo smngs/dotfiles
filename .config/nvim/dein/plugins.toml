@@ -27,8 +27,8 @@ repo = 'sheerun/vim-polyglot'
 [[plugins]]
 repo = 'simeji/winresizer'
 hook_add = '''
-    let g:winresizer_vert_resize = 3
-    let g:winresizer_horiz_resize = 3
+    let g:winresizer_vert_resize = 1
+    let g:winresizer_horiz_resize = 1
 '''
 
 # HTML
@@ -71,8 +71,7 @@ hook_add = '''
     endfunction
 
     let g:coc_global_extensions = [
-        \ 'coc-clangd'
-        \, 'coc-css'
+        \ 'coc-css'
         \, 'coc-dictionary'
         \, 'coc-eslint'
         \, 'coc-tslint'
@@ -99,12 +98,19 @@ hook_add = '''
 '''
 
 # [[plugins]]
-# repo = 'Shougo/neosnippet.vim'
+# repo = 'dense-analysis/ale'
 # hook_add = '''
-#   imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-#   smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-#   xmap <C-k>     <Plug>(neosnippet_expand_target)
+#     let g:ale_linters = { 'cpp': ['clangd'] }
+#     let g:ale_fixers = { 'cpp': [ 'clang-format' ] }
 # '''
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+hook_add = '''
+  imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+  smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+  xmap <C-k>     <Plug>(neosnippet_expand_target)
+'''
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
@@ -310,6 +316,17 @@ call defx#custom#option('_', {
   \ 'resume': 1,
   \ 'focus': 0,
   \ 'floating_preview': 1,
+  \ 'columns': 'indent:git:icons:filename:mark',
   \ })
 
 '''
+
+# devicon
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
+repo = 'kristijanhusak/defx-icons'
+
+[[plugins]]
+repo = 'kristijanhusak/defx-git'

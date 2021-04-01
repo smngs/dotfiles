@@ -1,21 +1,23 @@
 {
-  "languageserver": {
-    "efm": {
-      "command": "efm-langserver",
-      "args": [],
-      "filetypes": ["markdown"]
+    "languageserver": {
+      "golang": {
+        "command": "gopls",
+        "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+        "filetypes": ["go"],
+        "initializationOptions": {
+          "usePlaceholders": true
+        }
     },
-    "clangd": {
-      "command": "clangd",
-      "args": ["--background-index"],
-      "rootPatterns": [
-        "compile_flags.txt",
-        "compile_commands.json",
-        ".vim/",
-        ".git/",
-        ".hg/"
-      ],
-      "filetypes": ["c", "cpp", "objc", "objcpp"]
+    "ccls": {
+        "enable": false,
+        "command": "ccls",
+        "filetypes": ["c", "cpp", "objc", "objcpp"],
+        "rootPatterns": [".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+        "initializationOptions": {
+            "cache": {
+                "directory": "/tmp/ccls"
+            }
+        }
     }
-  },
+  }
 }
