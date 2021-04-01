@@ -206,6 +206,7 @@ bindsym $Mod+i exec firefox
 bindsym $mod+Shift+e exec emacs
 
 assign [class="(?i)slack" ] 9
+assign [class="Thunderbird"] 8
 
 # Daemons
 exec_always --no-startup-id xrandr --output DP-4 --mode 3840x2160 --pos 0x0 --output HDMI-0 --scale 2x2 --pos 3840x0 --output DP-1 --scale 2x2 --pos 7680x0 --primary
@@ -219,6 +220,7 @@ exec_always --no-startup-id fcitx
 # exec_always --no-startup-id conky
 exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
 exec_always --no-startup-id slack
+exec_always --no-startup-id thunderbird
 # exec_always --no-startup-id barrier
 
 # Applets
