@@ -3,7 +3,8 @@
 source ${HOME}/dotfiles/bin/loglib.sh
 
 DOT_DIRECTORY="${HOME}/dotfiles"
-DOT_CONFIG_DIRECTORY=".config"
+DOT_CONFIG_DIRECTORY="config"
+DOT_HOME_DIRECTORY="home"
 DOT_URL="https://github.com/smngs/dotfiles.git"
 
 var1=$1
@@ -77,7 +78,7 @@ download () {
 
 deploy () {
 	# Deploy home directory dotfiles.
-    cd ${DOT_DIRECTORY}
+    cd ${DOT_DIRECTORY}/${DOT_HOME_DIRECTORY}
     for f in .??*
     do
         [ "$f" = ".git" ] && continue
@@ -85,7 +86,7 @@ deploy () {
         [ "$f" = ".config" ] && continue
         [ "$f" = "host" ] && continue
 
-        ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
+        ln -snfv ${DOT_DIRECTORY}/${DOT_HOME_DIRECTORY}/${f} ${HOME}/${f}
     done
     log_info "Deploy home directory dotfiles complete!"
 
@@ -111,43 +112,6 @@ deploy () {
         done
     fi
     log_info "Deploy .config depended dotfiles complete!" 
-}
-
-clean () {
-	# Delete home directory dotfiles.
-  log_warn "DEPRECATED!! Are you sure you want to clean dotfiles? [y/N]:"
-	read answer
-	
-	case $answer in
-		[Yy]* )
-			cd ${DOT_DIRECTORY}
-			for f in .??*
-			do
-				[ "$f" = ".git" ] && continue
-				[ "$f" = "bin" ] && continue
-				[ "$f" = ".config" ] && continue
-				[ "$f" = "host" ] && continue
-
-				rm -rf "${HOME}/${f}"
-			done
-
-			# Delete .config directory dotfiles.
-			cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
-			for file in `\find . -maxdepth 1 -type d | sed '1d'`; do
-				[ "$f" == "./" ] && continue
-				rm -rf "${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}"
-			done
-
-			rm -rf ${HOME}/.Xresources
-			rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/i3
-			rm -rf ${HOME}/${DOT_CONFIG_DIRECTORY}/polybar
-
-      log_info "clean dotfiles complete!"
-			;;
-		* )
-      log_error "clean cancelled."
-			;;
-	esac
 }
 
 init () {
@@ -190,7 +154,6 @@ Options:
 	--help, -h              Show helpfile
 	--deploy, -d            Create symlink to home directory 
 	--backup, -b            Backup dotfiles
-	--clean, -c             Cleanup dotfiles
 	--update, -u            Update dotfiles
 	--init, -i              Setup environment settings
 EOF
@@ -201,8 +164,6 @@ case $var1 in
 	"-d" ) deploy ;;
 	"--backup" ) backup ;;
 	"-b" ) backup ;;
-	"--clean" ) clean ;;
-	"-c" ) clean ;;
   "--update" ) update ;;
   "-u" ) update ;;
 	"--init" ) init ;;
