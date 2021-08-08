@@ -202,14 +202,26 @@ bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
 # Applications
-bindsym $Mod+i exec firefox
+# bindsym $Mod+i exec firefox
+bindsym $Mod+i exec google-chrome-stable
+# bindsym $Mod+i exec LIBVA_DRIVER_NAME=vdpau MOZ_X11_EGL=1 firefox-nightly
 bindsym $mod+Shift+e exec emacs
 
 assign [class="(?i)slack" ] 9
 assign [class="Thunderbird"] 8
 
 # Daemons
-exec_always --no-startup-id xrandr --output DP-4 --mode 3840x2160 --pos 0x0 --output HDMI-0 --scale 2x2 --pos 3840x0 --output DP-1 --scale 2x2 --pos 7680x0 --primary
+# exec_always --no-startup-id xrandr --output DP-0 --primary --mode 3840x2160 --pos 0x0 --scale 1.5x1.5 --output DP-2 --mode 3840x2160 --pos 5760x-540 --rotate left --scale 1.5x1.5 --output HDMI-0 --pos 1080x3240 --scale 1.0x1.0
+
+# exec_always --no-startup-id xrandr \
+#     --output DP-0 --primary --mode 3840x2160 --pos 0x0 --scale 1.5x1.5 \
+#     --output DP-2 --mode 3840x2160 --pos 5760x-540 --rotate left --scale 1.5x1.5 \
+#     --output HDMI-0 --pos 1080x3240 --scale 1.0x1.0
+
+exec_always --no-startup-id xrandr \
+    --output HDMI-0 --pos 0x0 \
+    --output DP-0 --primary --mode 3840x2160 --pos 3840x0 \
+    --output DP-2 --mode 3840x2160 --pos 7680x0
 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
