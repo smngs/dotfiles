@@ -15,9 +15,6 @@ test: ## Test dotfiles and init scripts
 backup: ## Backup dotfiles
 	@sh $(DOT_DIRECTORY)/bin/install.sh --backup
 
-clean: ## Cleanup dotfiles
-	@sh $(DOT_DIRECTORY)/bin/install.sh --clean
-
 update: ## Fetch changes for this repo
 	@sh $(DOT_DIRECTORY)/bin/install.sh --update
 
