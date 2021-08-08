@@ -5,6 +5,33 @@
 # this file and re-run i3-config-wizard(1).
 #
 
+input "type:keyboard" {
+    xkb_layout us
+    xkb_options ctrl:nocaps
+}
+
+input "1739:30383:DELL08AF:00_06CB:76AF_Touchpad" {
+    tap enabled
+    natural_scroll enabled
+}
+
+# output DP-2 pos 0 0
+# output DP-1 pos 640 1440
+# output eDP-1 pos 2560 1000 
+
+output DP-2 pos 0 0
+output DP-1 pos 2560 0
+output eDP-1 pos 2560 1440 
+
+
+workspace 1 output DP-2
+workspace 2 output DP-1
+workspace 3 output eDP-1
+
+exec_always waybar
+
+output * bg #000000 solid_color
+
 # i3 config file (v4)
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
@@ -31,13 +58,13 @@ font pango:Ricty 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec --no-startup-id alacritty
+bindsym $mod+Return exec --no-startup-id termite 
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec rofi -show drun
+bindsym $mod+d exec rofi -show drun -font "Cica-Regular 12"
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -66,6 +93,9 @@ bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
+
+bindsym $mod+Tab workspace prev
+bindsym $mod+Shift+Tab workspace next
 
 # split in horizontal orientation
 bindsym $mod+n split h
@@ -165,12 +195,12 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # new_window none
-default_border none
 # new_float none
-default_floating_border none
 gaps outer 6
 gaps inner 6
 
+default_border none
+default_floating_border none
 
 # App Settings
 for_window [class="Pavucontrol"] floating enable, resize set 1200 800
@@ -181,12 +211,11 @@ for_window [class="Blueman-manager"] floating enable, resize set 1200 800
 for_window [class="system-config-printer"] floating enable, resize set 1200 800
 for_window [class="Lxappearance"] floating enable, resize set 600 400
 
-set $Locker light-locker-command -l && sleep 1
-set $mode_system System (l) lock, (e) logout, (h) hybrid-sleep, (r) reboot, (Shift+s) shutdown
+set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id $Locker, mode "default"
-    bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym h exec systemctl hybrid-sleep, mode "default"
+    bindsym l exec --no-startup-id swaylock -c 000000, mode "default"
+    bindsym e exec --no-startup-id swaymsg exit, mode "default"
+    bindsym s exec systemctl suspend, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym shift+s exec --no-startup-id sudo shutdown now, mode "default"
     bindsym Return mode "default"
@@ -204,46 +233,28 @@ bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
 # Applications
-bindsym $mod+i exec GDK_BACKEND=wayland firefox
-# bindsym $mod+Shift+e exec emacs
+bindsym $mod+i exec MOZ_ENABLE_WAYLAND=1 GTK_THEME=Adwaita:dark firefox
+bindsym $mod+o exec nautilus
+bindsym $mod+p exec enpass showassistant
 
-# assign [class="(?i)slack" ] 9
+assign [class="(?i)slack" ] 9
 
 # Daemons
-# exec_always --no-startup-id xrandr --output HDMI1 --output HDMI2 --right-of HDMI1 --primary --output HDMI3 --right-of HDMI2
-# Use HDMI2 in 4K.
-# exec_always --no-startup-id xrandr \
-#   --output HDMI1 --mode 3840x2160 --pos 0x0 \
-#   --output HDMI2 --scale 2x2 --primary --pos 3840x0 \
-#   --output HDMI3 --scale 2x2 --pos 7680x0 
-
+# exec_always --no-startup-id xrandr --output eDP-1 --brightness 0.75
 # exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-# exec_always --no-startup-id sudo compton
+# exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
 # exec_always --no-startup-id light-locker --lock-on-suspend
-# # exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/wallpaper.jpg
-# exec_always --no-startup-id feh --bg-center ~/keyboard.jpg
-# exec_always --no-startup-id fcitx
-# # exec_always --no-startup-id conky
-# exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
-# exec_always --no-startup-id slack
-# exec_always --no-startup-id barrier
-# 
-# # Applets
-# exec_always --no-startup-id nm-applet
-# exec_always --no-startup-id blueman-applet
-# exec_always --no-startup-id system-config-printer-applet
-# 
-# # Power managements
-# exec_always sudo tlp start
-
+# exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/wallpaper.jpg
 exec_always --no-startup-id fcitx
+# exec_always --no-startup-id ~/.config/conky/launch.sh
+# exec_always --no-startup-id /usr/lib/notify-osd/notify-osd
+exec_always --no-startup-id slack
+# exec_always --no-startup-id libinput-gestures-setup start
 
-output {
-  "*" background ~/.config/sway/wallpaper.jpg fill
-  # "HDMI-A-1" scale 2
-  "HDMI-A-2" pos 3840 0 res 1920x1080
-  "HDMI-A-3" pos 1920 0 res 1920x1080
-  "HDMI-A-1" pos 0 0 scale 2
-}
+# Applets
+exec_always --no-startup-id nm-applet --indicator
+exec_always --no-startup-id blueman-applet
+exec_always --no-startup-id system-config-printer-applet
 
-exec_always --no-startup-id waybar
+# Power managements
+# exec_always sudo tlp start

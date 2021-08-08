@@ -14,6 +14,7 @@ setopt auto_menu
 setopt auto_cd
 setopt correct
 
+export LANG=ja_JP.UTF-8
 # 256 色表示できるように．
 export TERM=screen-256color
 

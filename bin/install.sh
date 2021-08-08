@@ -3,7 +3,7 @@
 source ${HOME}/dotfiles/bin/loglib.sh
 
 DOT_DIRECTORY="${HOME}/dotfiles"
-DOT_CONFIG_DIRECTORY=".config"
+DOT_CONFIG_DIRECTORY="config"
 DOT_URL="https://git.mine-313.com/syota/dotfiles.git"
 
 var1=$1
@@ -77,7 +77,7 @@ download () {
 
 deploy () {
 	# Deploy home directory dotfiles.
-    cd ${DOT_DIRECTORY}
+    cd ${DOT_DIRECTORY}/home
     for f in .??*
     do
         [ "$f" = ".git" ] && continue
@@ -85,7 +85,7 @@ deploy () {
         [ "$f" = ".config" ] && continue
         [ "$f" = "host" ] && continue
 
-        ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
+        ln -snfv ${DOT_DIRECTORY}/home/${f} ${HOME}/${f}
     done
     log_info "Deploy home directory dotfiles complete!"
 
@@ -95,11 +95,11 @@ deploy () {
         # make .config directory if not exists.
         [ "$file" = ".config" ] && continue
 
-        if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
-            mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
+        if [ ! -e "${HOME}/.config" ]; then
+            mkdir "${HOME}/.config"
         fi
 
-        ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
+        ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/.config/${file:2}
     done
     log_info "Deploy .config dotfiles complete."
 
@@ -107,7 +107,7 @@ deploy () {
     log_warn "hostname == `hostname -s`, Install depended dotfiles."
         cd ${DOT_DIRECTORY}/host/`hostname -s`
         for file in `\find . -maxdepth 1 | sed '1d'`; do
-            ln -snfv ${DOT_DIRECTORY}/host/`hostname -s`/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
+            ln -snfv ${DOT_DIRECTORY}/host/`hostname -s`/${file:2} ${HOME}/.config/${file:2}
         done
     fi
     log_info "Deploy .config depended dotfiles complete!" 
