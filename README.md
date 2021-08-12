@@ -4,7 +4,7 @@ Dotfiles
 ## Usage
 
 ``` shell
-$ bash -c "$(curl -L dot.mngs.io)"
+$ bash -c "$(curl -L dot.smngs.io)"
 ```
 
 ## Require
