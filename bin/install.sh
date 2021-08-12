@@ -1,7 +1,5 @@
 #!/bin/sh
 
-source ${HOME}/dotfiles/bin/loglib.sh
-
 DOT_DIRECTORY="${HOME}/dotfiles"
 DOT_CONFIG_DIRECTORY="config"
 DOT_HOME_DIRECTORY="home"
@@ -17,11 +15,34 @@ dotfiles_logo='
  \__,_|\___/ \__|_| |_|_|\___||___/
 '
 
+readonly LOGFILE="/tmp/${0##*/}.log"
+readonly PROCNAME=${0##*/}
+
+function log_warn() {
+    local fname=${BASH_SOURCE[1]##*/}
+    echo -e "\033[0;33mWARN:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
+}
+
+function log_question() {
+    local fname=${BASH_SOURCE[1]##*/}
+    echo -e "\033[0;33mQUESTION:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
+}
+
+function log_info() {
+    local fname=${BASH_SOURCE[1]##*/}
+    echo -e "\033[0;32mINFO:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
+}
+
+function log_error() {
+    local fname=${BASH_SOURCE[1]##*/}
+    echo -e "\033[0;31mERROR:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
+}
+
 backup () {
 	# Backup home directory dotfiles.
 	cd ${DOT_DIRECTORY}
 	if [ -e "${HOME}/dotfiles-backup" ]; then
-    log_warn "dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
+    log_question "dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
 		read answer
 		case $answer in
 			"" | [Yy]* )
@@ -120,7 +141,7 @@ init () {
 
 install () {
 	echo -e "$dotfiles_logo"
-  log_warn "Are you sure you want to install dotfiles? [Y/n]:"
+  log_question "Are you sure you want to install dotfiles? [Y/n]:"
 	read answer
 
 	case $answer in
