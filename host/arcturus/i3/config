@@ -202,8 +202,8 @@ bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
 # Applications
-# bindsym $Mod+i exec firefox
-bindsym $Mod+i exec google-chrome-stable
+bindsym $Mod+i exec firefox
+# bindsym $Mod+i exec google-chrome-stable
 # bindsym $Mod+i exec LIBVA_DRIVER_NAME=vdpau MOZ_X11_EGL=1 firefox-nightly
 bindsym $mod+Shift+e exec emacs
 
@@ -224,7 +224,7 @@ exec_always --no-startup-id xrandr \
     --output DP-2 --mode 3840x2160 --pos 7680x0
 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
+# exec_always --no-startup-id compton --config ~/.config/compton/compton.conf -b
 exec_always --no-startup-id light-locker --lock-on-suspend
 # exec_always --no-startup-id feh --bg-scale $HOME/.config/i3/wallpaper.jpg
 exec_always --no-startup-id feh --bg-center ~/.config/i3/wallpaper.jpg
@@ -241,4 +241,4 @@ exec_always --no-startup-id blueman-applet
 exec_always --no-startup-id system-config-printer-applet
 
 # Power managements
-exec_always sudo tlp start
+exec_always sudo avrcp-volume
