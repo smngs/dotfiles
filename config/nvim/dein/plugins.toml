@@ -189,27 +189,39 @@ hook_add = '''
 '''
 
 # Appearance
+# [[plugins]]
+# repo = 'arcticicestudio/nord-vim'
+
 [[plugins]]
-repo = 'cocopon/iceberg.vim'
-[[plugins]]
-repo = 'gkeep/iceberg-dark'
+repo = "joshdick/onedark.vim"
+
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
-    let g:lightline = { 'colorscheme': 'icebergDark'}
+    let g:lightline = { 'colorscheme': 'onedark' }
 '''
-[[plugins]]
-repo = 'nvim-treesitter/nvim-treesitter'
-hook_add = '''
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-  },
-}
-EOF
-'''
+
+# [[plugins]]
+# repo = 'cocopon/iceberg.vim'
+# [[plugins]]
+# repo = 'gkeep/iceberg-dark'
+# [[plugins]]
+# repo = 'itchyny/lightline.vim'
+# hook_add = '''
+#     let g:lightline = { 'colorscheme': 'icebergDark'}
+# '''
+# [[plugins]]
+# repo = 'nvim-treesitter/nvim-treesitter'
+# hook_add = '''
+# lua <<EOF
+# require'nvim-treesitter.configs'.setup {
+#   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+#   highlight = {
+#     enable = true,              -- false will disable the whole extension
+#   },
+# }
+# EOF
+# '''
 
 # Git
 [[plugins]]

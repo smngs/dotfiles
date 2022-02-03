@@ -42,7 +42,7 @@ syntax on
 
 " Colorscheme
 set termguicolors
-colorscheme iceberg
+colorscheme onedark
 
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
