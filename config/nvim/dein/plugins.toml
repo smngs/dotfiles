@@ -121,23 +121,33 @@ repo = 'Shougo/neosnippet-snippets'
 [[plugins]]
 repo = 'lervag/vimtex'
 hook_add = '''
-    let g:vimtex_fold_envs = 0
-    let g:vimtex_view_general_viewer = 'zathura'
-    let g:vimtex_view_general_options = '-r @line @pdf @tex'
-    let g:vimtex_quickfix_open_on_warning = 0
+    if has('mac')
+      let g:vimtex_view_method='skim'
+    else
+      let g:vimtex_view_method='zathura'
+    endif
+    if has('nvim')
+      let g:vimtex_compiler_progname
+            \ = 'nvr'
+    endif
+
+    let maplocalleader = '\'
     let g:vimtex_compiler_latexmk = {
-        \ 'background': 1,
-        \ 'build_dir': '',
-        \ 'continuous': 1,
-        \ 'options' : [
-            \   '-pdfdvi',
-        \   '-verbose',
-        \   '-file-line-error',
-        \   '-synctex=1',
-        \   '-interaction=nonstopmode',
-        \ ]}
-    let g:tex_conceal=''
-    nmap <localleader>ll <plug>(vimtex-compile-toggle)
+      \ 'background': 1,
+      \ 'build_dir': '',
+      \ 'continuous': 1,
+      \ 'options': [
+      \    '-pdfdvi', 
+      \    '-verbose',
+      \    '-file-line-error',
+      \    '-synctex=1',
+      \    '-interaction=nonstopmode',
+      \],
+      \}
+
+let g:vimtex_view_general_viewer
+      \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+let g:vimtex_view_general_options = '-r @line @pdf @tex'
 '''
 
 # markdown
@@ -156,14 +166,22 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'iamcco/markdown-preview.nvim'
-build = 'cd app && yarn install'
+repo = 'previm/previm'
 hook_add = '''
-    let g:mkdp_auto_start = 1
-    let g:mkdp_auto_close = 1
-    let g:mkdp_browser = 'firefox'
-    let g:mkdp_command_for_global = 1
+	let g:previm_open_cmd = 'open -a Firefox'
+  let g:previm_enable_realtime = 1
+  let g:previm_custom_css_path = "~/.config/nvim/markdown.css"
 '''
+
+# [[plugins]]
+# repo = 'iamcco/markdown-preview.nvim'
+# build = 'cd app && yarn install'
+# hook_add = '''
+#     let g:mkdp_auto_start = 1
+#     let g:mkdp_auto_close = 1
+#     let g:mkdp_browser = 'firefox'
+#     let g:mkdp_command_for_global = 1
+# '''
 
 [[plugins]]
 repo = 'dhruvasagar/vim-marp'
