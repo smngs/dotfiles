@@ -18,7 +18,8 @@ backup: ## Backup dotfiles
 update: ## Fetch changes for this repo
 	@sh $(DOT_DIRECTORY)/bin/install.sh --update
 
-install: backup update deploy init ## Run make backup, update, deploy, init
+install:
+	@sh $(DOT_DIRECTORY)/bin/install.sh --install
 
 help: ## Self-documented Makefile
 	@sh $(DOT_DIRECTORY)/bin/install.sh --help

@@ -1,17 +1,17 @@
 {
 	"filters": {},
-  "plugins": ["latex2e"],
-	"rules": {
-		"preset-ja-technical-writing": {
-			"ja-no-mixed-period": {
-				"periodMark": "．",
-				"allowPeriodMarks": ["。"],
-				"allowEmojiAtEnd": false,
-				"forceAppendPeriod": false
-			},
-		    "sentence-length": {
-                max: 300
-		    }
-	    }
-    }
+		"plugins": ["latex2e"],
+		"rules": {
+			"preset-ja-technical-writing": {
+				"ja-no-mixed-period": {
+					"periodMark": "．",
+					"allowPeriodMarks": ["。"],
+					"allowEmojiAtEnd": false,
+					"forceAppendPeriod": false
+				},
+				"sentence-length": {
+max: 300
+				}
+			}
+		}
 }

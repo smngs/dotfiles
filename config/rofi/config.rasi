@@ -1,21 +1,9 @@
 configuration {
-	modi: "run,window,windowcd,drun,ssh";
-	lines: 6;
-	bw: 2;
-	location: 0;
-	padding: 5;
-	fixed-num-lines: true;
-	terminal: "hyper";
-	sidebar-mode: true;
-	combi-modi: "windowcd,drun";
-	hide-scrollbar: true;
-	color-normal: "#455a64, #fafbfc, #455a64, #00bcd4, #fafbfc";
-	color-urgent: "#455a64, #ff5252, #455a64, #ff5252, #fdf6e3";
-	color-active: "#455a64, #00bcd4, #455a64, #009688, #fdf6e3";
-	color-window: "#3a4c54, #2a373e, #c3c6c8";
-	kb-mode-next: "Shift+Right,Control+i,Control+Tab";
-	kb-mode-previous: "Shift+Left,Control+Shift+i";
-	kb-row-up: "Up,Control+p,Shift+Tab,Alt+Tab";
-	kb-row-down: "Down,Control+n";
-	kb-cancel: "Escape,Control+g,Control+bracketleft,Control+c";
+  sidebar-mode:  true;
+  hide-scrollbar: true;
+  kb-cancel: "Escape,Control+bracketleft";
+  kb-mode-previous: "Alt+u";
+  kb-mode-next: "Alt+i";
+  font: "Migu 1C Regular";
 }
+@theme "~/.config/rofi/slate.rasi"

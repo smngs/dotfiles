@@ -3,8 +3,9 @@
 	url = https://github.com/tmux-plugins/tpm
 
 [submodule ".config/ranger/plugins/ranger_devicons"]
-  path = .config/ranger/plugins/ranger_devicons
-  url = https://github.com/alexanderjeurissen/ranger_devicons
+	path = .config/ranger/plugins/ranger_devicons
+	url = https://github.com/alexanderjeurissen/ranger_devicons
+
 [submodule "home/.tmux/plugins/tpm"]
 	path = home/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm.git
