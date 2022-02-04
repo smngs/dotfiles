@@ -3,10 +3,11 @@
 DOT_DIRECTORY="${HOME}/dotfiles"
 DOT_CONFIG_DIRECTORY="config"
 DOT_HOME_DIRECTORY="home"
+DOT_HOST_DIRECTORY="host"
 DOT_URL="https://github.com/smngs/dotfiles.git"
 
-var1=$1
-var2=$2
+source ${DOT_DIRECTORY}/bin/shell-logger.sh
+
 dotfiles_logo='
      _       _    __ _ _           
   __| | ___ | |_ / _(_) | ___  ___ 
@@ -15,49 +16,26 @@ dotfiles_logo='
  \__,_|\___/ \__|_| |_|_|\___||___/
 '
 
-readonly LOGFILE="/tmp/${0##*/}.log"
-readonly PROCNAME=${0##*/}
-
-function log_warn() {
-    local fname=${BASH_SOURCE[1]##*/}
-    echo -e "\033[0;33mWARN:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
-}
-
-function log_question() {
-    local fname=${BASH_SOURCE[1]##*/}
-    echo -e "\033[0;33mQUESTION:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
-}
-
-function log_info() {
-    local fname=${BASH_SOURCE[1]##*/}
-    echo -e "\033[0;32mINFO:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
-}
-
-function log_error() {
-    local fname=${BASH_SOURCE[1]##*/}
-    echo -e "\033[0;31mERROR:\033[0;39m $(date '+%Y-%m-%dT%H:%M:%S') ${PROCNAME} (${fname}:${BASH_LINENO[0]}:${FUNCNAME[1]}) $@" | tee -a ${LOGFILE}
-}
-
 backup () {
 	# Backup home directory dotfiles.
 	cd ${DOT_DIRECTORY}
 	if [ -e "${HOME}/dotfiles-backup" ]; then
-    log_question "dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
+    notice "dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
 		read answer
 		case $answer in
 			"" | [Yy]* )
 				rm -rf "${HOME}/dotfiles-backup/*"
 				mkdir "${HOME}/dotfiles-backup/*"
-        log_info "Rewrite ${HOME}/dotfiles-backup."
+        info "Rewrite ${HOME}/dotfiles-backup."
 				;;
 			* )
-        log_error "Backup Cancelled"
+        err "Backup Cancelled"
 				exit 1
 				;;
 		esac
 	else
 		mkdir "${HOME}/dotfiles-backup"
-    log_info "Make ${HOME}/dotfiles-backup."
+    info "Make ${HOME}/dotfiles-backup."
 	fi
 
 	for f in .??*
@@ -67,34 +45,34 @@ backup () {
 		if [ -e "${HOME}/$f" ]; then
 			sudo cp -r "${HOME}/$f" "${HOME}/dotfiles-backup/" 
 			if [ ! $? == 0 ]; then
-        log_error "Backup aborted!"
+        err "Backup aborted!"
 				exit 1
 			fi
 		fi
 	done
 
-  log_info "Backup dotfiles completed!"
+  info "Backup dotfiles completed!"
 }
 
 download () {
 	if [ -d "$DOT_DIRECTORY" ]; then
-    log_error "dotfiles already exists. -> $DOT_DIRECTORY"
+    err "dotfiles already exists. -> $DOT_DIRECTORY"
 		exit 1
 	fi
 
-  log_info "Downloading dotfiles..."
+  info "Downloading dotfiles..."
 	
 	if [ -x "`which git`" ]; then
 		git clone --recursive "$DOT_URL" "$DOT_DIRECTORY"
-    log_info "Download dotfiles completed."
+    info "Download dotfiles completed."
 	else
-    log_error "Require Git."
+    err "Require Git."
 		exit 1
 	fi
 
-  log_info "Pull dotfiles submodules..."
+  info "Pull dotfiles submodules..."
   git submodule update --init --recursive
-  log_info "pull dotfiles submodules completed."
+  info "pull dotfiles submodules completed."
 }
 
 deploy () {
@@ -109,7 +87,7 @@ deploy () {
 
         ln -snfv ${DOT_DIRECTORY}/${DOT_HOME_DIRECTORY}/${f} ${HOME}/${f}
     done
-    log_info "Deploy home directory dotfiles complete!"
+    info "Deploy home directory dotfiles complete."
 
     # Deploy .config directory dotfiles.
     cd ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}
@@ -123,53 +101,50 @@ deploy () {
 
         ln -snfv ${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
     done
-    log_info "Deploy .config dotfiles complete."
+    info "Deploy .config dotfiles complete."
 
-    if [ -d ${DOT_DIRECTORY}/host/`hostname -s` ]; then
-    log_warn "hostname == `hostname -s`, Install depended dotfiles."
-        cd ${DOT_DIRECTORY}/host/`hostname -s`
+    if [ -d ${DOT_DIRECTORY}/${DOT_HOST_DIRECTORY}/`hostname -s` ]; then
+    warn "hostname == `hostname -s`, Install depended dotfiles."
+        cd ${DOT_DIRECTORY}/${DOT_HOST_DIRECTORY}/`hostname -s`
         for file in `\find . -maxdepth 1 | sed '1d'`; do
-            ln -snfv ${DOT_DIRECTORY}/host/`hostname -s`/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
+            ln -snfv ${DOT_DIRECTORY}/${DOT_HOST_DIRECTORY}/`hostname -s`/${file:2} ${HOME}/${DOT_CONFIG_DIRECTORY}/${file:2}
         done
     fi
-    log_info "Deploy .config depended dotfiles complete!" 
+    info "Deploy .config depended dotfiles complete."
 }
 
 init () {
-	:
-}
-
-install () {
 	echo -e "$dotfiles_logo"
-  log_question "Are you sure you want to install dotfiles? [Y/n]:"
+  notice "Are you sure you want to install dotfiles? [Y/n]:"
 	read answer
 
 	case $answer in
 		"" | [Yy]* )
-			download
       deploy
-			init
+      install
 			;;
 		* )
-      log_error "Install cancelled."
+      err "Install cancelled."
 			;;
 	esac
 }
+
+install () {
+    :
+}
 		
 update () {
-  log_info "Start dotfiles update."
+  info "Start dotfiles update."
   git pull origin master
   git submodule update
-  log_info "Finish dotfiles update."
+  info "Finish dotfiles update."
 }
 
 help () {
 	cat <<EOF
 $(basename ${0}) is a tool for deploy dotfiles.
-
 Usage:
 	$(basename ${0}) [<options>]
-
 Options:
 	--install (default)     Run Backup, Update, Deploy, Init
 	--help, -h              Show helpfile
@@ -180,17 +155,23 @@ Options:
 EOF
 }
 
-case $var1 in
+case $1 in
+	"deploy" ) deploy ;;
 	"--deploy" ) deploy ;;
 	"-d" ) deploy ;;
+	"backup" ) backup ;;
 	"--backup" ) backup ;;
 	"-b" ) backup ;;
+  "update" ) update ;;
   "--update" ) update ;;
   "-u" ) update ;;
+	"init" ) init ;;
 	"--init" ) init ;;
 	"-i" ) init ;;
+	"help" ) help ;;
 	"--help" ) help ;;
 	"-h" ) help ;;
+	"install" ) install ;;
 	"--install" ) install ;;
 	* ) install ;;
 esac
