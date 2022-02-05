@@ -1,177 +1,60 @@
+# -------------------------------------------------------
+#        _             _            _                  _
+#  _ __ | |_   _  __ _(_)_ __  ___ | |_ ___  _ __ ___ | |
+# | '_ \| | | | |/ _` | | '_ \/ __|| __/ _ \| '_ ` _ \| |
+# | |_) | | |_| | (_| | | | | \__ \| || (_) | | | | | | |
+# | .__/|_|\__,_|\__, |_|_| |_|___(_)__\___/|_| |_| |_|_|
+# |_|            |___/
+# -------------------------------------------------------
+
+# -------------------------------------------------------
 # Dein
-[[plugins]]
-repo = 'Shougo/dein.vim'
+# -------------------------------------------------------
 
 [[plugins]]
-repo = 'Yggdroot/indentLine'
-hook_add = '''
-    let g:indentLine_setConceal = 0
-'''
+ repo = 'Shougo/dein.vim'
+
+# -------------------------------------------------------
+# Colorscheme
+# -------------------------------------------------------
 
 [[plugins]]
-repo = 'deton/jasegment.vim'
-hook_add = '''
-    let g:jasegment#model = 'knbc_bunsetu'
-    let g:jasegment#highlight = 2
-    let g:jasegment#splitpat = '[^[:space:]　][?!、。，．・]\+\zs'
-'''
+ repo = "joshdick/onedark.vim"
 
 [[plugins]]
-repo = 'junegunn/fzf.vim'
+ repo = 'itchyny/lightline.vim'
+ hook_add = '''
+     let g:lightline = { 'colorscheme': 'onedark' }
+ '''
 
-# Syntax-highlight
-[[plugins]]
-repo = 'sheerun/vim-polyglot'
+# -------------------------------------------------------
+# Completion
+# -------------------------------------------------------
 
-# Resizer
-[[plugins]]
-repo = 'simeji/winresizer'
-hook_add = '''
-    let g:winresizer_vert_resize = 1
-    let g:winresizer_horiz_resize = 1
-'''
-
-# HTML
-repo = 'tpope/vim-surround'
-
-# LSP (Language Server Protocol)
-[[plugins]]
-repo = 'neoclide/coc.nvim'
-rev = 'release'
-hook_add = '''
-    nmap <silent> <space><space> :<C-u>CocList<cr>
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gy <Plug>(coc-type-definition)
-    nmap <silent> gi <Plug>(coc-implementation)
-    nmap <silent> gr <Plug>(coc-references)
-    nmap <leader> rn <Plug>(coc-rename)
-
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-
-    nnoremap <silent> K :call <SID>show_documentation()<CR>
-        function! s:show_documentation()
-        if &filetype == 'vim'
-            execute 'h '.expand('<cword>')
-        else
-            call CocAction('doHover')
-        endif
-    endfunction
-
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ coc#refresh()
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
-    let g:coc_global_extensions = [
-        \ 'coc-css'
-        \, 'coc-dictionary'
-        \, 'coc-eslint'
-        \, 'coc-tslint'
-        \, 'coc-tsserver'
-        \, 'coc-prettier'
-        \, 'coc-git'
-        \, 'coc-html'
-        \, 'coc-java'
-        \, 'coc-json'
-        \, 'coc-markdownlint'
-        \, 'coc-neosnippet'
-        \, 'coc-omni'
-        \, 'coc-python'
-        \, 'coc-r-lsp'
-        \, 'coc-sh'
-        \, 'coc-syntax'
-        \, 'coc-tag'
-        \, 'coc-vimtex'
-        \, 'coc-yaml'
-        \, 'coc-vimlsp'
-        \, 'coc-word'
-        \, 'coc-snippets'
-        \, 'coc-spell-checker'
-        \ ]
-
-'''
-
-# [[plugins]]
-# repo = 'dense-analysis/ale'
-# hook_add = '''
-#     let g:ale_linters = { 'cpp': ['clangd'] }
-#     let g:ale_fixers = { 'cpp': [ 'clang-format' ] }
-# '''
+# ---------- ddc && pum ----------
 
 [[plugins]]
-repo = 'Shougo/neosnippet.vim'
-hook_add = '''
-  imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-  smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k>     <Plug>(neosnippet_expand_target)
-'''
+ repo = "Shougo/ddc.vim"
+ hook_add = '''
+     source ~/.config/nvim/dein/config/ddc.vim
+ '''
 
 [[plugins]]
-repo = 'Shougo/neosnippet-snippets'
+ repo = "Shougo/pum.vim"
 
-# LaTeX
+# denops (depended for ddc.vim)
 [[plugins]]
-repo = 'lervag/vimtex'
-hook_add = '''
-    if has('mac')
-      let g:vimtex_view_method='skim'
-    else
-      let g:vimtex_view_method='zathura'
-    endif
-    if has('nvim')
-      let g:vimtex_compiler_progname
-            \ = 'nvr'
-    endif
+ repo = "vim-denops/denops.vim"
 
-    let maplocalleader = '\'
-    let g:vimtex_compiler_latexmk = {
-      \ 'background': 1,
-      \ 'build_dir': '',
-      \ 'continuous': 1,
-      \ 'options': [
-      \    '-pdfdvi', 
-      \    '-verbose',
-      \    '-file-line-error',
-      \    '-synctex=1',
-      \    '-interaction=nonstopmode',
-      \],
-      \}
-
-let g:vimtex_view_general_viewer
-      \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-let g:vimtex_view_general_options = '-r @line @pdf @tex'
-'''
-
-# markdown
+# ddc-plugins
 [[plugins]]
-repo = 'plasticboy/vim-markdown'
-hook_add = '''
-    let g:vim_markdown_folding_disabled = 1
-    let g:vim_markdown_auto_insert_bullets = 0
-    let g:vim_markdown_new_list_item_indent = 0
-
-    let g:vim_markdown_conceal = 0
-    let g:tex_conceal = 0
-
-    let g:vim_markdown_math = 1
-    let g:tex_flavor = 'latex'
-'''
+ repo = "Shougo/ddc-nvim-lsp"
 
 [[plugins]]
-repo = 'previm/previm'
-hook_add = '''
-	let g:previm_open_cmd = 'open -a Firefox'
-  let g:previm_enable_realtime = 1
-  let g:previm_custom_css_path = "~/.config/nvim/markdown.css"
-'''
+ repo = "Shougo/ddc-around"
+
+[[plugins]]
+repo = 'tani/ddc-fuzzy'
 
 # [[plugins]]
 # repo = 'iamcco/markdown-preview.nvim'
@@ -184,181 +67,107 @@ hook_add = '''
 # '''
 
 [[plugins]]
-repo = 'dhruvasagar/vim-marp'
+ repo = "matsui54/denops-popup-preview.vim"
+ hook_add = '''
+   call popup_preview#enable()
+ '''
 
 [[plugins]]
-repo = 'dhruvasagar/vim-table-mode'
+ repo = "matsui54/denops-signature_help"
+ hook_add = '''
+   call signature_help#enable()
+   let g:signature_help_config = { 'border': v:true, 'style': 'full' }
+ '''
+
+# ---------- nvim-lsp ----------
 
 [[plugins]]
-repo = 'mattn/vim-maketable'
-
-# submode
-[[plugins]]
-repo = 'kana/vim-submode'
-hook_add = '''
-    call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
-    call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
-    call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>+')
-    call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>-')
-    call submode#map('winsize', 'n', '', '>', '<C-w>>')
-    call submode#map('winsize', 'n', '', '<', '<C-w><')
-    call submode#map('winsize', 'n', '', '+', '<C-w>+')
-    call submode#map('winsize', 'n', '', '-', '<C-w>-')
-'''
-
-# Appearance
-# [[plugins]]
-# repo = 'arcticicestudio/nord-vim'
+ repo = 'neovim/nvim-lspconfig'
+ hook_add = '''
+     source ~/.config/nvim/dein/config/nvim-lspconfig.vim
+ '''
 
 [[plugins]]
-repo = "joshdick/onedark.vim"
+ repo = "williamboman/nvim-lsp-installer"
+
+# ---------- tree-sitter ----------
 
 [[plugins]]
-repo = 'itchyny/lightline.vim'
-hook_add = '''
-    let g:lightline = { 'colorscheme': 'onedark' }
-'''
+ repo = 'nvim-treesitter/nvim-treesitter'
+ hook_add = '''
+     source ~/.config/nvim/dein/config/nvim-treesitter.vim
+ '''
 
-# [[plugins]]
-# repo = 'cocopon/iceberg.vim'
-# [[plugins]]
-# repo = 'gkeep/iceberg-dark'
-# [[plugins]]
-# repo = 'itchyny/lightline.vim'
-# hook_add = '''
-#     let g:lightline = { 'colorscheme': 'icebergDark'}
-# '''
-# [[plugins]]
-# repo = 'nvim-treesitter/nvim-treesitter'
-# hook_add = '''
-# lua <<EOF
-# require'nvim-treesitter.configs'.setup {
-#   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-#   highlight = {
-#     enable = true,              -- false will disable the whole extension
-#   },
-# }
-# EOF
-# '''
+# ---------- snippets ----------
 
-# Git
 [[plugins]]
-repo = "airblade/vim-gitgutter"
-[[plugins]]
-repo = "tpope/vim-fugitive"
+ repo = 'hrsh7th/vim-vsnip'
+ hook_add = '''
+     source ~/.config/nvim/dein/config/vim-vsnip.vim
+ '''
 
-# Terminal
 [[plugins]]
-repo = 'Shougo/deol.nvim'
-hook_add = '''
-    nnoremap <silent><C-o> :<C-u>Deol -split=floating<CR>
-    tnoremap <ESC>   <C-\><C-n>
-'''
+ repo = 'hrsh7th/vim-vsnip-integ'
 
-# Cheat Sheet
 [[plugins]]
-repo = 'reireias/vim-cheatsheet'
-hook_add = '''
-  let g:cheatsheet#cheat_file = '~/.config/nvim/cheat.txt'
-  let g:cheatsheet#float_window = 1
-  let g:cheatsheet#float_window_width_ratio = 0.6
-  let g:cheatsheet#float_window_height_ratio = 0.6
-'''
+ repo = 'rafamadriz/friendly-snippets'
 
+# -------------------------------------------------------
+# LaTeX
+# -------------------------------------------------------
+
+# ---------- vimtex ----------
+
+[[plugins]]
+ repo = 'lervag/vimtex'
+ hook_add = '''
+     let g:vimtex_view_method = 'zathura'
+ '''
+
+# -------------------------------------------------------
+# Markdown
+# -------------------------------------------------------
+
+[[plugins]]
+ repo = 'iamcco/markdown-preview.nvim'
+ build = 'cd app && yarn install'
+ hook_add = '''
+     let g:mkdp_auto_start = 1
+     let g:mkdp_auto_close = 1
+     let g:mkdp_browser = 'firefox'
+     let g:mkdp_command_for_global = 1
+ '''
+
+# -------------------------------------------------------
 # Filer
+# -------------------------------------------------------
+
 [[plugins]]
 repo = 'Shougo/defx.nvim'
 hook_add = '''
-	autocmd FileType defx call s:defx_my_settings()
-	function! s:defx_my_settings() abort
-	  " Define mappings
-	  nnoremap <silent><buffer><expr> <CR>
-	  \ defx#do_action('drop')
-	  nnoremap <silent><buffer><expr> c
-	  \ defx#do_action('copy')
-	  nnoremap <silent><buffer><expr> m
-	  \ defx#do_action('move')
-	  nnoremap <silent><buffer><expr> p
-	  \ defx#do_action('paste')
-	  nnoremap <silent><buffer><expr> l
-	  \ defx#do_action('drop')
-	  nnoremap <silent><buffer><expr> E
-	  \ defx#do_action('drop', 'vsplit')
-	  nnoremap <silent><buffer><expr> P
-	  \ defx#do_action('preview')
-	  nnoremap <silent><buffer><expr> o
-	  \ defx#do_action('open_tree', 'toggle')
-	  nnoremap <silent><buffer><expr> K
-	  \ defx#do_action('new_directory')
-	  nnoremap <silent><buffer><expr> N
-	  \ defx#do_action('new_file')
-	  nnoremap <silent><buffer><expr> M
-	  \ defx#do_action('new_multiple_files')
-	  nnoremap <silent><buffer><expr> C
-	  \ defx#do_action('toggle_columns',
-	  \                'mark:indent:icon:filename:type:size:time')
-	  nnoremap <silent><buffer><expr> S
-	  \ defx#do_action('toggle_sort', 'time')
-	  nnoremap <silent><buffer><expr> d
-	  \ defx#do_action('remove')
-	  nnoremap <silent><buffer><expr> r
-	  \ defx#do_action('rename')
-	  nnoremap <silent><buffer><expr> !
-	  \ defx#do_action('execute_command')
-	  nnoremap <silent><buffer><expr> x
-	  \ defx#do_action('execute_system')
-	  nnoremap <silent><buffer><expr> yy
-	  \ defx#do_action('yank_path')
-	  nnoremap <silent><buffer><expr> .
-	  \ defx#do_action('toggle_ignored_files')
-	  nnoremap <silent><buffer><expr> ;
-	  \ defx#do_action('repeat')
-	  nnoremap <silent><buffer><expr> h
-	  \ defx#do_action('cd', ['..'])
-	  nnoremap <silent><buffer><expr> ~
-	  \ defx#do_action('cd')
-	  nnoremap <silent><buffer><expr> q
-	  \ defx#do_action('quit')
-	  nnoremap <silent><buffer><expr> <Space>
-	  \ defx#do_action('toggle_select') . 'j'
-	  nnoremap <silent><buffer><expr> *
-	  \ defx#do_action('toggle_select_all')
-	  nnoremap <silent><buffer><expr> j
-	  \ line('.') == line('$') ? 'gg' : 'j'
-	  nnoremap <silent><buffer><expr> k
-	  \ line('.') == 1 ? 'G' : 'k'
-	  nnoremap <silent><buffer><expr> <C-l>
-	  \ defx#do_action('redraw')
-	  nnoremap <silent><buffer><expr> <C-g>
-	  \ defx#do_action('print')
-	  nnoremap <silent><buffer><expr> cd
-	  \ defx#do_action('change_vim_cwd')
-	endfunction
-
-  autocmd VimEnter * execute 'Defx'
-  nnoremap <silent> <Leader>f :<C-u> Defx <CR>
-
-call defx#custom#option('_', {
-  \ 'winwidth': 40,
-  \ 'split': 'vertical',
-  \ 'direction': 'topleft',
-  \ 'show_ignored_files': 0,
-  \ 'buffer_name': 'explorer',
-  \ 'toggle': 1,
-  \ 'resume': 1,
-  \ 'focus': 0,
-  \ 'floating_preview': 1,
-  \ 'columns': 'indent:git:icons:filename:mark',
-  \ })
-
+    source ~/.config/nvim/dein/config/defx.vim
 '''
-
-# devicon
-[[plugins]]
-repo = 'ryanoasis/vim-devicons'
 
 [[plugins]]
 repo = 'kristijanhusak/defx-icons'
 
 [[plugins]]
 repo = 'kristijanhusak/defx-git'
+
+[[plugins]]
+repo = 't9md/vim-choosewin'
+hook_add = '''
+    let g:choosewin_overlay_enabled = 1
+    let g:choosewin_overlay_clear_multibyte = 1
+'''
+
+# -------------------------------------------------------
+# Terminal
+# -------------------------------------------------------
+
+[[plugins]]
+ repo = 'Shougo/deol.nvim'
+ hook_add = '''
+     nnoremap <silent><C-o> :<C-u>Deol -split=floating<CR>
+     tnoremap <ESC>   <C-\><C-n>
+ '''
