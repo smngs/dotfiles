@@ -4,27 +4,33 @@
 #  _ / /\__ \ | | | | | (__
 # (_)___|___/_| |_|_|  \___|
 
-# zplug の設定読み込み．
 source ~/.zplugrc
 
-# 補完を有効化．
+# ----------------- setopt --------------------
+
 autoload -Uz compinit && compinit
 setopt auto_list
 setopt auto_menu
 setopt auto_cd
 setopt correct
-
 setopt share_history
+
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
 SAVEHIST=1000000
+
+zstyle ':completion:*:default' menu select=1
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+
+# ----------------- path && env --------------------
 
 export LANG=ja_JP.UTF-8
 export TERM=screen-256color
 export EDITOR=nvim
 
-zstyle ':completion:*:default' menu select=1
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+if type nvim > /dev/null 2>&1; then
+  export EDITOR='nvim'
+fi
 
 case ${OSTYPE} in
     darwin*)
