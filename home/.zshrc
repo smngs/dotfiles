@@ -14,40 +14,25 @@ setopt auto_menu
 setopt auto_cd
 setopt correct
 
+setopt share_history
+HISTFILE=$HOME/.zsh-history
+HISTSIZE=1000000
+SAVEHIST=1000000
+
 export LANG=ja_JP.UTF-8
-# 256 色表示できるように．
 export TERM=screen-256color
-
-# anyframe の設定．
-zstyle ":anyframe:selector:" use fzf-tmux
-zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux -p'
-export FZF_TMUX=1
-export FZF_TMUX_OPTS='-p'
-
-# enhancd の設定．
-export ENHANCD_FILTER="fzf-tmux -p"
-export ENHANCD_DISABLE_DOT=1
+export EDITOR=nvim
 
 zstyle ':completion:*:default' menu select=1
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
-# export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-# export PATH="/usr/local/bin:\
-#   /usr/local/sbin:\
-#   $HOME/.gem/ruby/2.7.0/bin:\
-#   $PATH"
-
-if type hyper > /dev/null 2>&1; then
-    export TERMINAL='hyper'
-fi
-if type nvim > /dev/null 2>&1; then
-  export EDITOR='nvim'
-fi
-
-HISTFILE=$HOME/.zsh-history
-HISTSIZE=1000000
-SAVEHIST=1000000
-setopt share_history
+case ${OSTYPE} in
+    darwin*)
+        export PATH=$PATH:/opt/homebrew:/usr/local/Homebrew/bin
+        ;;
+    linux*)
+        ;;
+esac
 
 # ----------------- alias --------------------
 
@@ -55,8 +40,8 @@ if [[ $(command -v exa) ]]; then
   alias l='exa --icons'
   alias ls='exa --icons'
   alias la='exa --icons -a'
-  alias ll='ls --icons -lh'
-  alias lla='ls --icons -lah'
+  alias ll='exa --icons -lh'
+  alias lla='exa --icons -lah'
 fi
 
 if [[ $(command -v bat) ]]; then
@@ -78,11 +63,11 @@ alias df='df -h'
 alias q='exit'
 alias c='clear'
 
-alias ..='cd ..'
-alias ..2='cd ../..'
-alias ..3='cd ../../..'
-alias ..4='cd ../../../..'
-alias ..5='cd ../../../../..'
+alias ..='\cd ..'
+alias ..2='\cd ../..'
+alias ..3='\cd ../../..'
+alias ..4='\cd ../../../..'
+alias ..5='\cd ../../../../..'
 
 # tmux
 alias t='tmuximum'
@@ -111,7 +96,6 @@ alias r='ranger'
 # --------------------------------------------
 
 # ----------------- function -----------------
-# tmuximum
 if [ -z $TMUX ]; then
   tmuximum
 fi
