@@ -99,6 +99,12 @@ alias v='nvim'
 # ranger
 alias r='ranger'
 
+# fzf-tmux
+
+export FZF_TMUX=1
+export FZF_TMUX_OPTS="-p 80%"
+
+export ENHANCD_FILTER='fzf-tmux -p'
 # --------------------------------------------
 
 # ----------------- function -----------------
@@ -136,3 +142,9 @@ function do_enter() {
 zle -N do_enter
 bindkey '^m' do_enter
 # --------------------------------------------
+
+# Load rbenv automatically by appending
+# the following to ~/.zshrc:
+
+
+eval "$(rbenv init -)"
