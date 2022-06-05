@@ -15,17 +15,31 @@
  repo = 'Shougo/dein.vim'
 
 # -------------------------------------------------------
-# Colorscheme
+# Colorscheme / Icon
 # -------------------------------------------------------
 
+# [[plugins]]
+#  repo = "joshdick/onedark.vim"
+
 [[plugins]]
- repo = "joshdick/onedark.vim"
+repo = 'cocopon/iceberg.vim'
+hook_add = '''
+  set termguicolors
+  set background=dark
+  colorscheme iceberg
+'''
 
 [[plugins]]
  repo = 'itchyny/lightline.vim'
  hook_add = '''
-     let g:lightline = { 'colorscheme': 'onedark' }
+  let g:lightline = { 'colorscheme': 'iceberg' }
  '''
+
+[[plugins]]
+ repo = "kyazdani42/nvim-web-devicons"
+
+[[plugins]]
+ repo = "mhinz/vim-startify"
 
 # -------------------------------------------------------
 # Completion
@@ -55,16 +69,6 @@
 
 [[plugins]]
 repo = 'tani/ddc-fuzzy'
-
-# [[plugins]]
-# repo = 'iamcco/markdown-preview.nvim'
-# build = 'cd app && yarn install'
-# hook_add = '''
-#     let g:mkdp_auto_start = 1
-#     let g:mkdp_auto_close = 1
-#     let g:mkdp_browser = 'firefox'
-#     let g:mkdp_command_for_global = 1
-# '''
 
 [[plugins]]
  repo = "matsui54/denops-popup-preview.vim"
@@ -121,7 +125,7 @@ repo = 'tani/ddc-fuzzy'
 [[plugins]]
  repo = 'lervag/vimtex'
  hook_add = '''
-     let g:vimtex_view_method = 'zathura'
+     " let g:vimtex_view_method = 'Skim'
  '''
 
 # -------------------------------------------------------
@@ -132,9 +136,13 @@ repo = 'tani/ddc-fuzzy'
  repo = 'iamcco/markdown-preview.nvim'
  build = 'cd app && yarn install'
  hook_add = '''
+     function OpenMarkdownPreview (url)
+       execute "silent ! /Applications/Firefox.app/Contents/MacOS/firefox --new-window " . a:url
+     endfunction
+     let g:mkdp_browserfunc = 'OpenMarkdownPreview'
+
      let g:mkdp_auto_start = 1
      let g:mkdp_auto_close = 1
-     let g:mkdp_browser = 'firefox'
      let g:mkdp_command_for_global = 1
  '''
 
@@ -160,6 +168,19 @@ hook_add = '''
     let g:choosewin_overlay_enabled = 1
     let g:choosewin_overlay_clear_multibyte = 1
 '''
+
+# -------------------------------------------------------
+# Git
+# -------------------------------------------------------
+
+[[plugins]]
+ repo = 'nvim-lua/plenary.nvim'
+
+[[plugins]]
+ repo = 'lewis6991/gitsigns.nvim'
+ hook_add = '''
+     source ~/.config/nvim/dein/config/gitsigns.vim
+ '''
 
 # -------------------------------------------------------
 # Terminal

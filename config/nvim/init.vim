@@ -62,9 +62,6 @@ nnoremap <up> gk
 " Colorscheme / syntax
 " ---------------------------------
 
-set termguicolors
-colorscheme onedark
-
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight SpecialKey ctermbg=NONE guibg=NONE
