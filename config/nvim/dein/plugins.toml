@@ -15,80 +15,46 @@
  repo = 'Shougo/dein.vim'
 
 # -------------------------------------------------------
-# Colorscheme
+# Colorscheme / Icon
 # -------------------------------------------------------
 
 [[plugins]]
- repo = "joshdick/onedark.vim"
+repo = 'cocopon/iceberg.vim'
+hook_add = '''
+  set termguicolors
+  set background=dark
+  colorscheme iceberg
+'''
 
 [[plugins]]
  repo = 'itchyny/lightline.vim'
  hook_add = '''
-     let g:lightline = { 'colorscheme': 'onedark' }
+  let g:lightline = { 'colorscheme': 'iceberg' }
  '''
+
+[[plugins]]
+ repo = "kyazdani42/nvim-web-devicons"
+
+[[plugins]]
+ repo = "mhinz/vim-startify"
 
 # -------------------------------------------------------
 # Completion
 # -------------------------------------------------------
 
-# ---------- ddc && pum ----------
+# ---------- coc-nvim ----------
 
 [[plugins]]
- repo = "Shougo/ddc.vim"
- hook_add = '''
-     source ~/.config/nvim/dein/config/ddc.vim
- '''
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+hook_add = '''
+    source ~/.config/nvim/dein/config/coc.nvim
+'''
+
+# ---------- snippets ----------
 
 [[plugins]]
- repo = "Shougo/pum.vim"
-
-# denops (depended for ddc.vim)
-[[plugins]]
- repo = "vim-denops/denops.vim"
-
-# ddc-plugins
-[[plugins]]
- repo = "Shougo/ddc-nvim-lsp"
-
-[[plugins]]
- repo = "Shougo/ddc-around"
-
-[[plugins]]
-repo = 'tani/ddc-fuzzy'
-
-# [[plugins]]
-# repo = 'iamcco/markdown-preview.nvim'
-# build = 'cd app && yarn install'
-# hook_add = '''
-#     let g:mkdp_auto_start = 1
-#     let g:mkdp_auto_close = 1
-#     let g:mkdp_browser = 'firefox'
-#     let g:mkdp_command_for_global = 1
-# '''
-
-[[plugins]]
- repo = "matsui54/denops-popup-preview.vim"
- hook_add = '''
-   call popup_preview#enable()
- '''
-
-[[plugins]]
- repo = "matsui54/denops-signature_help"
- hook_add = '''
-   call signature_help#enable()
-   let g:signature_help_config = { 'border': v:true, 'style': 'full' }
- '''
-
-# ---------- nvim-lsp ----------
-
-[[plugins]]
- repo = 'neovim/nvim-lspconfig'
- hook_add = '''
-     source ~/.config/nvim/dein/config/nvim-lspconfig.vim
- '''
-
-[[plugins]]
- repo = "williamboman/nvim-lsp-installer"
+repo = 'honza/vim-snippets'
 
 # ---------- tree-sitter ----------
 
@@ -97,20 +63,6 @@ repo = 'tani/ddc-fuzzy'
  hook_add = '''
      source ~/.config/nvim/dein/config/nvim-treesitter.vim
  '''
-
-# ---------- snippets ----------
-
-[[plugins]]
- repo = 'hrsh7th/vim-vsnip'
- hook_add = '''
-     source ~/.config/nvim/dein/config/vim-vsnip.vim
- '''
-
-[[plugins]]
- repo = 'hrsh7th/vim-vsnip-integ'
-
-[[plugins]]
- repo = 'rafamadriz/friendly-snippets'
 
 # -------------------------------------------------------
 # LaTeX
@@ -121,7 +73,7 @@ repo = 'tani/ddc-fuzzy'
 [[plugins]]
  repo = 'lervag/vimtex'
  hook_add = '''
-     let g:vimtex_view_method = 'zathura'
+     let g:vimtex_view_method = 'skim'
  '''
 
 # -------------------------------------------------------
@@ -132,9 +84,13 @@ repo = 'tani/ddc-fuzzy'
  repo = 'iamcco/markdown-preview.nvim'
  build = 'cd app && yarn install'
  hook_add = '''
+     function OpenMarkdownPreview (url)
+       execute "silent ! /Applications/Firefox.app/Contents/MacOS/firefox --new-window " . a:url
+     endfunction
+     let g:mkdp_browserfunc = 'OpenMarkdownPreview'
+
      let g:mkdp_auto_start = 1
      let g:mkdp_auto_close = 1
-     let g:mkdp_browser = 'firefox'
      let g:mkdp_command_for_global = 1
  '''
 
@@ -160,6 +116,19 @@ hook_add = '''
     let g:choosewin_overlay_enabled = 1
     let g:choosewin_overlay_clear_multibyte = 1
 '''
+
+# -------------------------------------------------------
+# Git
+# -------------------------------------------------------
+
+[[plugins]]
+ repo = 'nvim-lua/plenary.nvim'
+
+[[plugins]]
+ repo = 'lewis6991/gitsigns.nvim'
+ hook_add = '''
+     source ~/.config/nvim/dein/config/gitsigns.vim
+ '''
 
 # -------------------------------------------------------
 # Terminal
