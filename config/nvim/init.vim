@@ -86,6 +86,13 @@ syntax on
 set laststatus=2
 
 " ---------------------------------
+" linenumber
+" ---------------------------------
+
+set relativenumber number
+set signcolumn=yes:1
+
+" ---------------------------------
 " Undo
 " ---------------------------------
 
@@ -130,7 +137,6 @@ set smartcase
 set hlsearch
 
 set whichwrap=b,s,h,l,<,>,[,],~
-set number
 set cursorline
 
 set backspace=indent,eol,start

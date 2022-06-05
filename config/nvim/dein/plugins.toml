@@ -18,9 +18,6 @@
 # Colorscheme / Icon
 # -------------------------------------------------------
 
-# [[plugins]]
-#  repo = "joshdick/onedark.vim"
-
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
 hook_add = '''
@@ -45,54 +42,19 @@ hook_add = '''
 # Completion
 # -------------------------------------------------------
 
-# ---------- ddc && pum ----------
+# ---------- coc-nvim ----------
 
 [[plugins]]
- repo = "Shougo/ddc.vim"
- hook_add = '''
-     source ~/.config/nvim/dein/config/ddc.vim
- '''
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+hook_add = '''
+    source ~/.config/nvim/dein/config/coc.nvim
+'''
+
+# ---------- snippets ----------
 
 [[plugins]]
- repo = "Shougo/pum.vim"
-
-# denops (depended for ddc.vim)
-[[plugins]]
- repo = "vim-denops/denops.vim"
-
-# ddc-plugins
-[[plugins]]
- repo = "Shougo/ddc-nvim-lsp"
-
-[[plugins]]
- repo = "Shougo/ddc-around"
-
-[[plugins]]
-repo = 'tani/ddc-fuzzy'
-
-[[plugins]]
- repo = "matsui54/denops-popup-preview.vim"
- hook_add = '''
-   call popup_preview#enable()
- '''
-
-[[plugins]]
- repo = "matsui54/denops-signature_help"
- hook_add = '''
-   call signature_help#enable()
-   let g:signature_help_config = { 'border': v:true, 'style': 'full' }
- '''
-
-# ---------- nvim-lsp ----------
-
-[[plugins]]
- repo = 'neovim/nvim-lspconfig'
- hook_add = '''
-     source ~/.config/nvim/dein/config/nvim-lspconfig.vim
- '''
-
-[[plugins]]
- repo = "williamboman/nvim-lsp-installer"
+repo = 'honza/vim-snippets'
 
 # ---------- tree-sitter ----------
 
@@ -101,20 +63,6 @@ repo = 'tani/ddc-fuzzy'
  hook_add = '''
      source ~/.config/nvim/dein/config/nvim-treesitter.vim
  '''
-
-# ---------- snippets ----------
-
-[[plugins]]
- repo = 'hrsh7th/vim-vsnip'
- hook_add = '''
-     source ~/.config/nvim/dein/config/vim-vsnip.vim
- '''
-
-[[plugins]]
- repo = 'hrsh7th/vim-vsnip-integ'
-
-[[plugins]]
- repo = 'rafamadriz/friendly-snippets'
 
 # -------------------------------------------------------
 # LaTeX
@@ -125,7 +73,7 @@ repo = 'tani/ddc-fuzzy'
 [[plugins]]
  repo = 'lervag/vimtex'
  hook_add = '''
-     " let g:vimtex_view_method = 'Skim'
+     let g:vimtex_view_method = 'skim'
  '''
 
 # -------------------------------------------------------
