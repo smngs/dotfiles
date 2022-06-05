@@ -62,9 +62,6 @@ nnoremap <up> gk
 " Colorscheme / syntax
 " ---------------------------------
 
-set termguicolors
-colorscheme onedark
-
 highlight Normal ctermbg=NONE guibg=NONE
 highlight NonText ctermbg=NONE guibg=NONE
 highlight SpecialKey ctermbg=NONE guibg=NONE
@@ -87,6 +84,13 @@ syntax on
 " ---------------------------------
 
 set laststatus=2
+
+" ---------------------------------
+" linenumber
+" ---------------------------------
+
+set relativenumber number
+set signcolumn=yes:1
 
 " ---------------------------------
 " Undo
@@ -133,7 +137,6 @@ set smartcase
 set hlsearch
 
 set whichwrap=b,s,h,l,<,>,[,],~
-set number
 set cursorline
 
 set backspace=indent,eol,start
