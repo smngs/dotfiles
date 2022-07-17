@@ -9,9 +9,11 @@
 [submodule "home/.tmux/plugins/tpm"]
 	path = home/.tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm.git
+
 [submodule "home/.tmux/plugins/iceberg-dark"]
 	path = home/.tmux/plugins/iceberg-dark
 	url = https://github.com/gkeep/iceberg-dark
+
 [submodule "home/.tmux/plugins/tmux-onedark-theme"]
 	path = home/.tmux/plugins/tmux-onedark-theme
 	url = https://github.com/odedlaz/tmux-onedark-theme
