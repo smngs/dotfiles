@@ -130,7 +130,15 @@ init () {
 }
 
 install () {
-    :
+  if [ "$(uname)" == 'Darwin' ]; then
+    echo "Your platform: MacOS"
+    ${DOT_DIRECTORY}/bin/homebrew_install.sh
+  elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
+    echo "Your platform: Linux"
+    ${DOT_DIRECTORY}/bin/arch_install.sh
+  else
+    echo "Your platform ($(uname -a)) is not supported. Skipping..."
+  fi
 }
 		
 update () {
