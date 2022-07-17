@@ -28,7 +28,7 @@ jobs:
 
     # Lint check
     - name: Check bin/init.sh
-      run: shellcheck ${GITHUB_WORKSPACE}/bin/install.sh
+      run: shellcheck  -e SC1091,SC2181,SC2308 ${GITHUB_WORKSPACE}/bin/install.sh
 
     - name: Check .zshrc
       run: shellcheck ${GITHUB_WORKSPACE}/home/.zshrc --exclude=SC2148,SC1090

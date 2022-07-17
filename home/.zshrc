@@ -17,10 +17,8 @@ setopt share_history
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
-SAVEHIST=1000000
 
 zstyle ':completion:*:default' menu select=1
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 # ----------------- path && env --------------------
 
@@ -108,7 +106,7 @@ export ENHANCD_FILTER='fzf-tmux -p'
 # --------------------------------------------
 
 # ----------------- function -----------------
-if [ -z $TMUX ]; then
+if [ -z "$TMUX" ]; then
   tmuximum
 fi
 
