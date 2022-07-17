@@ -12,6 +12,6 @@ jobs:
     - uses: actions/checkout@v2
 
     # Error Check
-    - name: Run init.sh
-      run: ${GITHUB_WORKSPACE}/bin/install.sh
+    - name: Run install.sh
+      run: yes | ${GITHUB_WORKSPACE}/bin/install.sh
 
