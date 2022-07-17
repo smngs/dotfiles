@@ -1,0 +1,17 @@
+name: linux
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ubuntu-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # Error Check
+    - name: Run install.sh
+      run: yes | ${GITHUB_WORKSPACE}/bin/install.sh
+
