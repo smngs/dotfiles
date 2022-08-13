@@ -12,7 +12,7 @@
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'Shougo/dein.vim'
+repo = 'Shougo/dein.vim'
 
 # -------------------------------------------------------
 # Colorscheme / Icon
@@ -27,42 +27,251 @@ hook_add = '''
 '''
 
 [[plugins]]
- repo = 'itchyny/lightline.vim'
- hook_add = '''
+repo = 'itchyny/lightline.vim'
+hook_add = '''
   let g:lightline = { 'colorscheme': 'iceberg' }
- '''
+'''
 
 [[plugins]]
- repo = "kyazdani42/nvim-web-devicons"
+repo = "kyazdani42/nvim-web-devicons"
+
+# -------------------------------------------------------
+# Lua
+# -------------------------------------------------------
 
 [[plugins]]
- repo = "mhinz/vim-startify"
+repo = 'nvim-lua/plenary.nvim'
+
+[[plugins]]
+repo = 'nvim-lua/popup.nvim'
+
+# -------------------------------------------------------
+# Notify
+# -------------------------------------------------------
+
+[[plugins]]
+repo = 'rcarriga/nvim-notify'
+hook_add = '''
+lua << EOF
+  require('notify').setup({
+    stages = 'fade_in_slide_out',
+    on_open = nil,
+    on_close = nil,
+    render = 'default',
+    timeout = 5000,
+    max_width = nil,
+    max_height = nil,
+    background_colour = 'Normal',
+    minimum_width = 50
+  })
+  vim.notify = require("notify")
+EOF
+'''
+
+[[plugins]]
+repo = 'j-hui/fidget.nvim'
+hook_add = '''
+lua << EOF
+  require("fidget").setup()
+EOF
+'''
 
 # -------------------------------------------------------
 # Completion
 # -------------------------------------------------------
 
-# ---------- coc-nvim ----------
+# ---------- nvim-lspconfig ----------
 
+# nvim-lspconfig
 [[plugins]]
-repo = 'neoclide/coc.nvim'
-rev = 'release'
+repo = 'neovim/nvim-lspconfig'
 hook_add = '''
-    source ~/.config/nvim/dein/config/coc.nvim
+lua << EOF
+  -- 2. build-in LSP function
+  -- keyboard shortcut
+  vim.keymap.set('n', 'K',  '<cmd>lua vim.lsp.buf.hover()<CR>')
+  vim.keymap.set('n', 'gf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
+  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
+  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
+  vim.keymap.set('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+  vim.keymap.set('n', 'gn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+  vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+  vim.keymap.set('n', 'ge', '<cmd>lua vim.diagnostic.open_float()<CR>')
+  vim.keymap.set('n', 'g]', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+  vim.keymap.set('n', 'g[', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+  -- LSP handlers
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false }
+  )
+  -- Reference highlight
+  vim.cmd [[
+  set updatetime=500
+  highlight LspReferenceText  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+  highlight LspReferenceRead  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+  highlight LspReferenceWrite cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
+  augroup lsp_document_highlight
+    autocmd!
+    autocmd CursorHold,CursorHoldI * lua vim.lsp.buf.document_highlight()
+    autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
+  augroup END
+  ]]
+EOF
 '''
 
-# ---------- snippets ----------
+# mason.nvim
+[[plugins]]
+repo = 'williamboman/mason.nvim'
+hook_add = '''
+lua << EOF
+  require('mason').setup()
+EOF
+'''
 
 [[plugins]]
-repo = 'honza/vim-snippets'
-
-# ---------- tree-sitter ----------
+repo = 'williamboman/mason-lspconfig.nvim'
+hook_add = '''
+lua << EOF
+require('mason-lspconfig').setup_handlers({ function(server)
+  local opt = {
+    -- -- Function executed when the LSP server startup
+    -- on_attach = function(client, bufnr)
+    --   local opts = { noremap=true, silent=true }
+    --   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    --   vim.cmd 'autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)'
+    -- end,
+    capabilities = require('cmp_nvim_lsp').update_capabilities(
+      vim.lsp.protocol.make_client_capabilities()
+    )
+  }
+  require('lspconfig')[server].setup(opt)
+end })
+EOF
+'''
 
 [[plugins]]
- repo = 'nvim-treesitter/nvim-treesitter'
- hook_add = '''
-     source ~/.config/nvim/dein/config/nvim-treesitter.vim
- '''
+repo = "hrsh7th/nvim-cmp"
+hook_add = '''
+lua << EOF
+  -- 3. completion (hrsh7th/nvim-cmp)
+  local cmp = require("cmp")
+  local lspkind = require('lspkind')
+
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
+    sources = {
+      { name = "nvim_lsp" },
+      { name = "nvim_lsp_signature_help" },
+      { name = "nvim_lsp_document_symbol" },
+      { name = "luasnip" },
+      -- { name = "buffer" },
+      { name = "path" },
+    },
+    mapping = cmp.mapping.preset.insert({
+      ["<C-p>"] = cmp.mapping.select_prev_item(),
+      ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+      ["<C-n>"] = cmp.mapping.select_next_item(),
+      ["<Tab>"] = cmp.mapping.select_next_item(),
+      ['<C-l>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ["<CR>"] = cmp.mapping.confirm { select = true },
+    }),
+    experimental = {
+      ghost_text = true,
+    },
+    formatting = {
+      format = lspkind.cmp_format({
+        mode = 'symbol_text',
+        maxwidth = 50,
+        before = function(entry, vim_item)
+          return vim_item
+        end
+      })
+    }
+  })
+  -- cmp.setup.cmdline('/', {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = {
+  --     { name = 'buffer' }
+  --   }
+  -- })
+  -- cmp.setup.cmdline(":", {
+  --   mapping = cmp.mapping.preset.cmdline(),
+  --   sources = {
+  --     { name = "path" },
+  --     { name = "cmdline" },
+  --   },
+  -- })
+EOF
+'''
+
+# completion sources
+
+[[plugins]]
+repo = "hrsh7th/cmp-nvim-lsp"
+
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp-signature-help'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp-document-symbol'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-path'
+
+# Snippets
+
+[[plugins]]
+repo = 'L3MON4D3/LuaSnip'
+
+[[plugins]]
+repo = 'saadparwaiz1/cmp_luasnip'
+
+[[plugins]]
+repo = 'rafamadriz/friendly-snippets'
+hook_add = '''
+lua << EOF
+  require("luasnip/loaders/from_vscode").lazy_load()
+EOF
+'''
+
+# Others
+
+[[plugins]]
+repo = 'onsails/lspkind.nvim'
+
+[[plugins]]
+repo = 'folke/trouble.nvim'
+hook_add = '''
+lua << EOF
+  require('trouble').setup {
+    position = 'bottom',
+    height = 10,
+    widht = 50,
+    icons = true,
+    mode ='workspace_diagnostics',
+    indent_lines = true,
+    auto_open = true,
+    auto_close = false,
+    auto_preview = true,
+    auto_fold = false,
+    auto_jump = {'lsp_definitions'},
+    signs = {
+      error = 'E',
+      warning = 'W',
+      hint = 'H',
+      information = 'I',
+      other = 'O'
+    },
+    use_diagnostic_signs = true
+  }
+EOF
+'''
 
 # -------------------------------------------------------
 # LaTeX
@@ -71,28 +280,23 @@ repo = 'honza/vim-snippets'
 # ---------- vimtex ----------
 
 [[plugins]]
- repo = 'lervag/vimtex'
- hook_add = '''
+repo = 'lervag/vimtex'
+hook_add = '''
      let g:vimtex_view_method = 'skim'
- '''
+'''
 
 # -------------------------------------------------------
 # Markdown
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'iamcco/markdown-preview.nvim'
- build = 'cd app && yarn install'
- hook_add = '''
-     function OpenMarkdownPreview (url)
-       execute "silent ! /Applications/Firefox.app/Contents/MacOS/firefox --new-window " . a:url
-     endfunction
-     let g:mkdp_browserfunc = 'OpenMarkdownPreview'
-
+repo = 'iamcco/markdown-preview.nvim'
+build = 'cd app && yarn install'
+hook_add = '''
      let g:mkdp_auto_start = 1
      let g:mkdp_auto_close = 1
      let g:mkdp_command_for_global = 1
- '''
+'''
 
 # -------------------------------------------------------
 # Filer
@@ -122,21 +326,125 @@ hook_add = '''
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'nvim-lua/plenary.nvim'
+repo = 'lewis6991/gitsigns.nvim'
+hook_add = '''
+lua << EOF
+  -- WIP
+EOF
+'''
 
 [[plugins]]
- repo = 'lewis6991/gitsigns.nvim'
- hook_add = '''
-     source ~/.config/nvim/dein/config/gitsigns.vim
- '''
+repo = 'akinsho/git-conflict.nvim'
+hook_add = '''
+lua << EOF
+  require('git-conflict').setup()
+EOF
+'''
 
-# -------------------------------------------------------
+[[plugins]]
+repo = 'TimUntersberger/neogit'
+hook_add = '''
+lua << EOF
+  local neogit = require("neogit")
+
+  neogit.setup {
+    disable_signs = false,
+    disable_hint = false,
+    disable_context_highlighting = false,
+    disable_commit_confirmation = false,
+    -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size. 
+    -- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
+    auto_refresh = true,
+    disable_builtin_notifications = false,
+    use_magit_keybindings = false,
+    -- Change the default way of opening neogit
+    kind = "tab",
+    -- Change the default way of opening the commit popup
+    commit_popup = {
+      kind = "split",
+    },
+    -- Change the default way of opening popups
+    popup = {
+      kind = "split",
+    },
+    -- customize displayed signs
+    signs = {
+      -- { CLOSED, OPENED }
+      section = { ">", "v" },
+      item = { ">", "v" },
+      hunk = { "", "" },
+    },
+    integrations = {
+      -- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.
+      -- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
+      --
+      -- Requires you to have `sindrets/diffview.nvim` installed.
+      -- use { 
+      --   'TimUntersberger/neogit', 
+      --   requires = { 
+      --     'nvim-lua/plenary.nvim',
+      --     'sindrets/diffview.nvim' 
+      --   }
+      -- }
+      --
+      diffview = false  
+    },
+    -- Setting any section to `false` will make the section not render at all
+    sections = {
+      untracked = {
+        folded = false
+      },
+      unstaged = {
+        folded = false
+      },
+      staged = {
+        folded = false
+      },
+      stashes = {
+        folded = true
+      },
+      unpulled = {
+        folded = true
+      },
+      unmerged = {
+        folded = false
+      },
+      recent = {
+        folded = true
+      },
+    },
+    -- override/add mappings
+    mappings = {
+      -- modify status buffer mappings
+      status = {
+        -- Adds a mapping with "B" as key that does the "BranchPopup" command
+        ["B"] = "BranchPopup",
+        -- Removes the default mapping of "s"
+        ["s"] = "",
+      }
+    }
+  }
+EOF
+'''
+# ------ -------------------------------------------------
 # Terminal
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'Shougo/deol.nvim'
- hook_add = '''
+repo = 'Shougo/deol.nvim'
+hook_add = '''
      nnoremap <silent><C-o> :<C-u>Deol -split=floating<CR>
      tnoremap <ESC>   <C-\><C-n>
+ '''
+
+# -------------------------------------------------------
+# Brackets
+# -------------------------------------------------------
+
+[[plugins]]
+repo = 'windwp/nvim-autopairs'
+hook_add = '''
+lua << EOF
+  require('nvim-autopairs').setup()
+EOF
  '''
