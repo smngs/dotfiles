@@ -26,11 +26,59 @@ hook_add = '''
   colorscheme iceberg
 '''
 
+# [[plugins]]
+# repo = 'itchyny/lightline.vim'
+# hook_add = '''
+#   let g:lightline = { 'colorscheme': 'iceberg' }
+# '''
+
 [[plugins]]
-repo = 'itchyny/lightline.vim'
+repo = 'nvim-lualine/lualine.nvim'
 hook_add = '''
-  let g:lightline = { 'colorscheme': 'iceberg' }
+lua << EOF
+  require('lualine').setup{
+    options = {
+      icons_enabled = true,
+      theme = 'auto',
+      component_separators = { left = '', right = ''},
+      section_separators = { left = '', right = ''},
+      disabled_filetypes = {
+        statusline = {},
+        winbar = {},
+      },
+      ignore_focus = {},
+      always_divide_middle = true,
+      globalstatus = false,
+      refresh = {
+        statusline = 1000,
+        tabline = 1000,
+        winbar = 1000,
+      }
+    },
+    sections = {
+      lualine_a = {'mode'},
+      lualine_b = {'branch', 'diff', 'diagnostics'},
+      lualine_c = {'filename'},
+      lualine_x = {'encoding', 'fileformat', 'filetype'},
+      lualine_y = {'progress'},
+      lualine_z = {'location'}
+    },
+    inactive_sections = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {'filename'},
+      lualine_x = {'location'},
+      lualine_y = {},
+      lualine_z = {}
+    },
+    tabline = {},
+    winbar = {},
+    inactive_winbar = {},
+    extensions = {}
+  }
+EOF
 '''
+
 
 [[plugins]]
 repo = "kyazdani42/nvim-web-devicons"
@@ -75,6 +123,19 @@ lua << EOF
   require("fidget").setup()
 EOF
 '''
+
+# -------------------------------------------------------
+# Color-Highlight
+# -------------------------------------------------------
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+hook_add = '''
+    source ~/.config/nvim/dein/config/nvim-treesitter.vim
+'''
+
+[[plugins]]
+repo = 'yioneko/nvim-yati'
 
 # -------------------------------------------------------
 # Completion
@@ -133,14 +194,26 @@ EOF
 repo = 'williamboman/mason-lspconfig.nvim'
 hook_add = '''
 lua << EOF
-require('mason-lspconfig').setup_handlers({ function(server)
+local m = require('mason-lspconfig')
+
+m.setup({
+  ensure_installed = {
+    'clangd',
+    'pyright',
+    'texlab',
+    'tsserver',
+    'rust_analyzer',
+    'jedi_language_server',
+    'pylsp',
+    'remark_ls',
+    'html',
+    'dockerls',
+  },
+  automatic_installation = true
+})
+
+m.setup_handlers({ function(server)
   local opt = {
-    -- -- Function executed when the LSP server startup
-    -- on_attach = function(client, bufnr)
-    --   local opts = { noremap=true, silent=true }
-    --   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    --   vim.cmd 'autocmd BufWritePre * lua vim.lsp.buf.formatting_sync(nil, 1000)'
-    -- end,
     capabilities = require('cmp_nvim_lsp').update_capabilities(
       vim.lsp.protocol.make_client_capabilities()
     )
@@ -169,6 +242,7 @@ lua << EOF
       { name = "nvim_lsp_signature_help" },
       { name = "nvim_lsp_document_symbol" },
       { name = "luasnip" },
+      { name = "treesitter" },
       -- { name = "buffer" },
       { name = "path" },
     },
@@ -223,6 +297,9 @@ repo = 'hrsh7th/cmp-nvim-lsp-document-symbol'
 
 [[plugins]]
 repo = 'hrsh7th/cmp-path'
+
+[[plugins]]
+repo = 'ray-x/cmp-treesitter'
 
 # Snippets
 
@@ -426,7 +503,7 @@ lua << EOF
   }
 EOF
 '''
-# ------ -------------------------------------------------
+# --------------------------------------------------------
 # Terminal
 # -------------------------------------------------------
 
@@ -435,7 +512,7 @@ repo = 'Shougo/deol.nvim'
 hook_add = '''
      nnoremap <silent><C-o> :<C-u>Deol -split=floating<CR>
      tnoremap <ESC>   <C-\><C-n>
- '''
+'''
 
 # -------------------------------------------------------
 # Brackets
@@ -447,4 +524,16 @@ hook_add = '''
 lua << EOF
   require('nvim-autopairs').setup()
 EOF
- '''
+'''
+
+# -------------------------------------------------------
+# Which-key
+# -------------------------------------------------------
+
+[[plugins]]
+repo = 'folke/which-key.nvim'
+hook_add = '''
+lua << EOF
+  require('which-key').setup()
+EOF
+'''
