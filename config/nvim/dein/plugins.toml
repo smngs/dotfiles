@@ -26,57 +26,10 @@ hook_add = '''
   colorscheme iceberg
 '''
 
-# [[plugins]]
-# repo = 'itchyny/lightline.vim'
-# hook_add = '''
-#   let g:lightline = { 'colorscheme': 'iceberg' }
-# '''
-
 [[plugins]]
 repo = 'nvim-lualine/lualine.nvim'
 hook_add = '''
-lua << EOF
-  require('lualine').setup{
-    options = {
-      icons_enabled = true,
-      theme = 'auto',
-      component_separators = { left = '', right = ''},
-      section_separators = { left = '', right = ''},
-      disabled_filetypes = {
-        statusline = {},
-        winbar = {},
-      },
-      ignore_focus = {},
-      always_divide_middle = true,
-      globalstatus = false,
-      refresh = {
-        statusline = 1000,
-        tabline = 1000,
-        winbar = 1000,
-      }
-    },
-    sections = {
-      lualine_a = {'mode'},
-      lualine_b = {'branch', 'diff', 'diagnostics'},
-      lualine_c = {'filename'},
-      lualine_x = {'encoding', 'fileformat', 'filetype'},
-      lualine_y = {'progress'},
-      lualine_z = {'location'}
-    },
-    inactive_sections = {
-      lualine_a = {},
-      lualine_b = {},
-      lualine_c = {'filename'},
-      lualine_x = {'location'},
-      lualine_y = {},
-      lualine_z = {}
-    },
-    tabline = {},
-    winbar = {},
-    inactive_winbar = {},
-    extensions = {}
-  }
-EOF
+    source ~/.config/nvim/dein/config/lualine.nvim
 '''
 
 
@@ -100,20 +53,7 @@ repo = 'nvim-lua/popup.nvim'
 [[plugins]]
 repo = 'rcarriga/nvim-notify'
 hook_add = '''
-lua << EOF
-  require('notify').setup({
-    stages = 'fade_in_slide_out',
-    on_open = nil,
-    on_close = nil,
-    render = 'default',
-    timeout = 5000,
-    max_width = nil,
-    max_height = nil,
-    background_colour = 'Normal',
-    minimum_width = 50
-  })
-  vim.notify = require("notify")
-EOF
+    source ~/.config/nvim/dein/config/nvim-notify.nvim
 '''
 
 [[plugins]]
@@ -147,38 +87,7 @@ repo = 'yioneko/nvim-yati'
 [[plugins]]
 repo = 'neovim/nvim-lspconfig'
 hook_add = '''
-lua << EOF
-  -- 2. build-in LSP function
-  -- keyboard shortcut
-  vim.keymap.set('n', 'K',  '<cmd>lua vim.lsp.buf.hover()<CR>')
-  vim.keymap.set('n', 'gf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
-  vim.keymap.set('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-  vim.keymap.set('n', 'gn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-  vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-  vim.keymap.set('n', 'ge', '<cmd>lua vim.diagnostic.open_float()<CR>')
-  vim.keymap.set('n', 'g]', '<cmd>lua vim.diagnostic.goto_next()<CR>')
-  vim.keymap.set('n', 'g[', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
-  -- LSP handlers
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false }
-  )
-  -- Reference highlight
-  vim.cmd [[
-  set updatetime=500
-  highlight LspReferenceText  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
-  highlight LspReferenceRead  cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
-  highlight LspReferenceWrite cterm=underline ctermfg=1 ctermbg=8 gui=underline guifg=#A00000 guibg=#104040
-  augroup lsp_document_highlight
-    autocmd!
-    autocmd CursorHold,CursorHoldI * lua vim.lsp.buf.document_highlight()
-    autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
-  augroup END
-  ]]
-EOF
+  source ~/.config/nvim/dein/config/nvim-lspconfig.nvim
 '''
 
 # mason.nvim
@@ -193,96 +102,22 @@ EOF
 [[plugins]]
 repo = 'williamboman/mason-lspconfig.nvim'
 hook_add = '''
-lua << EOF
-local m = require('mason-lspconfig')
-
-m.setup({
-  ensure_installed = {
-    'clangd',
-    'pyright',
-    'texlab',
-    'tsserver',
-    'rust_analyzer',
-    'jedi_language_server',
-    'pylsp',
-    'remark_ls',
-    'html',
-    'dockerls',
-  },
-  automatic_installation = true
-})
-
-m.setup_handlers({ function(server)
-  local opt = {
-    capabilities = require('cmp_nvim_lsp').update_capabilities(
-      vim.lsp.protocol.make_client_capabilities()
-    )
-  }
-  require('lspconfig')[server].setup(opt)
-end })
-EOF
+  source ~/.config/nvim/dein/config/mason-lspconfig.nvim
 '''
 
 [[plugins]]
 repo = "hrsh7th/nvim-cmp"
 hook_add = '''
-lua << EOF
-  -- 3. completion (hrsh7th/nvim-cmp)
-  local cmp = require("cmp")
-  local lspkind = require('lspkind')
-
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body)
-      end,
-    },
-    sources = {
-      { name = "nvim_lsp" },
-      { name = "nvim_lsp_signature_help" },
-      { name = "nvim_lsp_document_symbol" },
-      { name = "luasnip" },
-      { name = "treesitter" },
-      -- { name = "buffer" },
-      { name = "path" },
-    },
-    mapping = cmp.mapping.preset.insert({
-      ["<C-p>"] = cmp.mapping.select_prev_item(),
-      ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-      ["<C-n>"] = cmp.mapping.select_next_item(),
-      ["<Tab>"] = cmp.mapping.select_next_item(),
-      ['<C-l>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ["<CR>"] = cmp.mapping.confirm { select = true },
-    }),
-    experimental = {
-      ghost_text = true,
-    },
-    formatting = {
-      format = lspkind.cmp_format({
-        mode = 'symbol_text',
-        maxwidth = 50,
-        before = function(entry, vim_item)
-          return vim_item
-        end
-      })
-    }
-  })
-  -- cmp.setup.cmdline('/', {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = {
-  --     { name = 'buffer' }
-  --   }
-  -- })
-  -- cmp.setup.cmdline(":", {
-  --   mapping = cmp.mapping.preset.cmdline(),
-  --   sources = {
-  --     { name = "path" },
-  --     { name = "cmdline" },
-  --   },
-  -- })
-EOF
+    source ~/.config/nvim/dein/config/nvim-cmp.nvim
 '''
+
+# [[plugins]]
+# repo = 'Maan2003/lsp_lines.nvim'
+# hook_add = '''
+#   lua << EOF
+#   require('lsp_lines').setup()
+# EOF
+# '''
 
 # completion sources
 
@@ -325,29 +160,7 @@ repo = 'onsails/lspkind.nvim'
 [[plugins]]
 repo = 'folke/trouble.nvim'
 hook_add = '''
-lua << EOF
-  require('trouble').setup {
-    position = 'bottom',
-    height = 10,
-    widht = 50,
-    icons = true,
-    mode ='workspace_diagnostics',
-    indent_lines = true,
-    auto_open = true,
-    auto_close = false,
-    auto_preview = true,
-    auto_fold = false,
-    auto_jump = {'lsp_definitions'},
-    signs = {
-      error = 'E',
-      warning = 'W',
-      hint = 'H',
-      information = 'I',
-      other = 'O'
-    },
-    use_diagnostic_signs = true
-  }
-EOF
+    source ~/.config/nvim/dein/config/trouble.nvim
 '''
 
 # -------------------------------------------------------
@@ -391,118 +204,38 @@ repo = 'kristijanhusak/defx-icons'
 [[plugins]]
 repo = 'kristijanhusak/defx-git'
 
-[[plugins]]
-repo = 't9md/vim-choosewin'
-hook_add = '''
-    let g:choosewin_overlay_enabled = 1
-    let g:choosewin_overlay_clear_multibyte = 1
-'''
+# [[plugins]]
+# repo = 't9md/vim-choosewin'
+# hook_add = '''
+#     let g:choosewin_overlay_enabled = 1
+#     let g:choosewin_overlay_clear_multibyte = 1
+# '''
 
 # -------------------------------------------------------
 # Git
 # -------------------------------------------------------
 
-[[plugins]]
-repo = 'lewis6991/gitsigns.nvim'
-hook_add = '''
-lua << EOF
-  -- WIP
-EOF
-'''
+# [[plugins]]
+# repo = 'lewis6991/gitsigns.nvim'
+# hook_add = '''
+# lua << EOF
+#   -- WIP
+# EOF
+# '''
 
-[[plugins]]
-repo = 'akinsho/git-conflict.nvim'
-hook_add = '''
-lua << EOF
-  require('git-conflict').setup()
-EOF
-'''
+# [[plugins]]
+# repo = 'akinsho/git-conflict.nvim'
+# hook_add = '''
+# lua << EOF
+#   require('git-conflict').setup()
+# EOF
+# '''
 
-[[plugins]]
-repo = 'TimUntersberger/neogit'
-hook_add = '''
-lua << EOF
-  local neogit = require("neogit")
-
-  neogit.setup {
-    disable_signs = false,
-    disable_hint = false,
-    disable_context_highlighting = false,
-    disable_commit_confirmation = false,
-    -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size. 
-    -- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
-    auto_refresh = true,
-    disable_builtin_notifications = false,
-    use_magit_keybindings = false,
-    -- Change the default way of opening neogit
-    kind = "tab",
-    -- Change the default way of opening the commit popup
-    commit_popup = {
-      kind = "split",
-    },
-    -- Change the default way of opening popups
-    popup = {
-      kind = "split",
-    },
-    -- customize displayed signs
-    signs = {
-      -- { CLOSED, OPENED }
-      section = { ">", "v" },
-      item = { ">", "v" },
-      hunk = { "", "" },
-    },
-    integrations = {
-      -- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `sindrets/diffview.nvim`.
-      -- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
-      --
-      -- Requires you to have `sindrets/diffview.nvim` installed.
-      -- use { 
-      --   'TimUntersberger/neogit', 
-      --   requires = { 
-      --     'nvim-lua/plenary.nvim',
-      --     'sindrets/diffview.nvim' 
-      --   }
-      -- }
-      --
-      diffview = false  
-    },
-    -- Setting any section to `false` will make the section not render at all
-    sections = {
-      untracked = {
-        folded = false
-      },
-      unstaged = {
-        folded = false
-      },
-      staged = {
-        folded = false
-      },
-      stashes = {
-        folded = true
-      },
-      unpulled = {
-        folded = true
-      },
-      unmerged = {
-        folded = false
-      },
-      recent = {
-        folded = true
-      },
-    },
-    -- override/add mappings
-    mappings = {
-      -- modify status buffer mappings
-      status = {
-        -- Adds a mapping with "B" as key that does the "BranchPopup" command
-        ["B"] = "BranchPopup",
-        -- Removes the default mapping of "s"
-        ["s"] = "",
-      }
-    }
-  }
-EOF
-'''
+# [[plugins]]
+# repo = 'TimUntersberger/neogit'
+# hook_add = '''
+#     source ~/.config/nvim/dein/config/neogit.nvim
+# '''
 # --------------------------------------------------------
 # Terminal
 # -------------------------------------------------------
@@ -530,10 +263,11 @@ EOF
 # Which-key
 # -------------------------------------------------------
 
-[[plugins]]
-repo = 'folke/which-key.nvim'
-hook_add = '''
-lua << EOF
-  require('which-key').setup()
-EOF
-'''
+# [[plugins]]
+# repo = 'folke/which-key.nvim'
+# hook_add = '''
+# lua << EOF
+#   require('which-key').setup()
+# EOF
+# '''
+
