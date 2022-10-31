@@ -12,7 +12,7 @@
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'Shougo/dein.vim'
+repo = 'Shougo/dein.vim'
 
 # -------------------------------------------------------
 # Colorscheme / Icon
@@ -27,42 +27,133 @@ hook_add = '''
 '''
 
 [[plugins]]
- repo = 'itchyny/lightline.vim'
- hook_add = '''
-  let g:lightline = { 'colorscheme': 'iceberg' }
- '''
+repo = 'nvim-lualine/lualine.nvim'
+hook_add = '''
+    source ~/.config/nvim/dein/config/lualine.nvim
+'''
+
 
 [[plugins]]
- repo = "kyazdani42/nvim-web-devicons"
+repo = "kyazdani42/nvim-web-devicons"
+
+# -------------------------------------------------------
+# Lua
+# -------------------------------------------------------
 
 [[plugins]]
- repo = "mhinz/vim-startify"
+repo = 'nvim-lua/plenary.nvim'
+
+[[plugins]]
+repo = 'nvim-lua/popup.nvim'
+
+# -------------------------------------------------------
+# Notify
+# -------------------------------------------------------
+
+[[plugins]]
+repo = 'rcarriga/nvim-notify'
+hook_add = '''
+    source ~/.config/nvim/dein/config/nvim-notify.nvim
+'''
+
+[[plugins]]
+repo = 'j-hui/fidget.nvim'
+hook_add = '''
+lua << EOF
+  require("fidget").setup()
+EOF
+'''
+
+# -------------------------------------------------------
+# Color-Highlight
+# -------------------------------------------------------
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+hook_add = '''
+    source ~/.config/nvim/dein/config/nvim-treesitter.vim
+'''
+
+[[plugins]]
+repo = 'yioneko/nvim-yati'
 
 # -------------------------------------------------------
 # Completion
 # -------------------------------------------------------
 
-# ---------- coc-nvim ----------
+# ---------- nvim-lspconfig ----------
 
+# nvim-lspconfig
 [[plugins]]
-repo = 'neoclide/coc.nvim'
-rev = 'release'
+repo = 'neovim/nvim-lspconfig'
 hook_add = '''
-    source ~/.config/nvim/dein/config/coc.nvim
+  source ~/.config/nvim/dein/config/nvim-lspconfig.nvim
 '''
 
-# ---------- snippets ----------
+# mason.nvim
+[[plugins]]
+repo = 'williamboman/mason.nvim'
+hook_add = '''
+lua << EOF
+  require('mason').setup()
+EOF
+'''
 
 [[plugins]]
-repo = 'honza/vim-snippets'
-
-# ---------- tree-sitter ----------
+repo = 'williamboman/mason-lspconfig.nvim'
+hook_add = '''
+  source ~/.config/nvim/dein/config/mason-lspconfig.nvim
+'''
 
 [[plugins]]
- repo = 'nvim-treesitter/nvim-treesitter'
- hook_add = '''
-     source ~/.config/nvim/dein/config/nvim-treesitter.vim
- '''
+repo = "hrsh7th/nvim-cmp"
+hook_add = '''
+    source ~/.config/nvim/dein/config/nvim-cmp.nvim
+'''
+
+# completion sources
+
+[[plugins]]
+repo = "hrsh7th/cmp-nvim-lsp"
+
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp-signature-help'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp-document-symbol'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-path'
+
+[[plugins]]
+repo = 'ray-x/cmp-treesitter'
+
+# Snippets
+
+[[plugins]]
+repo = 'L3MON4D3/LuaSnip'
+
+[[plugins]]
+repo = 'saadparwaiz1/cmp_luasnip'
+
+[[plugins]]
+repo = 'rafamadriz/friendly-snippets'
+hook_add = '''
+lua << EOF
+  require("luasnip/loaders/from_vscode").lazy_load()
+EOF
+'''
+
+# Others
+
+[[plugins]]
+repo = 'onsails/lspkind.nvim'
+
+[[plugins]]
+repo = 'folke/trouble.nvim'
+hook_add = '''
+    source ~/.config/nvim/dein/config/trouble.nvim
+'''
 
 # -------------------------------------------------------
 # LaTeX
@@ -71,28 +162,23 @@ repo = 'honza/vim-snippets'
 # ---------- vimtex ----------
 
 [[plugins]]
- repo = 'lervag/vimtex'
- hook_add = '''
+repo = 'lervag/vimtex'
+hook_add = '''
      let g:vimtex_view_method = 'skim'
- '''
+'''
 
 # -------------------------------------------------------
 # Markdown
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'iamcco/markdown-preview.nvim'
- build = 'cd app && yarn install'
- hook_add = '''
-     function OpenMarkdownPreview (url)
-       execute "silent ! /Applications/Firefox.app/Contents/MacOS/firefox --new-window " . a:url
-     endfunction
-     let g:mkdp_browserfunc = 'OpenMarkdownPreview'
-
+repo = 'iamcco/markdown-preview.nvim'
+build = 'cd app && yarn install'
+hook_add = '''
      let g:mkdp_auto_start = 1
      let g:mkdp_auto_close = 1
      let g:mkdp_command_for_global = 1
- '''
+'''
 
 # -------------------------------------------------------
 # Filer
@@ -110,33 +196,61 @@ repo = 'kristijanhusak/defx-icons'
 [[plugins]]
 repo = 'kristijanhusak/defx-git'
 
-[[plugins]]
-repo = 't9md/vim-choosewin'
-hook_add = '''
-    let g:choosewin_overlay_enabled = 1
-    let g:choosewin_overlay_clear_multibyte = 1
-'''
-
 # -------------------------------------------------------
 # Git
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'nvim-lua/plenary.nvim'
+repo = 'lewis6991/gitsigns.nvim'
+hook_add = '''
+  source ~/.config/nvim/dein/config/gitsigns.vim
+'''
 
 [[plugins]]
- repo = 'lewis6991/gitsigns.nvim'
- hook_add = '''
-     source ~/.config/nvim/dein/config/gitsigns.vim
- '''
+repo = 'akinsho/git-conflict.nvim'
+hook_add = '''
+lua << EOF
+  require('git-conflict').setup()
+EOF
+'''
 
-# -------------------------------------------------------
+[[plugins]]
+repo = 'TimUntersberger/neogit'
+hook_add = '''
+    source ~/.config/nvim/dein/config/neogit.nvim
+'''
+# --------------------------------------------------------
 # Terminal
 # -------------------------------------------------------
 
 [[plugins]]
- repo = 'Shougo/deol.nvim'
- hook_add = '''
+repo = 'Shougo/deol.nvim'
+hook_add = '''
      nnoremap <silent><C-o> :<C-u>Deol -split=floating<CR>
      tnoremap <ESC>   <C-\><C-n>
- '''
+'''
+
+# -------------------------------------------------------
+# Brackets
+# -------------------------------------------------------
+
+[[plugins]]
+repo = 'windwp/nvim-autopairs'
+hook_add = '''
+lua << EOF
+  require('nvim-autopairs').setup()
+EOF
+'''
+
+# -------------------------------------------------------
+# Which-key
+# -------------------------------------------------------
+
+# [[plugins]]
+# repo = 'folke/which-key.nvim'
+# hook_add = '''
+# lua << EOF
+#   require('which-key').setup()
+# EOF
+# '''
+

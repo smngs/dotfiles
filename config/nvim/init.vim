@@ -63,19 +63,19 @@ nnoremap <up> gk
 " Colorscheme / syntax
 " ---------------------------------
 
-highlight Normal ctermbg=NONE guibg=NONE
-highlight NonText ctermbg=NONE guibg=NONE
-highlight SpecialKey ctermbg=NONE guibg=NONE
-highlight EndOfBuffer ctermbg=NONE guibg=NONE
-
-augroup TransparentBG
-  	autocmd!
-	autocmd Colorscheme * highlight Normal ctermbg=none
-	autocmd Colorscheme * highlight NonText ctermbg=none
-	autocmd Colorscheme * highlight LineNr ctermbg=none
-	autocmd Colorscheme * highlight Folded ctermbg=none
-	autocmd Colorscheme * highlight EndOfBuffer ctermbg=none 
-augroup END
+" highlight Normal ctermbg=NONE guibg=NONE
+" highlight NonText ctermbg=NONE guibg=NONE
+" highlight SpecialKey ctermbg=NONE guibg=NONE
+" highlight EndOfBuffer ctermbg=NONE guibg=NONE
+" 
+" augroup TransparentBG
+"   	autocmd!
+" 	autocmd Colorscheme * highlight Normal ctermbg=none
+" 	autocmd Colorscheme * highlight NonText ctermbg=none
+" 	autocmd Colorscheme * highlight LineNr ctermbg=none
+" 	autocmd Colorscheme * highlight Folded ctermbg=none
+" 	autocmd Colorscheme * highlight EndOfBuffer ctermbg=none 
+" augroup END
 
 filetype plugin indent on
 syntax on
@@ -121,9 +121,12 @@ set ambiwidth=double
 " Tab / Indent
 " ---------------------------------
 
+" Tab
 set expandtab
 set tabstop=2
 set softtabstop=2
+
+" Indent
 set autoindent
 set smartindent
 set shiftwidth=2
@@ -137,16 +140,24 @@ set ignorecase
 set smartcase
 set hlsearch
 
+" ---------------------------------
+" Cursor
+" ---------------------------------
+
 set whichwrap=b,s,h,l,<,>,[,],~
-set cursorline
-
 set backspace=indent,eol,start
-
-set showmatch
 
 set wildmenu
 set wildmode=full
 set history=5000
+
+set cursorline
+
+" ---------------------------------
+" Bracket
+" ---------------------------------
+
+set showmatch
 
 " ---------------------------------
 " Mouse
