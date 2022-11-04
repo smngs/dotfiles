@@ -1,4 +1,4 @@
-# ----------------- path && env --------------------
+# ----------------- env --------------------
 
 export LANG=ja_JP.UTF-8
 export TERM=screen-256color
@@ -69,36 +69,8 @@ alias ..5='\cd ../../../../..'
 # tmux
 alias t='tmuximum'
 
-# git
-alias g='anyframe-source-ghq-repository \
-  | anyframe-selector-fzf-tmux \
-  | cd'
-alias gs='git status --short --branch'
-alias gd='git diff'
-alias ga='git add -A'
-alias gpl='git pull'
-alias gc='git commit'
-alias gch='git checkout'
-alias gps='git push'
-alias gb='git branch'
-alias gf='git fetch'
-
-# vim
-alias n='nvim'
-alias v='nvim'
-
-# ranger
-alias r='ranger'
-
-# fzf-tmux
-
-export FZF_TMUX=1
-export FZF_TMUX_OPTS="-p 80%"
-
-export ENHANCD_FILTER='fzf-tmux -p'
-# --------------------------------------------
-
 # ----------------- function -----------------
+
 if [ -z "$TMUX" ]; then
   tmux
 fi
@@ -129,6 +101,33 @@ function do_enter() {
 zle -N do_enter
 bindkey '^m' do_enter
 
-zstyle ':completion:*:default' menu select=1
+# ----------------- zatta-zone (TBR) -----------------
+# fzf-tmux
+# export FZF_TMUX=1
+# export FZF_TMUX_OPTS="-p 80%"
+# export ENHANCD_FILTER='fzf-tmux -p'
+
+# zeno
+export ZENO_HOME="$HOME/.config/zeno"
+export ZENO_ENABLE_SOCK=1
+export ZENO_DISABLE_EXECUTE_CACHE_COMMAND=1
+#
+# export ZENO_ENABLE_FZF_TMUX=1
+# export ZENO_FZF_TMUX_OPTIONS="-p 50%"
+
+export FZF_DEFAULT_OPTS="--height 30% --layout=reverse --border --ansi --margin 1,3"
+export ZENO_DISABLE_BUILTIN_COMPLETION=1
+export ZENO_GIT_CAT="bat --color=always"
+export ZENO_GIT_TREE="exa --tree"
+
+# ----------------- plugins -----------------
+## -> .zinitrc
+
+source ~/.zinitrc
+
+# ----------------- autoloads -----------------
+
+autoload -Uz cdr
+autoload -Uz chpwd_recent_dirs
 autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+zpcompinit

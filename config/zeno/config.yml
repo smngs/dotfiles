@@ -1,0 +1,177 @@
+snippets:
+  # snippet and keyword abbrev
+  - name: git status
+    keyword: gs
+    snippet: git status --short --branch
+
+  - name: git commit all
+    keyword: gca
+    snippet: git commit -am '{{commit_message}}'
+
+  - name: git add
+    keyword: ga
+    snippet: git add
+
+  - name: git diff
+    keyword: gd
+    snippet: git diff
+
+  - name: git pull
+    keyword: gpl
+    snippet: git pull
+
+  - name: git commit
+    keyword: gc
+    snippet: git commit
+
+  - name: git checkout
+    keyword: gch
+    snippet: git checkout
+
+  - name: git push
+    keyword: gps
+    snippet: git push
+
+  - name: git branch
+    keyword: gb
+    snippet: git branch
+
+  - name: git fetch
+    keyword: gf
+    snippet: git fetch
+
+  # snippet with placeholder
+  - name: git commit message
+    keyword: gcm
+    snippet: git commit -m '{{commit_message}}'
+
+  - name: "null"
+    keyword: "null"
+    snippet: ">/dev/null 2>&1"
+    # auto expand condition
+    # If not defined, it is only valid at the beginning of a line.
+    context:
+      # buffer: ''
+      lbuffer: '.+\s'
+      # rbuffer: ''
+
+  - name: branch
+    keyword: B
+    snippet: git symbolic-ref --short HEAD
+    context:
+      lbuffer: '^git\s+checkout\s+'
+    evaluate: true # eval snippet
+
+  - name: nvim
+    keyword: n
+    snippet: nvim
+
+  - name: exit
+    keyword: q
+    snippet: exit
+
+  - name: clear
+    keyword: c
+    snippet: clear
+
+  - name: ranger 
+    keyword: r
+    snippet: ranger 
+
+  # date
+  - name: yyyymmdd
+    keyword: yyyymmdd
+    snippet: date "+%Y%m%d"
+    evaluate: true
+    global: true
+
+  - name: yyyy-mm-dd
+    keyword: yyyy-mm-dd
+    snippet: date "+%Y-%m-%d"
+    evaluate: true
+    global: true
+
+  - name: yyyy/mm/dd
+    keyword: yyyy/mm/dd
+    snippet: date "+%Y/%m/%d"
+    evaluate: true
+    global: true
+
+.default-options: &default-options
+  --exit-0: true
+  --select-1: true
+  --tiebreak: begin,index
+  --height: 30%
+  --cycle: true
+  --preview-window: right:50%
+
+.multi-options: &multi-options
+  <<: *default-options
+  --multi: true
+
+.format-options: &format-options
+  <<: *default-options
+  --nth: "3"
+
+completions:
+  - name: file
+    patterns:
+      - ^\s*(bat|cat|delta|diff|e|grep|head|hexdump|hexyl|less|nvim|sed|tail|vim|vi)(\s+\S+)*\s+$
+    sourceCommand: fd --color=always --hidden --type=f
+    options:
+      <<: *multi-options
+      --preview: bat --color=always --theme=GitHub --style=numbers,header,grid {}
+    callback: sed 's/ /\\ /g' | paste -s -d ' ' -
+
+  - name: file or directory
+    patterns:
+      - ^\s*(code|cp|ln|mv|rm|subl)(\s+\S+)*\s+$
+    sourceCommand: fd --color=always --hidden
+    options:
+      <<: *default-options
+      --preview: bat --color=always --theme=GitHub --style=numbers,header,grid {}
+    callback: sed 's/ /\\ /g'
+
+  - name: directory
+    patterns:
+      - ^\s*(cd|la|ll|ls|tree)(\s+\S+)*\s+$
+    sourceCommand: fd --color=always --hidden --type=d
+    options:
+      <<: *default-options
+      --preview: exa -T {}
+    callback: sed -E 's/ /\\ /g; s,/?$,/,'
+
+  # simple sourceCommand, no callback
+  - name: kill signal
+    patterns:
+      - "^kill -s $"
+    sourceCommand: "kill -l | tr ' ' '\\n'"
+    options:
+      --prompt: "'Kill Signal> '"
+
+  # use excludePatterns and callback
+  - name: kill pid
+    patterns:
+      - "^kill( .*)? $"
+    excludePatterns:
+      # -l, -n or -s is followed by SIGNAL instead of PID
+      - " -[lns] $"
+    sourceCommand: "LANG=C ps -ef | sed 1d"
+    options:
+      --multi: true
+      --prompt: "'Kill Process> '"
+    callback: "awk '{print $2}'"
+
+  # Use null (\0) termination Input / Output
+  - name: chdir
+    patterns:
+      - "^cd $"
+    sourceCommand: "find . -path '*/.git' -prune -o -maxdepth 5 -type d -print0"
+    options:
+      # Added --read0 if null termination is used in `sourceCommand` output.
+      --read0: true
+      --prompt: "'Chdir> '"
+      --preview: "cd {} && ls -a | sed '/^[.]*$/d'"
+    callback: "cut -z -c 3-"
+    callbackZero: true  # null termination is used in `callback` I/O
+
