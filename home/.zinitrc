@@ -17,7 +17,7 @@ __zeno_atload() {
   bindkey ' '  zeno-auto-snippet
   bindkey '^M' zeno-auto-snippet-and-accept-line
   bindkey '^I' zeno-completion
-  # bindkey '^P' zeno-completion
+  bindkey '^P' zeno-completion
 
   bindkey '^r'   zeno-history-selection
   bindkey '^x^s' zeno-insert-snippet
