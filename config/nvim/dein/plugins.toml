@@ -132,6 +132,12 @@ repo = 'ray-x/cmp-treesitter'
 
 [[plugins]]
 repo = 'L3MON4D3/LuaSnip'
+hook_add = '''
+lua << EOF
+  -- load snippets from path/of/your/nvim/config/my-cool-snippets
+  require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+EOF
+'''
 
 [[plugins]]
 repo = 'saadparwaiz1/cmp_luasnip'

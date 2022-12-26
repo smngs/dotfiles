@@ -1,0 +1,18 @@
+{
+  "name": "snippets",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "cpp",
+        "path": "./atcoder.json"
+      },
+      {
+        "language": "cpp",
+        "path": "./cpp-mapler.json"
+      }
+    ]
+  }
+}
