@@ -1,0 +1,131 @@
+{
+  "atcoder": {
+    "prefix": "atcoder",
+    "body": [
+      "#include <bits/stdc++.h>",
+      "using namespace std;",
+      "",
+      "int main() {",
+      "\t$1",
+      "}"
+    ],
+    "description": "atcoder template"
+  },
+
+  "header": {
+    "prefix": "header",
+    "body": ["#include <bits/stdc++.h>", "using namespace std;"],
+    "description": "calling header"
+  },
+
+  "cout": {
+    "prefix": "co",
+    "body": ["cout << $1 << endl;"],
+    "description": "standard output"
+  },
+
+  "cin": {
+    "prefix": "ci",
+    "body": ["cin >> $1;"],
+    "description": "standard input"
+  },
+
+  "while": {
+    "prefix": "while",
+    "body": ["while (${1:expression}) {", "\t${0:}", "}"],
+    "description": "while loop"
+  },
+
+  "double for loop": {
+    "prefix": "for2",
+    "body": [
+      "for (int i = 0; i < count; i++)",
+      "{",
+      "\tfor (int j = 0; j < count; j++)",
+      "\t{",
+      "\t\t/* code */",
+      "\t}",
+      "}"
+    ],
+    "description": "double for loop"
+  },
+
+  "triple for loop": {
+    "prefix": "for3",
+    "body": [
+      "for (int i = 0; i < count; i++)",
+      "{",
+      "\tfor (int j = 0; j < count; j++)",
+      "\t{",
+      "\t\tfor (int k =0; k < count; k++)",
+      "\t\t{",
+      "\t\t\t/* code */",
+      "\t\t}",
+      "\t}",
+      "}"
+    ],
+    "description": "triple for loop"
+  },
+
+  "switch": {
+    "prefix": "switch",
+    "body": ["switch (${1:expression}) {", "\tdefault:", "\tbreak;${0:}", "}"],
+    "description": "switch statement"
+  },
+
+  "find_prime_number": {
+    "prefix": "isPrime",
+    "body": [
+      "bool isPrime(int n, int i = 2)",
+      "{",
+      "\t// Base cases",
+      "\tif (n <= 2)",
+      "\t\treturn (n == 2) ? true : false;",
+      "\tif (n % i == 0)",
+      "\t\treturn false;",
+      "\tif (i * i > n)",
+      "\t\treturn true;\n",
+      "\t// Check for next divisor",
+      "\treturn isPrime(n, i + 1);",
+      "}"
+    ],
+    "description": "finding prime number"
+  },
+
+  "gcd": {
+    "prefix": "gcd",
+    "body": ["int gcd(int a, int b) {", "\treturn a ? gcd(b, a%b) : a;", "}"],
+    "description": "Greatest Common Divisor"
+  },
+
+  "lcm": {
+    "prefix": "lcm",
+    "body": ["int lcm(int a, int b) {", "\treturn a / gcd(a, b) * b;", "}"],
+    "description": "Least Common Multiply"
+  },
+
+  "digit_sum": {
+    "prefix": "digitsum",
+    "body": [
+      "int digit_sum(int n) {",
+      "\tint res = 0;",
+      "\twhile(n > 0) {",
+      "\t\tres += n%10;",
+      "\t\tn /= 10;",
+      "\t}",
+      "\treturn res;",
+      "}"
+    ],
+    "description": "sum of all digits"
+  },
+
+  "string_count": {
+    "prefix": "stringcount",
+    "body": [
+      "int string_count(string s, char c) {",
+      "\treturn count(s.cbegin(), s.cend(), c);",
+      "}"
+    ],
+    "description": "count the number of occurrences of char 'x' in the string"
+  }
+}
