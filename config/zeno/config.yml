@@ -117,7 +117,7 @@ completions:
   - name: file
     patterns:
       - ^\s*(bat|cat|delta|diff|e|grep|head|hexdump|hexyl|less|nvim|sed|tail|vim|vi)(\s+\S+)*\s+$
-    sourceCommand: fd --color=always --hidden --type=f
+    sourceCommand: fd --color=always --hidden --type=f -E '.git/*'
     options:
       <<: *multi-options
       --preview: bat --color=always --theme=GitHub --style=numbers,header,grid {}
@@ -126,7 +126,7 @@ completions:
   - name: file or directory
     patterns:
       - ^\s*(code|cp|ln|mv|rm|subl)(\s+\S+)*\s+$
-    sourceCommand: fd --color=always --hidden
+    sourceCommand: fd --color=always --hidden -E '.git/*'
     options:
       <<: *default-options
       --preview: bat --color=always --theme=GitHub --style=numbers,header,grid {}
@@ -135,7 +135,7 @@ completions:
   - name: directory
     patterns:
       - ^\s*(cd|la|ll|ls|tree)(\s+\S+)*\s+$
-    sourceCommand: fd --color=always --hidden --type=d
+    sourceCommand: fd --color=always --hidden --type=d -E '.git/*'
     options:
       <<: *default-options
       --preview: exa -T {}
