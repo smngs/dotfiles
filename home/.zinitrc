@@ -1,0 +1,29 @@
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+
+zinit wait lucid blockf light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust \
+    zdharma-continuum/fast-syntax-highlighting \
+    zsh-users/zsh-history-substring-search \
+    zsh-users/zsh-autosuggestions \
+    zsh-users/zsh-completions \
+    chrissicool/zsh-256color \
+    mafredri/zsh-async \
+
+__zeno_atload() {
+  bindkey ' '  zeno-auto-snippet
+  bindkey '^M' zeno-auto-snippet-and-accept-line
+  bindkey '^I' zeno-completion
+  # bindkey '^P' zeno-completion
+
+  bindkey '^r'   zeno-history-selection
+  bindkey '^x^s' zeno-insert-snippet
+  bindkey '^x^f' zeno-ghq-cd
+}
+
+zinit wait lucid light-mode for \
+  atload'__zeno_atload' \
+  @'yuki-yano/zeno.zsh'
