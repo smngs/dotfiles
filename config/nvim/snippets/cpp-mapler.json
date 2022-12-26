@@ -1,0 +1,92 @@
+{
+	"cpp": {
+			"prefix": "cpp_template",
+			"body": [
+					"/**",
+					" *    author:  mapler",
+					" *    created: $CURRENT_MONTH.$CURRENT_DATE.$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+					" **/",
+					"",
+					"#include <bits/stdc++.h>",
+					"using namespace std;",
+					"",
+					"using ull = unsigned long long;",
+					"using ll = long long;",
+					"using vi = vector<int>;",
+					"using vl = vector<long>;",
+					"using vll = vector<long long>;",
+					"using vvi = vector<vi>;",
+					"using vvl = vector<vl>;",
+					"using vvll = vector<vll>;",
+					"using vs = vector<string>;",
+					"using pii = pair<int, int>;",
+					"",
+					"",
+					"int main() {",
+					"",
+					"    return 0;",
+					"}"
+			],
+			"description": "cpp"
+	},
+	"out": {
+			"body": "cout << ${1:ans} << \"\\n\";",
+			"prefix": "out"
+	},
+	"out2": {
+			"body": [
+					"cout << ${1:ans} << ${2:ans} << \"\\n\";"
+			],
+			"description": "out2",
+			"prefix": "out2"
+	},
+	"input1": {
+			"body": [
+					"${1:int} ${2:n};",
+					"cin >> $2;",
+					""
+			],
+			"description": "input1",
+			"prefix": "input1"
+	},
+	"input2": {
+			"body": [
+					"${1:int} ${2:n},${3:m} ;",
+					"cin >> $2 >> $3;",
+					""
+			],
+			"description": "input2",
+			"prefix": "input2"
+	},
+	"inputvec": {
+			"body": [
+					"vi ${1:a}(${2:n});",
+					"for (ll i = 0; i < $2; i++) cin >> $1[i];",
+					""
+			],
+			"description": "inputvec",
+			"prefix": "inputvec"
+	},
+	"all": {
+			"body": "$1.begin(), $1.end()",
+			"prefix": "all"
+	},
+	"forn": {
+			"body": [
+					"for (ll ${1:i}=0; ${1} < ${2:n}; ${1}++){",
+					"",
+					"}",
+					""
+			],
+			"description": "for",
+			"prefix": "forn"
+	},
+	"yesno": {
+			"body": [
+					"cout << (${1:ans} ? ${2|\"Yes\" : \"No\",\"YES\" : \"NO\",\"yes\" : \"no\"|}) << \"\\n\";"
+			],
+			"description": "yesno",
+			"prefix": "yesno"
+	}
+}
+
