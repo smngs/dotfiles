@@ -1,0 +1,133 @@
+# ----------------- env --------------------
+
+export LANG=ja_JP.UTF-8
+export TERM=screen-256color
+export EDITOR=nvim
+
+if type nvim > /dev/null 2>&1; then
+  export EDITOR='nvim'
+fi
+
+case ${OSTYPE} in
+    darwin*)
+        export PATH=$PATH:/opt/homebrew:/usr/local/Homebrew/bin
+
+        (( ${+commands[gdate]} )) && alias date='gdate'
+        (( ${+commands[gls]} )) && alias ls='gls'
+        (( ${+commands[gmkdir]} )) && alias mkdir='gmkdir'
+        (( ${+commands[gcp]} )) && alias cp='gcp'
+        (( ${+commands[gmv]} )) && alias mv='gmv'
+        (( ${+commands[grm]} )) && alias rm='grm'
+        (( ${+commands[gdu]} )) && alias du='gdu'
+        (( ${+commands[ghead]} )) && alias head='ghead'
+        (( ${+commands[gtail]} )) && alias tail='gtail'
+        (( ${+commands[gsed]} )) && alias sed='gsed'
+        (( ${+commands[ggrep]} )) && alias grep='ggrep'
+        (( ${+commands[gfind]} )) && alias find='gfind'
+        (( ${+commands[gdirname]} )) && alias dirname='gdirname'
+        (( ${+commands[gxargs]} )) && alias xargs='gxargs'
+        ;;
+    linux*)
+        ;;
+esac
+
+# ----------------- alias --------------------
+
+if [[ $(command -v exa) ]]; then
+  alias l='exa --icons'
+  alias ls='exa --icons'
+  alias la='exa --icons -a'
+  alias ll='exa --icons -lh'
+  alias lla='exa --icons -lah'
+fi
+
+if [[ $(command -v bat) ]]; then
+  alias cat='bat'
+fi
+
+if [[ $(command -v hexyl) ]]; then
+  alias od='hexyl'
+fi
+
+if [[ $(command -v procs) ]]; then
+  alias ps='procs'
+fi
+
+alias tree='tree -C'
+alias rm='rm -i'
+alias mv='mv -i'
+alias df='df -h'
+alias q='exit'
+alias c='clear'
+
+alias ..='\cd ..'
+alias ..2='\cd ../..'
+alias ..3='\cd ../../..'
+alias ..4='\cd ../../../..'
+alias ..5='\cd ../../../../..'
+
+# tmux
+alias t='tmuximum'
+
+# ----------------- function -----------------
+
+if [ -z "$TMUX" ]; then
+  tmux
+fi
+
+# do_enter (pwd, ls, git status)
+function do_enter() {
+    if [ -n "$BUFFER" ]; then
+        zle accept-line
+        return 0
+    fi
+    echo
+    echo -e "\e[0;33m--- pwd ---\e[0m"
+    pwd
+    echo
+    echo -e "\e[0;33m--- ls ---\e[0m"
+      ls
+    if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
+        echo
+        echo -e "\e[0;33m--- git status ---\e[0m"
+        git status -sb
+    fi
+    echo
+    echo
+    zle reset-prompt
+    return 0
+}
+
+zle -N do_enter
+bindkey '^m' do_enter
+
+# ----------------- zatta-zone (TBR) -----------------
+# fzf-tmux
+# export FZF_TMUX=1
+# export FZF_TMUX_OPTS="-p 80%"
+# export ENHANCD_FILTER='fzf-tmux -p'
+
+# zeno
+export ZENO_HOME="$HOME/.config/zeno"
+export ZENO_ENABLE_SOCK=1
+export ZENO_DISABLE_EXECUTE_CACHE_COMMAND=1
+#
+# export ZENO_ENABLE_FZF_TMUX=1
+# export ZENO_FZF_TMUX_OPTIONS="-p 50%"
+
+export FZF_DEFAULT_OPTS="--height 30% --layout=reverse --border --ansi --margin 1,3"
+export ZENO_DISABLE_BUILTIN_COMPLETION=1
+export ZENO_GIT_CAT="bat --color=always"
+export ZENO_GIT_TREE="exa --tree"
+
+# ----------------- plugins -----------------
+## -> .zinitrc
+
+source ~/.zinitrc
+
+# ----------------- autoloads -----------------
+
+autoload -Uz cdr
+autoload -Uz chpwd_recent_dirs
+autoload -Uz _zinit
+zpcompinit
