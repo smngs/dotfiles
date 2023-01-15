@@ -33,14 +33,25 @@ setopt share_history
 
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
+SAVEHIST=1000000
 
 # ----------------- theme --------------------
 
 zinit light-mode for \
-    sindresorhus/pure
+    zsh-users/zsh-autosuggestions \
+    sindresorhus/pure \
+    romkatv/zsh-defer
+
+## test
+autoload -Uz cdr
+autoload -Uz chpwd_recent_dirs
+autoload -Uz _zinit
+zpcompinit
 
 ## -> .zshrc-lazy (lazy-loading)
 
-zinit wait lucid null for \
-    atinit'source "$HOME/.zshrc.lazy"' \
-    @'zdharma-continuum/null'
+# zinit wait lucid null for \
+#     atinit'source "$HOME/.zshrc.lazy"' \
+#     @'zdharma-continuum/null'
+
+zsh-defer source $HOME/.zshrc.lazy
