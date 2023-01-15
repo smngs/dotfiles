@@ -2,6 +2,7 @@
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE:-$0}")" || exit; pwd)
 DOT_DIRECTORY="${HOME}/dotfiles"
 DOT_CONFIG_DIRECTORY="config"
+DOT_CONFIG_HOST_DIRECTORY="config"
 DOT_HOME_DIRECTORY="home"
 DOT_HOST_DIRECTORY="host"
 DOT_URL="https://github.com/smngs/dotfiles.git"
@@ -98,7 +99,7 @@ deploy () {
             mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
         fi
 
-        ln -snfv "${DOT_DIRECTORY}"/${DOT_CONFIG_DIRECTORY}/"${file:2}" "${HOME}"/${DOT_CONFIG_DIRECTORY}/"${file:2}"
+        ln -snfv "${DOT_DIRECTORY}"/${DOT_CONFIG_DIRECTORY}/"${file:2}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${file:2}"
     done
     info "Deploy .config dotfiles complete."
 
@@ -106,7 +107,7 @@ deploy () {
     warn "hostname == $(hostname -s), Install depended dotfiles."
         cd "${DOT_DIRECTORY}"/${DOT_HOST_DIRECTORY}/"$(hostname -s)" || exit
         for file in $(\find . -maxdepth 1 | sed '1d'); do
-            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOST_DIRECTORY}/"$(hostname -s)"/"${file:2}" "${HOME}"/${DOT_CONFIG_DIRECTORY}/"${file:2}"
+            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOST_DIRECTORY}/"$(hostname -s)"/"${file:2}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${file:2}"
         done
     fi
     info "Deploy .config depended dotfiles complete."

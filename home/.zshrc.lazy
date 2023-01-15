@@ -1,5 +1,4 @@
 # ----------------- env --------------------
-
 export LANG=ja_JP.UTF-8
 export TERM=screen-256color
 export EDITOR=nvim
@@ -68,6 +67,10 @@ alias ..5='\cd ../../../../..'
 
 # tmux
 alias t='tmuximum'
+
+# atcoder-cli
+alias acct='g++ main.cpp && oj t'
+alias accs='acc s'
 
 # ----------------- function -----------------
 
