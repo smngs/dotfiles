@@ -266,4 +266,6 @@ EOF
 
 [[plugins]]
 repo = 'andweeb/presence.nvim'
-
+hook_add = '''
+  source ~/.config/nvim/dein/config/presence.nvim
+'''
