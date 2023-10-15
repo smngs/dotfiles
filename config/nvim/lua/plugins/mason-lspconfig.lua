@@ -1,7 +1,4 @@
-lua << EOF
-local m = require('mason-lspconfig')
-
-m.setup({
+require('mason-lspconfig').setup({
   ensure_installed = {
     'clangd',
     'denols',
@@ -12,8 +9,7 @@ m.setup({
     'remark_ls',
     'pyright',
     'rust_analyzer',
-    'tsserver',
+    'tsserver'
   },
   automatic_installation = true
 })
-EOF
