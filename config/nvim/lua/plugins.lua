@@ -96,11 +96,13 @@ return {
     },
     config = function()
       require('mason-null-ls').setup({
-        ensure_installed = { "prettierd", "black", "goimports", "rustfmt", "textlint" },
+        ensure_installed = { "black", "textlint" },
         handlers = {},
       })
     end,
   },
+
+
 
  { -- nvim-cmp
   "hrsh7th/nvim-cmp",
