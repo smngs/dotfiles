@@ -3,7 +3,6 @@ require('mason-lspconfig').setup({
     'clangd',
     'denols',
     'dockerls',
-    'html',
     'jsonls',
     'texlab',
     'remark_ls',
@@ -12,4 +11,17 @@ require('mason-lspconfig').setup({
     'tsserver'
   },
   automatic_installation = true
+})
+
+-- Display error/warnings as hover.
+vim.o.updatetime = 200
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+  group = vim.api.nvim_create_augroup("float_diagnostic", { clear = true }),
+  callback = function ()
+    vim.diagnostic.open_float(nil, {focus=false})
+  end
+})
+
+vim.diagnostic.config({
+  virtual_text = false
 })

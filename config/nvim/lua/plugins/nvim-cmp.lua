@@ -97,7 +97,4 @@ require('mason-lspconfig').setup_handlers {
   end,
 }
 
-require('lsp_lines').setup()
-vim.diagnostic.config({
-  virtual_text = false,
-})
+

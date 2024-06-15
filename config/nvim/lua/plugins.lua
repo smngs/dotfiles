@@ -31,12 +31,12 @@ return {
 
  { -- Filer
    'lambdalisue/fern.vim',
-   config = function()
-     vim.cmd([[
-       autocmd StdinReadPre * let s:std_in=1
-       autocmd VimEnter * ++nested Fern . -drawer | if argc() > 0 || exists("s:std_in") | wincmd p | endif
-     ]])
-   end,
+   -- config = function()
+   --   vim.cmd([[
+   --     autocmd StdinReadPre * let s:std_in=1
+   --     autocmd VimEnter * ++nested Fern . -drawer | if argc() > 0 || exists("s:std_in") | wincmd p | endif
+   --   ]])
+   -- end,
    dependencies = {
      { 'lambdalisue/fern-git-status.vim', },
      { 'lambdalisue/nerdfont.vim', },
@@ -74,12 +74,12 @@ return {
   end
  },
 
- { -- Treesitter
-   'nvim-treesitter/nvim-treesitter',
-   config = function()
-     require("plugins.nvim-treesitter")
-   end
- },
+ -- { -- Treesitter
+ --   'nvim-treesitter/nvim-treesitter',
+ --   config = function()
+ --     require("plugins.nvim-treesitter")
+ --   end
+ -- },
 
  -- LSP
  { -- Mason
@@ -110,7 +110,6 @@ return {
     {"hrsh7th/cmp-nvim-lsp-document-symbol", },
     {"hrsh7th/cmp-path", },
     {"ray-x/cmp-treesitter", },
-    {"Maan2003/lsp_lines.nvim", },
   },
   config = function()
     require("plugins.nvim-cmp")
@@ -153,5 +152,6 @@ return {
   config = function ()
     require("nvim-surround").setup()
   end
- }
+ },
+
 }
