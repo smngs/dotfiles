@@ -46,7 +46,8 @@ vim.o.signcolumn = "yes:1"
 
 -- Undo
 if vim.fn.has('persistent_undo') == 1 then
-    vim.o.undodir = './undo'
+    local home = os.getenv('HOME')
+    vim.o.undodir =  home .. '/.local/state/nvim/undo'
     vim.o.undofile = true
 end
 
