@@ -4,7 +4,7 @@ require('mason-lspconfig').setup({
     'denols',
     'dockerls',
     'jsonls',
-    'texlab',
+    -- 'texlab',
     'remark_ls',
     'pyright',
     'rust_analyzer',
