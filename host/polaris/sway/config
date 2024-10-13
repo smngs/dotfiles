@@ -21,7 +21,7 @@ set $term "WINIT_UNIX_BACKEND=x11 vblank_mode=1 alacritty"
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu rofi -show drun
+set $menu wofi --show drun
 
 ### Output configuration
 #
@@ -30,9 +30,9 @@ set $menu rofi -show drun
 # output * bg #000000 solid_color
 output "*" bg /usr/share/backgrounds/archlinux/small.png fill
 
-output DP-3 resolution 3840x2160 position 0,0 scale 1
+output DP-1 resolution 3840x2160 position 0,0 scale 1
 output DP-2 resolution 3840x2160 position 3840,0 scale 1
-output DP-1 resolution 3840x2160 position 7680,0 scale 1
+output DP-3 resolution 3840x2160 position 7680,0 scale 1
 output HDMI-A-1 resolution 3840x2160 position 3840,2160 scale 1
 
 workspace 1 output DP-3
@@ -82,14 +82,15 @@ workspace 9 output HDMI-A-1
 bindsym $mod+Return exec $term
 
 # Kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 
 # Start your launcher
 bindsym $mod+d exec $menu
 
 # Vivaldi
 # bindsym $mod+i exec vivaldi-snapshot --enable-features=VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,UseOzonePlatform,Vulkan --ozone-platform=wayland --use-cmd-decoder=validating --use-gl=egl # wayland
-bindsym $mod+i exec vivaldi-snapshot --enable-features=VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,Vulkan --use-cmd-decoder=validating --use-gl=egl 
+# bindsym $mod+i exec vivaldi-snapshot --enable-features=VaapiVideoEncoder,VaapiVideoDecoder,CanvasOopRasterization,Vulkan --use-cmd-decoder=validating --use-gl=egl 
+bindsym $mod+i exec LIBVA_DRIVER_NAME=vdpau MOZ_X11_EGL=1 MOZ_ENABLE_WAYLAND=1 firefox
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -107,14 +108,14 @@ set $Locker light-locker-command -l && sleep 1
 set $mode_system System (l) lock, (e) logout, (h) hybrid-sleep, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
   bindsym l exec --no-startup-id $Locker, mode "default"
-    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym e exec --no-startup-id sway exit, mode "default"
     bindsym h exec systemctl hybrid-sleep, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym shift+s exec --no-startup-id shutdown now, mode "default"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+q mode "$mode_system"
+bindsym $mod+Shift+m mode "$mode_system"
 
 # Screen brightness controls
 bindsym XF86MonBrightnessUp exec light -A 5 # increase screen brightness
