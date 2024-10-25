@@ -68,6 +68,27 @@ return {
     end
   },
 
+  -- Markdown
+  {
+    "oflisback/obsidian-bridge.nvim",
+    opts = {
+      scroll_sync = true
+    }
+  },
+
+  { 
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons"
+    },
+    config = function()
+      require('render-markdown').setup ({
+        file_types = { "Avante" },
+      })
+    end
+  },
+
   -- LSP
   { -- Mason
     'williamboman/mason.nvim',
@@ -82,7 +103,7 @@ return {
           require('mason').setup()
         end
       },
-      {'neovim/nvim-lspconfig', },
+      { 'neovim/nvim-lspconfig', },
     },
     config = function()
       require("plugins.mason-lspconfig")
@@ -95,14 +116,16 @@ return {
       "nvimtools/none-ls.nvim",
     },
     config = function()
-      require('mason-null-ls').setup({
-        ensure_installed = { "black", "textlint" },
-        handlers = {},
+      local null_ls = require("null-ls")
+      null_ls.setup({
+          sources = {
+              null_ls.builtins.diagnostics.textlint.with({
+                filetypes = { "markdown", "tex" }
+              })
+          },
       })
     end,
   },
-
-
 
   { -- nvim-cmp
     "hrsh7th/nvim-cmp",
@@ -174,6 +197,7 @@ return {
 
   {
     "yetone/avante.nvim",
+    run = "make",
     dependencies = {
       'MeanderingProgrammer/render-markdown.nvim',
       'MunifTanjim/nui.nvim',
@@ -192,9 +216,6 @@ return {
           },
           use_absolute_path = true,
         },
-      })
-      require('render-markdown').setup ({
-        file_types = { "markdown", "Avante" },
       })
       require('avante_lib').load()
       require('avante').setup ({
