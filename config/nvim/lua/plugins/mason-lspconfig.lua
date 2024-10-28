@@ -5,10 +5,8 @@ require('mason-lspconfig').setup({
     'dockerls',
     'jsonls',
     -- 'texlab',
-    'remark_ls',
     'pyright',
     'rust_analyzer',
-    'tsserver'
   },
   automatic_installation = true
 })

@@ -5,7 +5,8 @@ fi
 
 case ${OSTYPE} in
     darwin*)
-        export PATH=$PATH:/opt/homebrew:/usr/local/Homebrew/bin
+        export PATH=$PATH:/opt/homebrew:/usr/local/Homebrew/bin:/Users/minegishi/.local/bin
+        eval "$(/usr/libexec/path_helper)"
         eval "$(pyenv init --path)"
 
         (( ${+commands[gdate]} )) && alias date='gdate'
@@ -26,6 +27,8 @@ case ${OSTYPE} in
     linux*)
         ;;
 esac
+
+zsh-defer source $HOME/.secrets
 
 # ----------------- alias --------------------
 
@@ -59,6 +62,7 @@ alias mv='mv -i'
 alias df='df -h'
 alias q='exit'
 alias c='clear'
+alias f='yazi'
 
 alias ..='\cd ..'
 alias ..2='\cd ../..'
@@ -74,10 +78,6 @@ alias acct='g++ main.cpp && oj t'
 alias accs='acc s'
 
 # ----------------- function -----------------
-
-if [ -z "$TMUX" ]; then
-  tmux
-fi
 
 # do_enter (pwd, ls, git status)
 function do_enter() {
