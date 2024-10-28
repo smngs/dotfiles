@@ -62,6 +62,7 @@ alias mv='mv -i'
 alias df='df -h'
 alias q='exit'
 alias c='clear'
+alias f='yazi'
 
 alias ..='\cd ..'
 alias ..2='\cd ../..'
