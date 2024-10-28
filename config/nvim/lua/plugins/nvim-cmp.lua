@@ -9,6 +9,7 @@ cmp.setup({
     end,
   },
   sources = {
+    { name = "skkeleton"},
     { name = "luasnip" },
     { name = "nvim_lsp" },
     { name = "nvim_lsp_signature_help" },
@@ -16,6 +17,9 @@ cmp.setup({
     { name = "treesitter" },
     -- { name = "buffer" },
     { name = "path" },
+  },
+  view = {
+    entries = 'native'
   },
   mapping = {
       ["<C-p>"] = cmp.mapping.select_prev_item(),
