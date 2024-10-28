@@ -5,7 +5,11 @@ require('trouble').setup({
   icons = true,
   mode ='workspace_diagnostics',
   indent_lines = true,
-  auto_open = true,
+  opts = {
+    modes = {
+      diagnostics = { auto_open = true },
+    }
+  },
   auto_close = true,
   auto_preview = true,
   auto_fold = false,
