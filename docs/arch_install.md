@@ -52,7 +52,8 @@ $ paru -S archlinux-wallpaper firefox \
     networkmanager network-manager-applet bluez bluez-tools system-config-printer \
     pipewire pavucontrol pipewire-pulse \
     slack discord discord-canary \
-    ttf-cica ttf-migu
+    ttf-cica ttf-migu \
+    yazi
 
 $ fcitx-configtool
 
