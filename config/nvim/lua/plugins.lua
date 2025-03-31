@@ -10,13 +10,17 @@ return {
     end
   },
 
-  { -- Status Line
-    'nvim-lualine/lualine.nvim',
-    requires = { 'nvim-tree/nvim-web-devicons', opt = true },
-    config = function()
-      require('lualine').setup()
-    end
-  },
+  -- { -- Status Line
+  --   'nvim-lualine/lualine.nvim',
+  --   requires = { 'nvim-tree/nvim-web-devicons', opt = true },
+  --   config = function()
+  --     require('lualine').setup {
+  --       options = {
+  --         theme = "iceberg_dark"
+  --       }
+  --     }
+  --   end
+  -- },
 
   { -- Mode to Column Line
     'mvllow/modes.nvim',
@@ -44,17 +48,17 @@ return {
     } ,
   },
 
-  { -- Bar (Buffer)
-    'romgrk/barbar.nvim',
-    dependencies = {
-      { 'lewis6991/gitsigns.nvim', },
-      { 'nvim-tree/nvim-web-devicons', },
-    },
-    config = function()
-      vim.api.nvim_set_keymap('n', '<C-j>', '<Cmd>BufferPrevious<CR>', { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', '<C-k>', '<Cmd>BufferNext<CR>', { noremap = true, silent = true })
-    end
-  },
+  -- { -- Bar (Buffer)
+  --   'romgrk/barbar.nvim',
+  --   dependencies = {
+  --     { 'lewis6991/gitsigns.nvim', },
+  --     { 'nvim-tree/nvim-web-devicons', },
+  --   },
+  --   config = function()
+  --     vim.api.nvim_set_keymap('n', '<C-j>', '<Cmd>BufferPrevious<CR>', { noremap = true, silent = true })
+  --     vim.api.nvim_set_keymap('n', '<C-k>', '<Cmd>BufferNext<CR>', { noremap = true, silent = true })
+  --   end
+  -- },
 
   { -- fuzzy finder (telescope)
     'nvim-telescope/telescope.nvim',
@@ -128,6 +132,15 @@ return {
   },
 
   {
+    "rust-lang/rust.vim",
+    ft = "rust",
+    init = function()
+      vim.g.rustfmt_autosave = 1
+      vim.g.rustfmt_options = '--edition 2024'
+    end,
+  },
+
+  { -- SKK (Input Method)
     'vim-skk/skkeleton',
     dependencies = {
       "vim-denops/denops.vim",
@@ -225,32 +238,32 @@ return {
     end
   },
 
-  {
-    "yetone/avante.nvim",
-    run = "make",
-    dependencies = {
-      'MeanderingProgrammer/render-markdown.nvim',
-      'MunifTanjim/nui.nvim',
-      'nvim-tree/nvim-web-devicons',
-      'HakonHarnes/img-clip.nvim',
-      'nvim-lua/plenary.nvim',
-      'stevearc/dressing.nvim',
-    },
-    config = function()
-      require('img-clip').setup ({
-        default = {
-          embed_image_as_base64 = false,
-          prompt_for_file_name = false,
-          drag_and_drop = {
-            insert_mode = true,
-          },
-          use_absolute_path = true,
-        },
-      })
-      require('avante_lib').load()
-      require('avante').setup ({
-        provider = "openai",
-      })
-    end
-  }
+  -- {
+  --   "yetone/avante.nvim",
+  --   run = "make",
+  --   dependencies = {
+  --     'MeanderingProgrammer/render-markdown.nvim',
+  --     'MunifTanjim/nui.nvim',
+  --     'nvim-tree/nvim-web-devicons',
+  --     'HakonHarnes/img-clip.nvim',
+  --     'nvim-lua/plenary.nvim',
+  --     'stevearc/dressing.nvim',
+  --   },
+  --   config = function()
+  --     require('img-clip').setup ({
+  --       default = {
+  --         embed_image_as_base64 = false,
+  --         prompt_for_file_name = false,
+  --         drag_and_drop = {
+  --           insert_mode = true,
+  --         },
+  --         use_absolute_path = true,
+  --       },
+  --     })
+  --     require('avante_lib').load()
+  --     require('avante').setup ({
+  --       provider = "openai",
+  --     })
+  --   end
+  -- }
 }

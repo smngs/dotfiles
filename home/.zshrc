@@ -58,3 +58,7 @@ zpcompinit
 #     @'zdharma-continuum/null'
 
 zsh-defer source $HOME/.zshrc.lazy
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
+
+zstyle ':completion:*' menu select
