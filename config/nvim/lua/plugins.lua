@@ -69,13 +69,6 @@ return {
   },
 
   -- Markdown
-  {
-    "oflisback/obsidian-bridge.nvim",
-    opts = {
-      scroll_sync = true
-    }
-  },
-
   { 
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = {
@@ -135,10 +128,10 @@ return {
     },
     config = function()
       vim.fn["skkeleton#config"]({
-        globalDictionaries = { '/usr/share/skk/SKK-JISYO.L' },
+        globalDictionaries = { '~/dotfiles/skk/SKK-JISYO.L' },
         eggLikeNewline = true,
         keepState = true,
-        -- sources = { "google_japanese_input" }
+        sources = { "google_japanese_input" }
       })
       vim.fn["skkeleton#register_kanatable"]("rom", {
         [","] = {"，", ""},
