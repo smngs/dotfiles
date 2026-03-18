@@ -12,9 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up dotfiles directory
-        run: |
-          mkdir -p "$HOME/dotfiles"
-          cp -r . "$HOME/dotfiles/"
+        run: ln -s "$GITHUB_WORKSPACE" "$HOME/dotfiles"
 
       - name: Test make help
         run: make -C "$HOME/dotfiles" help
