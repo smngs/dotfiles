@@ -22,11 +22,11 @@ yellow = "#e2a478"
 background = "#161821"
 foreground = "#d2d4de"
 
-[font]
-size = 13
+[general]
+import = ["~/.alacritty-font.toml"]
 
-[font.normal]
-family = "M+ 1m"
+[font]
+size = 16
 
 [[keyboard.bindings]]
 action = "ScrollToBottom"
@@ -39,6 +39,6 @@ action = "ToggleViMode"
 key = "Space"
 mods = "Shift"
 
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 args = ["-l", "-c", "zellij attach --index 0 --create"]

@@ -1,16 +1,36 @@
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 
-zinit wait lucid blockf light-mode for \
-    zsh-users/zsh-completions \
+# 優先度の高いプラグイン（補完とシンタックスハイライト）
+zinit wait'0a' lucid blockf light-mode for \
+    zsh-users/zsh-completions
+
+zinit wait'0b' lucid light-mode for \
+    zdharma-continuum/fast-syntax-highlighting
+
+# 中優先度のプラグイン
+zinit wait'0c' lucid light-mode for \
+    zsh-users/zsh-history-substring-search \
+    mafredri/zsh-async
+
+# 低優先度のプラグイン（annexes）
+zinit wait'1' lucid light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust \
-    zdharma-continuum/fast-syntax-highlighting \
-    zsh-users/zsh-history-substring-search \
-    chrissicool/zsh-256color \
-    mafredri/zsh-async
+    chrissicool/zsh-256color
+
+# zeno.zsh の遅延読み込み
+__zeno_atinit() {
+  export ZENO_HOME="$HOME/.config/zeno"
+  export ZENO_ENABLE_SOCK=1
+  export ZENO_DISABLE_EXECUTE_CACHE_COMMAND=1
+  export FZF_DEFAULT_OPTS="--height 30% --layout=reverse --border --ansi --margin 1,3"
+  export ZENO_DISABLE_BUILTIN_COMPLETION=1
+  export ZENO_GIT_CAT="bat --color=always"
+  export ZENO_GIT_TREE="eza --tree"
+}
 
 __zeno_atload() {
   if ! (( ${+commands[deno]} )); then
@@ -27,6 +47,7 @@ __zeno_atload() {
   bindkey '^x^f' zeno-ghq-cd
 }
 
-zinit wait lucid light-mode for \
+zinit wait'0d' lucid light-mode for \
+  atinit'__zeno_atinit' \
   atload'__zeno_atload' \
   @'yuki-yano/zeno.zsh'

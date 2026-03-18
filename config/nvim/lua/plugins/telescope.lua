@@ -12,6 +12,3 @@ require("telescope").setup({
   }
 })
 require("telescope").load_extension "lazy"
-
-local builtin = require("telescope.builtin")
-vim.keymap.set('n', 'ge', builtin.find_files, { noremap = true })

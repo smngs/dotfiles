@@ -10,7 +10,7 @@
 export LANG=ja_JP.UTF-8
 export LC_ALL=ja_JP.UTF-8
 export TERM=xterm-256color
-export EDITOR=nvim
+# EDITOR は .zshrc.lazy で設定
 
 # ----------------- setup zinit --------------------
 
@@ -46,20 +46,14 @@ zinit light-mode for \
     sindresorhus/pure \
     romkatv/zsh-defer
 
-## test
-autoload -Uz cdr
-autoload -Uz chpwd_recent_dirs
-autoload -Uz _zinit
-zpcompinit
-
 ## -> .zshrc-lazy (lazy-loading)
-
-# zinit wait lucid null for \
-#     atinit'source "$HOME/.zshrc.lazy"' \
-#     @'zdharma-continuum/null'
 
 zsh-defer source $HOME/.zshrc.lazy
 
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 zstyle ':completion:*' menu select
+
+# ----------------- aliases --------------------
+
+alias diff='delta'
