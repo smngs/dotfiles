@@ -218,6 +218,13 @@ return {
   { -- LaTeX
     "lervag/vimtex",
     ft = { "tex", "latex" },
+    init = function()
+      if vim.fn.has("mac") == 1 then
+        vim.g.vimtex_view_method = "skim"
+      else
+        vim.g.vimtex_view_method = "zathura"
+      end
+    end,
   },
 
   { -- copilot
@@ -266,34 +273,5 @@ return {
     config = function()
       require("nvim-surround").setup()
     end
-  },
-
-  -- {
-  --   "yetone/avante.nvim",
-  --   run = "make",
-  --   dependencies = {
-  --     'MeanderingProgrammer/render-markdown.nvim',
-  --     'MunifTanjim/nui.nvim',
-  --     'nvim-tree/nvim-web-devicons',
-  --     'HakonHarnes/img-clip.nvim',
-  --     'nvim-lua/plenary.nvim',
-  --     'stevearc/dressing.nvim',
-  --   },
-  --   config = function()
-  --     require('img-clip').setup ({
-  --       default = {
-  --         embed_image_as_base64 = false,
-  --         prompt_for_file_name = false,
-  --         drag_and_drop = {
-  --           insert_mode = true,
-  --         },
-  --         use_absolute_path = true,
-  --       },
-  --     })
-  --     require('avante_lib').load()
-  --     require('avante').setup ({
-  --       provider = "openai",
-  --     })
-  --   end
-  -- }
+  }
 }
