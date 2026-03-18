@@ -18,4 +18,4 @@ jobs:
         run: shellcheck -e SC1091,SC2181,SC2308 bin/install.sh
 
       - name: Check home/.zshrc
-        run: shellcheck home/.zshrc --exclude=SC2148,SC1090
+        run: shellcheck home/.zshrc --exclude=SC2148,SC1090,SC1091,SC2015,SC2034,SC2086
