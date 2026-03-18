@@ -1,16 +1,3 @@
-[[keyboard.bindings]]
-action = "ScrollToBottom"
-key = "Space"
-mode = "Vi"
-mods = "Shift"
-
-[[keyboard.bindings]]
-action = "ToggleViMode"
-key = "Space"
-mods = "Shift"
-
-[terminal]
-
 [colors.bright]
 black = "#6b7089"
 blue = "#91acd1"
@@ -39,11 +26,19 @@ foreground = "#d2d4de"
 size = 13
 
 [font.normal]
-family = "M PLUS 1 Code"
-style = "Regular"
+family = "M+ 1m"
 
-[keyboard]
+[[keyboard.bindings]]
+action = "ScrollToBottom"
+key = "Space"
+mode = "Vi"
+mods = "Shift"
 
-[terminal.shell]
+[[keyboard.bindings]]
+action = "ToggleViMode"
+key = "Space"
+mods = "Shift"
+
+[shell]
 program = "/bin/zsh"
 args = ["-l", "-c", "zellij attach --index 0 --create"]

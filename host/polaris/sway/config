@@ -30,15 +30,15 @@ set $menu wofi --show drun
 # output * bg #000000 solid_color
 output "*" bg /usr/share/backgrounds/archlinux/small.png fill
 
-output DP-1 resolution 3840x2160 position 0,0 scale 1
+output HDMI-A-1 resolution 3840x2160 position 0,0 scale 1
 output DP-2 resolution 3840x2160 position 3840,0 scale 1
 output DP-3 resolution 3840x2160 position 7680,0 scale 1
-output HDMI-A-1 resolution 3840x2160 position 3840,2160 scale 1
+output DP-1 resolution 3840x2160 position 11520,0 scale 1
 
-workspace 1 output DP-3
-workspace 2 output DP-2
+workspace 1 output DP-2
+workspace 2 output DP-3
 workspace 3 output DP-1
-workspace 9 output HDMI-A-1
+workspace 4 output DP-2
 
 #
 # Example configuration:
@@ -281,8 +281,9 @@ exec_always --no-startup-id mako
 assign [class="(?i)slack" ] 8
 exec_always --no-startup-id slack
 
-assign [class="discord" ] 9
-exec_always --no-startup-id discord
+assign [class="discord" ] 8
+exec_always --no-startup-id /usr/bin/discord --enable-features=UseOzonePlatform --ozone-platform=wayland
+exec_always --no-startup-id /usr/bin/discord-canary --enable-features=UseOzonePlatform --ozone-platform=wayland
 
 ## daemon
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
