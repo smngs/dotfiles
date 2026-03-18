@@ -5,5 +5,5 @@ Dotfiles
 
 
 ``` shell
-$ bash -c "$(curl -L dot.smngs.io)"
+$ bash -c "$(curl -L dot.smngs.io/install.sh)"
 ```
