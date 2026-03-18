@@ -7,7 +7,13 @@ DOT_HOME_DIRECTORY="home"
 DOT_HOST_DIRECTORY="host"
 DOT_URL="https://github.com/smngs/dotfiles.git"
 
-source "${SCRIPT_DIR}/shell-logger.sh"
+# shellcheck source=shell-logger.sh
+source "${SCRIPT_DIR}/shell-logger.sh" 2>/dev/null || {
+  info()   { echo "[INFO] $*"; }
+  notice() { echo "[NOTICE] $*"; }
+  warn()   { echo "[WARNING] $*"; }
+  err()    { echo "[ERROR] $*"; }
+}
 
 dotfiles_logo='
      _       _    __ _ _           
@@ -71,6 +77,7 @@ download () {
 	fi
 
   info "Pull dotfiles submodules..."
+  cd "${DOT_DIRECTORY}" || exit
   git submodule update --init --recursive
   info "pull dotfiles submodules completed."
 }
@@ -95,8 +102,8 @@ deploy () {
         # make .config directory if not exists.
         [ "$file" = ".config" ] && continue
 
-        if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
-            mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
+        if [ ! -e "${HOME}/.${DOT_CONFIG_DIRECTORY}" ]; then
+            mkdir "${HOME}/.${DOT_CONFIG_DIRECTORY}"
         fi
 
         ln -snfv "${DOT_DIRECTORY}"/${DOT_CONFIG_DIRECTORY}/"${file:2}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${file:2}"
@@ -145,7 +152,8 @@ install () {
 		
 update () {
   info "Start dotfiles update."
-  git pull origin master
+  cd "${DOT_DIRECTORY}" || exit
+  git pull origin main
   git submodule update
   info "Finish dotfiles update."
 }
