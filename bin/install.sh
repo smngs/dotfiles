@@ -71,6 +71,7 @@ download () {
 	fi
 
   info "Pull dotfiles submodules..."
+  cd "${DOT_DIRECTORY}" || exit
   git submodule update --init --recursive
   info "pull dotfiles submodules completed."
 }
@@ -145,7 +146,8 @@ install () {
 		
 update () {
   info "Start dotfiles update."
-  git pull origin master
+  cd "${DOT_DIRECTORY}" || exit
+  git pull origin main
   git submodule update
   info "Finish dotfiles update."
 }
