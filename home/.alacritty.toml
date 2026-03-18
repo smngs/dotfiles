@@ -26,7 +26,7 @@ foreground = "#d2d4de"
 import = ["~/.alacritty-font.toml"]
 
 [font]
-size = 16
+size = 13.5
 
 [[keyboard.bindings]]
 action = "ScrollToBottom"
