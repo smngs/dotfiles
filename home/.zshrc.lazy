@@ -69,6 +69,8 @@ alias q='exit'
 alias c='clear'
 alias f='yazi'
 
+alias claude='claude --enable-auto-mode'
+
 alias ..='\cd ..'
 alias ..2='\cd ../..'
 alias ..3='\cd ../../..'
