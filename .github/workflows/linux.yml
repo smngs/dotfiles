@@ -1,17 +1,27 @@
-name: linux
+name: Deploy Test
 
 on:
   push:
   pull_request:
 
 jobs:
-  ubuntu-test:
+  deploy-test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    # Error Check
-    - name: Run install.sh
-      run: yes | ${GITHUB_WORKSPACE}/bin/install.sh
+      - name: Set up dotfiles directory
+        run: ln -s "$GITHUB_WORKSPACE" "$HOME/dotfiles"
 
+      - name: Test make help
+        run: make -C "$HOME/dotfiles" help
+
+      - name: Test make deploy
+        run: make -C "$HOME/dotfiles" deploy
+
+      - name: Verify home symlinks
+        run: ls -la "$HOME/" | grep "^l"
+
+      - name: Verify .config symlinks
+        run: ls -la "$HOME/.config/"

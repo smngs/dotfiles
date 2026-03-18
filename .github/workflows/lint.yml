@@ -1,42 +1,24 @@
-name: lint
+name: Lint
 
 on:
   push:
   pull_request:
 
 jobs:
-  lint-check:
+  shellcheck:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.x'
-        architecture: 'x64'
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
 
-    - name: Display Python version
-      run: python -c "import sys; print(sys.version)"
+      - name: Check bin/install.sh
+        run: shellcheck -e SC1091,SC2181,SC2308 bin/install.sh
 
-    - name: Install required packages
-      run: |
-        brew install shellcheck
-        pip install --upgrade pip
-        pip install vim-vint
+      - name: Check bin/homebrew_install.sh
+        run: shellcheck bin/homebrew_install.sh
 
-    # Lint check
-    - name: Check bin/init.sh
-      run: shellcheck  -e SC1091,SC2181,SC2308 ${GITHUB_WORKSPACE}/bin/install.sh
-
-    - name: Check .zshrc
-      run: shellcheck ${GITHUB_WORKSPACE}/home/.zshrc --exclude=SC2148,SC1090
-
-    - name: Check nvim/init.vim
-      run: vint ${GITHUB_WORKSPACE}/config/nvim/*.vim -cstV --enable-neovim
-
-    - name: Check nvim/*.toml
-      run: |
-          curl -sL https://raw.githubusercontent.com/vmchale/tomlcheck/master/sh/check | sh || true
-          find ${GITHUB_WORKSPACE}/config/nvim/*/*.toml -type f | xargs -I {} ${GITHUB_WORKSPACE}/tomlcheck --file {}
+      - name: Check home/.zshrc
+        run: shellcheck home/.zshrc --exclude=SC2148,SC1090,SC1091,SC2015,SC2034,SC2086

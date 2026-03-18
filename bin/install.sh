@@ -95,8 +95,8 @@ deploy () {
         # make .config directory if not exists.
         [ "$file" = ".config" ] && continue
 
-        if [ ! -e "${HOME}/${DOT_CONFIG_DIRECTORY}" ]; then
-            mkdir "${HOME}/${DOT_CONFIG_DIRECTORY}"
+        if [ ! -e "${HOME}/.${DOT_CONFIG_DIRECTORY}" ]; then
+            mkdir "${HOME}/.${DOT_CONFIG_DIRECTORY}"
         fi
 
         ln -snfv "${DOT_DIRECTORY}"/${DOT_CONFIG_DIRECTORY}/"${file:2}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${file:2}"

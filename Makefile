@@ -1,25 +1,24 @@
-DOT_DIRECTORY="${HOME}/dotfiles"
-.DEFAULT_GOAL := help
+DOT_DIRECTORY = $(HOME)/dotfiles
+INSTALL_SH    = $(DOT_DIRECTORY)/bin/install.sh
 
-all:
+.DEFAULT_GOAL := help
+.PHONY: deploy init backup update install help
 
 deploy: ## Create symlink to home directory
-	@sh $(DOT_DIRECTORY)/bin/install.sh --deploy
+	@bash $(INSTALL_SH) --deploy
 
 init: ## Setup environment settings
-	@sh $(DOT_DIRECTORY)/bin/install.sh --init
-
-test: ## Test dotfiles and init scripts
-	@sh $(DOT_DIRECTORY)/bin/test.sh --test
+	@bash $(INSTALL_SH) --init
 
 backup: ## Backup dotfiles
-	@sh $(DOT_DIRECTORY)/bin/install.sh --backup
+	@bash $(INSTALL_SH) --backup
 
 update: ## Fetch changes for this repo
-	@sh $(DOT_DIRECTORY)/bin/install.sh --update
+	@bash $(INSTALL_SH) --update
 
-install:
-	@sh $(DOT_DIRECTORY)/bin/install.sh --install
+install: ## Install packages for current platform
+	@bash $(INSTALL_SH) --install
 
-help: ## Self-documented Makefile
-	@sh $(DOT_DIRECTORY)/bin/install.sh --help
+help: ## Show this help
+	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) \
+		| awk 'BEGIN {FS = ":.*##"}; {printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2}'
