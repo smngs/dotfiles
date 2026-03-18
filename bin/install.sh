@@ -7,7 +7,13 @@ DOT_HOME_DIRECTORY="home"
 DOT_HOST_DIRECTORY="host"
 DOT_URL="https://github.com/smngs/dotfiles.git"
 
-source "${SCRIPT_DIR}/shell-logger.sh"
+# shellcheck source=shell-logger.sh
+source "${SCRIPT_DIR}/shell-logger.sh" 2>/dev/null || {
+  info()   { echo "[INFO] $*"; }
+  notice() { echo "[NOTICE] $*"; }
+  warn()   { echo "[WARNING] $*"; }
+  err()    { echo "[ERROR] $*"; }
+}
 
 dotfiles_logo='
      _       _    __ _ _           
