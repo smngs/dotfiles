@@ -114,22 +114,22 @@ return {
     end,
   },
 
-  { -- mason-null-ls
-    "jay-babu/mason-null-ls.nvim",
-    dependencies = {
-      "nvimtools/none-ls.nvim",
-    },
-    config = function()
-      local null_ls = require("null-ls")
-      null_ls.setup({
-          sources = {
-              null_ls.builtins.diagnostics.textlint.with({
-                filetypes = { "markdown", "tex" }
-              })
-          },
-      })
-    end,
-  },
+  -- { -- mason-null-ls
+  --   "jay-babu/mason-null-ls.nvim",
+  --   dependencies = {
+  --     "nvimtools/none-ls.nvim",
+  --   },
+  --   config = function()
+  --     local null_ls = require("null-ls")
+  --     null_ls.setup({
+  --         sources = {
+  --             null_ls.builtins.diagnostics.textlint.with({
+  --               filetypes = { "markdown", "tex" }
+  --             })
+  --         },
+  --     })
+  --   end,
+  -- },
 
   {
     "rust-lang/rust.vim",
