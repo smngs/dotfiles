@@ -13,6 +13,10 @@ zinit wait lucid blockf light-mode for \
     mafredri/zsh-async
 
 __zeno_atload() {
+  if ! (( ${+commands[deno]} )); then
+    return
+  fi
+
   bindkey ' '  zeno-auto-snippet
   bindkey '^M' zeno-auto-snippet-and-accept-line
   bindkey '^I' zeno-completion
