@@ -1,10 +1,13 @@
 return {
   { -- Japanese Help
     'vim-jp/vimdoc-ja',
+    lazy = true,
   },
 
   { -- colorscheme
     'cocopon/iceberg.vim',
+    lazy = false,
+    priority = 1000,
     config = function()
       vim.cmd([[colorscheme iceberg]])
     end
@@ -24,6 +27,7 @@ return {
 
   { -- Mode to Column Line
     'mvllow/modes.nvim',
+    event = "VeryLazy",
     config = function()
       require('modes').setup({
         colors =  {
@@ -35,6 +39,10 @@ return {
 
   { -- Filer
     'lambdalisue/fern.vim',
+    cmd = { 'Fern' },
+    keys = {
+      { '<leader>e', '<cmd>Fern . -reveal=%<cr>', desc = 'Open Fern' },
+    },
     dependencies = {
       { 'lambdalisue/fern-git-status.vim', },
       { 'lambdalisue/nerdfont.vim', },
@@ -45,7 +53,7 @@ return {
         end
       },
       { 'lambdalisue/glyph-palette.vim', },
-    } ,
+    },
   },
 
   -- { -- Bar (Buffer)
@@ -62,10 +70,16 @@ return {
 
   { -- fuzzy finder (telescope)
     'nvim-telescope/telescope.nvim',
+    cmd = { 'Telescope' },
+    keys = {
+      { 'ge', '<cmd>Telescope find_files<cr>', desc = 'Find files' },
+      { '<leader>fg', '<cmd>Telescope live_grep<cr>', desc = 'Live grep' },
+      { '<leader>fb', '<cmd>Telescope buffers<cr>', desc = 'Buffers' },
+    },
     dependencies = {
-      {'nvim-lua/plenary.nvim', },
-      {'tsakirist/telescope-lazy.nvim', },
-      {'nvim-telescope/telescope-file-browser.nvim', },
+      { 'nvim-lua/plenary.nvim', },
+      { 'tsakirist/telescope-lazy.nvim', },
+      { 'nvim-telescope/telescope-file-browser.nvim', },
     },
     config = function()
       require("plugins.telescope")
@@ -73,8 +87,9 @@ return {
   },
 
   -- Markdown
-  { 
+  {
     'MeanderingProgrammer/render-markdown.nvim',
+    ft = { "markdown", "Avante" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons"
@@ -89,10 +104,12 @@ return {
   -- LSP
   { -- Mason
     'williamboman/mason.nvim',
+    cmd = { 'Mason', 'MasonInstall', 'MasonUpdate' },
   },
 
   { --Mason-lspconfig
     'williamboman/mason-lspconfig.nvim',
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       {
         'williamboman/mason.nvim',
@@ -130,11 +147,12 @@ return {
     init = function()
       vim.g.rustfmt_autosave = 1
       vim.g.rustfmt_options = '--edition 2024'
-    end,
+    end
   },
 
   { -- SKK (Input Method)
     'vim-skk/skkeleton',
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "vim-denops/denops.vim",
       "rinx/cmp-skkeleton"
@@ -160,18 +178,20 @@ return {
 
   {
     "delphinus/skkeleton_indicator.nvim",
+    event = { "InsertEnter", "CmdlineEnter" },
     opts = {}
   },
 
   { -- nvim-cmp
     "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
     dependencies = {
-      {"hrsh7th/cmp-nvim-lsp", },
-      {"onsails/lspkind.nvim", },
-      {"hrsh7th/cmp-nvim-lsp-signature-help", },
-      {"hrsh7th/cmp-nvim-lsp-document-symbol", },
-      {"hrsh7th/cmp-path", },
-      {"ray-x/cmp-treesitter", },
+      { "hrsh7th/cmp-nvim-lsp", },
+      { "onsails/lspkind.nvim", },
+      { "hrsh7th/cmp-nvim-lsp-signature-help", },
+      { "hrsh7th/cmp-nvim-lsp-document-symbol", },
+      { "hrsh7th/cmp-path", },
+      { "ray-x/cmp-treesitter", },
     },
     config = function()
       require("plugins.nvim-cmp")
@@ -180,27 +200,29 @@ return {
 
   { -- Snippet
     "L3MON4D3/LuaSnip",
+    event = "InsertEnter",
     dependencies = {
-      {'saadparwaiz1/cmp_luasnip',},
+      { 'saadparwaiz1/cmp_luasnip', },
       {
         'rafamadriz/friendly-snippets',
         config = function()
           require("luasnip/loaders/from_vscode").lazy_load()
         end
       },
-      {'saadparwaiz1/cmp_luasnip',},
     },
     config = function()
       require("luasnip.loaders.from_vscode").lazy_load({ paths = {"./snippets"} })
     end
   },
 
-  { -- Snippet
+  { -- LaTeX
     "lervag/vimtex",
+    ft = { "tex", "latex" },
   },
 
   { -- copilot
     'zbirenbaum/copilot.lua',
+    event = "InsertEnter",
     config = function()
       require("copilot").setup({
         suggestion = { enabled = false },
@@ -212,13 +234,27 @@ return {
 
   { -- Git
     "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       require("plugins.gitsigns")
     end
   },
 
+  { -- nvim-treesitter
+    "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    build = ":TSUpdate",
+    config = function()
+      require("plugins.nvim-treesitter")
+    end
+  },
+
   { -- Print diagnostics
     "folke/trouble.nvim",
+    cmd = { "Trouble", "TroubleToggle" },
+    keys = {
+      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Trouble' },
+    },
     config = function()
       require("plugins.trouble")
     end
@@ -226,6 +262,7 @@ return {
 
   { -- nvim-surround (edit brace)
     'kylechui/nvim-surround',
+    event = "VeryLazy",
     config = function()
       require("nvim-surround").setup()
     end
