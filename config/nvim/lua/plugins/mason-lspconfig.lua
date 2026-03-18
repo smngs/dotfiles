@@ -1,3 +1,6 @@
+local mason_lspconfig = require("mason-lspconfig");
+local lspconfig = require("lspconfig")
+
 require('mason-lspconfig').setup({
   ensure_installed = {
     'clangd',
@@ -10,6 +13,19 @@ require('mason-lspconfig').setup({
   },
   automatic_installation = true
 })
+
+-- local pio_driver = vim.fn.expand("~/.platformio/packages/**/bin/*")
+-- 
+-- vim.lsp.config("clangd", {
+--   cmd = {
+--     "clangd",
+--     "--background-index",
+--     "--clang-tidy",
+--     "--completion-style=detailed",
+--     "--query-driver=" .. pio_driver,
+--   },
+-- })
+
 
 -- Display error/warnings as hover.
 vim.o.updatetime = 200

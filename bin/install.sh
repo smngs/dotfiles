@@ -91,9 +91,21 @@ deploy () {
         [ "$f" = "bin" ] && continue
         [ "$f" = ".config" ] && continue
         [ "$f" = "host" ] && continue
+        [ "$f" = ".alacritty-font-darwin.toml" ] && continue
+        [ "$f" = ".alacritty-font-linux.toml" ] && continue
 
         ln -snfv "${DOT_DIRECTORY}"/${DOT_HOME_DIRECTORY}/"${f}" "${HOME}"/"${f}"
     done
+
+    # Deploy platform-specific alacritty font config.
+    case "$(uname)" in
+        Darwin*)
+            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOME_DIRECTORY}/.alacritty-font-darwin.toml "${HOME}"/.alacritty-font.toml
+            ;;
+        Linux*)
+            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOME_DIRECTORY}/.alacritty-font-linux.toml "${HOME}"/.alacritty-font.toml
+            ;;
+    esac
     info "Deploy home directory dotfiles complete."
 
     # Deploy .config directory dotfiles.

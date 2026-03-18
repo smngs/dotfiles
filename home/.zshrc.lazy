@@ -5,9 +5,14 @@ fi
 
 case ${OSTYPE} in
     darwin*)
-        export PATH=$PATH:/opt/homebrew:/usr/local/Homebrew/bin:/Users/minegishi/.local/bin
+        # path_helper を先に実行してから追加
         eval "$(/usr/libexec/path_helper)"
-        eval "$(pyenv init --path)"
+        export PATH="/opt/homebrew/bin:/usr/local/Homebrew/bin:$HOME/.local/bin:$PATH"
+        
+        # pyenv を遅延読み込み
+        if command -v pyenv >/dev/null 2>&1; then
+            eval "$(pyenv init --path)"
+        fi
 
         (( ${+commands[gdate]} )) && alias date='gdate'
         (( ${+commands[gls]} )) && alias ls='gls'
@@ -28,7 +33,7 @@ case ${OSTYPE} in
         ;;
 esac
 
-zsh-defer source $HOME/.secrets
+[[ -f $HOME/.secrets ]] && zsh-defer source $HOME/.secrets
 
 # ----------------- alias --------------------
 
@@ -69,13 +74,6 @@ alias ..2='\cd ../..'
 alias ..3='\cd ../../..'
 alias ..4='\cd ../../../..'
 alias ..5='\cd ../../../../..'
-
-# tmux
-alias t='tmuximum'
-
-# atcoder-cli
-alias acct='g++ main.cpp && oj t'
-alias accs='acc s'
 
 # ----------------- function -----------------
 
@@ -127,6 +125,7 @@ export ZENO_DISABLE_BUILTIN_COMPLETION=1
 export ZENO_GIT_CAT="bat --color=always"
 export ZENO_GIT_TREE="eza --tree"
 
+
 # ----------------- plugins -----------------
 ## -> .zinitrc
 
@@ -136,5 +135,15 @@ source ~/.zinitrc
 
 autoload -Uz cdr
 autoload -Uz chpwd_recent_dirs
-autoload -Uz _zinit
-zpcompinit
+autoload -Uz add-zsh-hook
+
+add-zsh-hook chpwd chpwd_recent_dirs
+
+# 補完システムの初期化（遅延読み込み）
+# 24時間以内なら補完ダンプのチェックをスキップして高速化
+autoload -Uz compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+  zsh-defer compinit
+else
+  zsh-defer compinit -C
+fi
