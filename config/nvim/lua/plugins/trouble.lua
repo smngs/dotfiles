@@ -1,18 +1,14 @@
 require('trouble').setup({
   position = 'bottom',
   height = 10,
-  widht = 50,
-  icons = true,
-  mode ='workspace_diagnostics',
+  width = 50,
   indent_lines = true,
-  opts = {
-    modes = {
-      diagnostics = { auto_open = true },
-    }
+  modes = {
+    diagnostics = { auto_open = true },
   },
   auto_close = true,
   auto_preview = true,
-  auto_fold = false,
+  auto_fold = true,
   auto_jump = {'lsp_definitions'},
   signs = {
     error = 'E',

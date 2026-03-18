@@ -105,6 +105,9 @@ function do_enter() {
 zle -N do_enter
 bindkey '^m' do_enter
 
+# ----------------- Rust -----------------
+export RUSTC_WRAPPER=/usr/bin/sccache
+
 # ----------------- zatta-zone (TBR) -----------------
 # fzf-tmux
 # export FZF_TMUX=1

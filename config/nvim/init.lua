@@ -37,7 +37,7 @@ vim.api.nvim_set_keymap('n', '<up>', 'gk', {})
 vim.o.termguicolors = true
 
 -- Lightline
-vim.o.laststatus = 2
+vim.o.laststatus = 3
 
 -- linenumber
 vim.o.relativenumber = true
