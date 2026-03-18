@@ -1,0 +1,43 @@
+name: macOS Homebrew Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  homebrew-test:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up dotfiles directory
+        run: ln -s "$GITHUB_WORKSPACE" "$HOME/dotfiles"
+
+      - name: Test make help
+        run: make -C "$HOME/dotfiles" help
+
+      - name: Test make deploy
+        run: make -C "$HOME/dotfiles" deploy
+
+      - name: Verify home symlinks
+        run: ls -la "$HOME/" | grep "^l"
+
+      - name: Verify .config symlinks
+        run: ls -la "$HOME/.config/"
+
+      - name: brew update
+        run: brew update
+
+      - name: Install core formulas
+        run: |
+          formulas=(git wget curl tree gh tig neovim diff-so-fancy)
+          for formula in "${formulas[@]}"; do
+            brew install "$formula" || brew upgrade "$formula"
+          done
+
+      - name: Verify installed formulas
+        run: |
+          for cmd in git wget curl tree gh tig nvim; do
+            which "$cmd" && echo "$cmd: ok"
+          done
