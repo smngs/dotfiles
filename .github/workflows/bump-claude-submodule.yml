@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SUBMODULE_TOKEN }}
 
       - name: Update submodule to latest main
         run: git submodule update --remote home/.claude
@@ -25,7 +25,7 @@ jobs:
         run: |
           git diff --quiet home/.claude || echo "changed=true" >> $GITHUB_OUTPUT
 
-      - name: Create PR and enable auto-merge
+      - name: Create PR and merge
         if: steps.changes.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,10 +39,10 @@ jobs:
           git commit -m "[update] bump smngs/claude submodule to latest main"
           git push origin "$BRANCH"
 
-          PR_URL=$(gh pr create \
+          gh pr create \
             --title "[update] bump smngs/claude submodule to latest main" \
             --body "Auto-generated PR to update the claude submodule to the latest main." \
             --base main \
-            --head "$BRANCH")
+            --head "$BRANCH"
 
-          gh pr merge "$PR_URL" --auto --merge
+          gh pr merge "$BRANCH" --merge --auto
