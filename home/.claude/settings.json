@@ -1,7 +1,7 @@
 {
   "statusLine": {
     "type": "command",
-    "command": "bash /home/smngs/.claude/statusline-command_linux.sh"
+    "command": "~/.claude/statusline.py"
   },
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true
