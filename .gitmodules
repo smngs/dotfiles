@@ -17,3 +17,6 @@
 [submodule "home/.tmux/plugins/tmux-onedark-theme"]
 	path = home/.tmux/plugins/tmux-onedark-theme
 	url = https://github.com/odedlaz/tmux-onedark-theme
+[submodule "home/.claude"]
+	path = home/.claude
+	url = https://github.com/smngs/claude.git
