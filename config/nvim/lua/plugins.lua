@@ -13,17 +13,14 @@ return {
     end
   },
 
-  -- { -- Status Line
-  --   'nvim-lualine/lualine.nvim',
-  --   requires = { 'nvim-tree/nvim-web-devicons', opt = true },
-  --   config = function()
-  --     require('lualine').setup {
-  --       options = {
-  --         theme = "iceberg_dark"
-  --       }
-  --     }
-  --   end
-  -- },
+  { -- Status Line
+    'nvim-lualine/lualine.nvim',
+    event = "VeryLazy",
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('plugins.lualine')
+    end
+  },
 
   { -- Mode to Column Line
     'mvllow/modes.nvim',
@@ -150,6 +147,19 @@ return {
     end
   },
 
+  { -- IME auto switch (fcitx5)
+    'keaising/im-select.nvim',
+    event = { "InsertLeave", "CmdlineLeave" },
+    config = function()
+      require('im_select').setup({
+        default_command = 'fcitx5-remote',
+        default_im_select = '1',
+        set_default_events = { 'VimEnter', 'FocusGained', 'InsertLeave', 'CmdlineLeave' },
+        set_previous_events = { 'InsertEnter' },
+      })
+    end
+  },
+
   { -- SKK (Input Method)
     'vim-skk/skkeleton',
     event = { "InsertEnter", "CmdlineEnter" },
@@ -265,6 +275,18 @@ return {
     },
     config = function()
       require("plugins.trouble")
+    end
+  },
+
+  { -- Claude Code
+    'greggh/claude-code.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    cmd = { 'ClaudeCode', 'ClaudeCodeContinue' },
+    keys = {
+      { '<leader>cc', desc = 'Toggle Claude Code' },
+    },
+    config = function()
+      require('plugins.claude-code')
     end
   },
 
