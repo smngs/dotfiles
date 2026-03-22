@@ -57,3 +57,6 @@ zstyle ':completion:*' menu select
 # ----------------- aliases --------------------
 
 alias diff='delta'
+
+# Claude Code
+export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=75
