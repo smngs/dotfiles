@@ -60,3 +60,10 @@ alias diff='delta'
 
 # Claude Code
 export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=75
+
+# bun completions
+[ -s "/Users/smngs/.bun/_bun" ] && source "/Users/smngs/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
