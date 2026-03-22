@@ -25,10 +25,10 @@ jobs:
         run: |
           git diff --quiet home/.claude || echo "changed=true" >> $GITHUB_OUTPUT
 
-      - name: Create PR and enable auto-merge
+      - name: Create PR and merge
         if: steps.changes.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SUBMODULE_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -39,8 +39,10 @@ jobs:
           git commit -m "[update] bump smngs/claude submodule to latest main"
           git push origin "$BRANCH"
 
-          gh pr create \
+          PR_URL=$(gh pr create \
             --title "[update] bump smngs/claude submodule to latest main" \
             --body "Auto-generated PR to update the claude submodule to the latest main." \
             --base main \
-            --head "$BRANCH"
+            --head "$BRANCH")
+
+          gh pr merge "$PR_URL" --merge
