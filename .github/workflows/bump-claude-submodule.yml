@@ -44,5 +44,3 @@ jobs:
             --body "Auto-generated PR to update the claude submodule to the latest main." \
             --base main \
             --head "$BRANCH"
-
-          gh pr merge --auto --merge
