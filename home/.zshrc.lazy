@@ -70,6 +70,9 @@ alias c='clear'
 alias f='yazi'
 
 alias claude='claude --enable-auto-mode'
+alias auto-commit='claude -p "/commit"'
+alias auto-pr='claude -p "/pr"'
+alias auto-ship='claude -p "/commit-pr"'
 
 alias ..='\cd ..'
 alias ..2='\cd ../..'
