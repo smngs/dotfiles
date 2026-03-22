@@ -45,4 +45,4 @@ jobs:
             --base main \
             --head "$BRANCH")
 
-          gh pr merge "$PR_URL" --merge
+          gh pr merge "$PR_URL" --merge --auto
