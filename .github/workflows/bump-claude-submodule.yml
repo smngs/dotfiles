@@ -39,10 +39,10 @@ jobs:
           git commit -m "[update] bump smngs/claude submodule to latest main"
           git push origin "$BRANCH"
 
-          PR_URL=$(gh pr create \
+          gh pr create \
             --title "[update] bump smngs/claude submodule to latest main" \
             --body "Auto-generated PR to update the claude submodule to the latest main." \
             --base main \
-            --head "$BRANCH")
+            --head "$BRANCH"
 
-          gh pr merge "$PR_URL" --merge --auto
+          gh pr merge "$BRANCH" --merge --auto
