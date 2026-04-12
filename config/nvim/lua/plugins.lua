@@ -149,6 +149,7 @@ return {
 
   { -- IME auto switch (fcitx5)
     'keaising/im-select.nvim',
+    enabled = vim.fn.has('mac') == 0,
     event = { "InsertLeave", "CmdlineLeave" },
     config = function()
       require('im_select').setup({
