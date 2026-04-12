@@ -69,7 +69,7 @@ alias q='exit'
 alias c='clear'
 alias f='yazi'
 
-alias claude='claude --enable-auto-mode'
+alias claude='claude --permission-mode auto'
 alias auto-commit='claude -p "/commit"'
 alias auto-pr='claude -p "/pr"'
 alias auto-ship='claude -p "/commit-pr"'
@@ -109,7 +109,11 @@ zle -N do_enter
 bindkey '^m' do_enter
 
 # ----------------- Rust -----------------
-export RUSTC_WRAPPER=/usr/bin/sccache
+if [ "$(uname -s)" = "Darwin" ]; then
+    export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
+else
+    export RUSTC_WRAPPER=/usr/bin/sccache
+fi
 
 # ----------------- zatta-zone (TBR) -----------------
 # fzf-tmux
@@ -130,6 +134,7 @@ export ZENO_DISABLE_BUILTIN_COMPLETION=1
 export ZENO_GIT_CAT="bat --color=always"
 export ZENO_GIT_TREE="eza --tree"
 
+export CLAUDE_CODE_NO_FLICKER=1
 
 # ----------------- plugins -----------------
 ## -> .zinitrc
