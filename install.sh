@@ -6,6 +6,10 @@ DOT_CONFIG_HOST_DIRECTORY="config"
 DOT_HOME_DIRECTORY="home"
 DOT_HOST_DIRECTORY="host"
 DOT_URL="https://github.com/smngs/dotfiles.git"
+CLAUDE_URL="https://github.com/smngs/claude.git"
+CLAUDE_DIR="${HOME}/.claude"
+NOTE_URL="https://github.com/smngs/note.git"
+NOTE_DIR="${HOME}/note"
 
 # shellcheck source=shell-logger.sh
 source "${SCRIPT_DIR}/shell-logger.sh" 2>/dev/null || {
@@ -68,7 +72,7 @@ download () {
     info "Downloading dotfiles..."
     
     if [ -x "$(which git)" ]; then
-      git clone --recursive "$DOT_URL" "$DOT_DIRECTORY"
+      git clone "$DOT_URL" "$DOT_DIRECTORY"
       info "Download dotfiles completed."
     else
       err "Require Git."
@@ -76,10 +80,6 @@ download () {
     fi
 	fi
 
-  info "Pull dotfiles submodules..."
-  cd "${DOT_DIRECTORY}" || exit
-  git submodule update --init --recursive
-  info "pull dotfiles submodules completed."
 }
 
 deploy () {
@@ -93,6 +93,7 @@ deploy () {
         [ "$f" = "host" ] && continue
         [ "$f" = ".alacritty-font-darwin.toml" ] && continue
         [ "$f" = ".alacritty-font-linux.toml" ] && continue
+        [ "$f" = ".claude" ] && continue
 
         ln -snfv "${DOT_DIRECTORY}"/${DOT_HOME_DIRECTORY}/"${f}" "${HOME}"/"${f}"
     done
@@ -130,6 +131,32 @@ deploy () {
         done
     fi
     info "Deploy .config depended dotfiles complete."
+
+    # Deploy Claude Code configuration.
+    if [ -d "${CLAUDE_DIR}" ]; then
+      info "Claude config already exists at ${CLAUDE_DIR}. Skipping clone."
+    else
+      info "Cloning Claude config..."
+      git clone "${CLAUDE_URL}" "${CLAUDE_DIR}"
+      info "Deploy Claude config complete."
+    fi
+
+    # Clone note repository if not already present.
+    if [ -d "${NOTE_DIR}" ]; then
+      info "Note repository already exists at ${NOTE_DIR}. Skipping clone."
+    else
+      info "Cloning note repository..."
+      git clone "${NOTE_URL}" "${NOTE_DIR}"
+      info "Clone note repository complete."
+    fi
+
+    # Create memory symlink to Obsidian vault if not already present.
+    VAULT_MEMORY="${NOTE_DIR}/99_Claude/Memory"
+    CLAUDE_MEMORY="${CLAUDE_DIR}/memory"
+    if [ -d "${VAULT_MEMORY}" ] && [ ! -e "${CLAUDE_MEMORY}" ]; then
+      ln -s "${VAULT_MEMORY}" "${CLAUDE_MEMORY}"
+      info "Memory symlink created: ${CLAUDE_MEMORY} -> ${VAULT_MEMORY}"
+    fi
 }
 
 init () {
@@ -166,7 +193,10 @@ update () {
   info "Start dotfiles update."
   cd "${DOT_DIRECTORY}" || exit
   git pull origin main
-  git submodule update
+  if [ -d "${CLAUDE_DIR}/.git" ]; then
+    info "Updating Claude config..."
+    git -C "${CLAUDE_DIR}" pull
+  fi
   info "Finish dotfiles update."
 }
 
