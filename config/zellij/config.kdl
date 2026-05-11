@@ -324,7 +324,7 @@ pane_frames false
 //   - detach (Default)
 //   - quit
 // 
-on_force_close "quit"
+on_force_close "detach"
  
 // Configure the scroll back buffer size
 // This is the number of lines zellij stores for each pane in the scroll back
@@ -397,7 +397,7 @@ on_force_close "quit"
 //   - true
 //   - false (default)
 // 
-// serialize_pane_viewport false
+serialize_pane_viewport true
  
 // Scrollback lines to serialize along with the pane viewport when serializing sessions, 0
 // defaults to the scrollback size. If this number is higher than the scrollback size, it will
@@ -414,7 +414,7 @@ on_force_close "quit"
  
 // How often in seconds sessions are serialized
 // 
-// serialization_interval 10000
+serialization_interval 60
  
 // Enable or disable writing of session metadata to disk (if disabled, other sessions might not know
 // metadata info on this session)
