@@ -111,6 +111,23 @@ fi
 # Bound last: do_enter hands off to zeno itself
 bindkey '^m' do_enter
 
+# ----------------- ssh -----------------
+
+# rbw-agent serves SSH keys straight from the Bitwarden vault, so no private
+# key is written to disk. Start it with `rbw unlock`; falls back to the system
+# agent while it is not running.
+if (( ${+commands[rbw]} )); then
+    for _rbw_sock in \
+        "${XDG_RUNTIME_DIR:-}/rbw/ssh-agent-socket" \
+        "${${TMPDIR:-/tmp}%/}/rbw-${UID}/ssh-agent-socket"; do
+        if [[ -S "$_rbw_sock" ]]; then
+            export SSH_AUTH_SOCK="$_rbw_sock"
+            break
+        fi
+    done
+    unset _rbw_sock
+fi
+
 # ----------------- Rust -----------------
 
 (( ${+commands[sccache]} )) && export RUSTC_WRAPPER=sccache
