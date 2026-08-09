@@ -122,10 +122,32 @@ if (( ${+commands[rbw]} )); then
         "${${TMPDIR:-/tmp}%/}/rbw-${UID}/ssh-agent-socket"; do
         if [[ -S "$_rbw_sock" ]]; then
             export SSH_AUTH_SOCK="$_rbw_sock"
+            # Stable path for tools that do not source this file (e.g. Claude Code),
+            # since the real socket lives under a per-session TMPDIR on macOS.
+            mkdir -p "$HOME/.local/share/ssh"
+            ln -sfn "$_rbw_sock" "$HOME/.local/share/ssh/rbw-agent.sock"
             break
         fi
     done
     unset _rbw_sock
+
+    # A locked vault leaves the agent with no keys, and ssh only reports
+    # "Permission denied (publickey)". Unlock and retry instead of failing.
+    # 255 is ssh's own error code, as opposed to a remote command's status.
+    _rbw_retry() {
+        local cmd="$1"; shift
+        command "$cmd" "$@"
+        local rc=$?
+        (( rc == 255 )) || return $rc
+        rbw unlocked >/dev/null 2>&1 && return $rc
+        print -u2 -P "%F{yellow}[$cmd] vault is locked; unlocking and retrying%f"
+        rbw unlock || return $rc
+        command "$cmd" "$@"
+    }
+
+    ssh()  { _rbw_retry ssh "$@" }
+    scp()  { _rbw_retry scp "$@" }
+    sftp() { _rbw_retry sftp "$@" }
 fi
 
 # ----------------- Rust -----------------
