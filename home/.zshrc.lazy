@@ -15,6 +15,11 @@ case ${OSTYPE} in
         unset _gnubin
         ;;
     linux*)
+        # Official deno build. Arch links its package against the system
+        # libsqlite3, which then collides with the copy @db/sqlite dlopens
+        # over FFI and segfaults; the upstream binary bundles its own.
+        [[ -d "$HOME/.deno/bin" ]] && export PATH="$HOME/.deno/bin:$PATH"
+
         # OSS CAD Suite (yosys / nextpnr / openFPGALoader / gowin_pack).
         # Appended, not prepended, so the system python keeps priority.
         [[ -d "$HOME/oss-cad-suite/bin" ]] && export PATH="$PATH:$HOME/oss-cad-suite/bin"
