@@ -15,6 +15,9 @@ case ${OSTYPE} in
         unset _gnubin
         ;;
     linux*)
+        # OSS CAD Suite (yosys / nextpnr / openFPGALoader / gowin_pack).
+        # Appended, not prepended, so the system python keeps priority.
+        [[ -d "$HOME/oss-cad-suite/bin" ]] && export PATH="$PATH:$HOME/oss-cad-suite/bin"
         ;;
 esac
 

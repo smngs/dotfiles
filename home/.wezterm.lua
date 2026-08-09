@@ -3,7 +3,8 @@ local config = wezterm.config_builder()
 
 config.color_scheme = "iceberg-dark"
 config.font = wezterm.font("CodeM Nerd Font")
-config.font_size = 14
+-- The Linux box runs at a different DPI than the Mac
+config.font_size = wezterm.target_triple:find("darwin") and 14 or 15
 config.cell_width = 0.81
 config.ime_preedit_rendering = "System"
 config.enable_tab_bar = false
