@@ -33,6 +33,19 @@ if [ -f "${PKG_DIRECTORY}/arch-aur.txt" ]; then
     paru -S --needed --noconfirm - < "${PKG_DIRECTORY}/arch-aur.txt"
 fi
 
+# Arch's deno links against the system libsqlite3, which collides with the
+# library @db/sqlite dlopens over FFI and segfaults (this breaks zeno, and
+# with it the Enter key). The upstream build bundles its own SQLite.
+if [ ! -x "${HOME}/.deno/bin/deno" ]; then
+    echo "installing the official deno build..."
+    DENO_INSTALL="${HOME}/.deno" sh -c "$(curl -fsSL https://deno.land/install.sh)" -- -y
+fi
+
+if pacman -Qq deno >/dev/null 2>&1; then
+    echo "removing the distro deno in favour of the official build..."
+    sudo pacman -Rns --noconfirm deno || true
+fi
+
 cat << END
 **************************************************
 ARCH PACKAGES INSTALLED! bye.

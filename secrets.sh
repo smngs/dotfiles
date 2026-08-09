@@ -9,7 +9,9 @@ set -euo pipefail
 SSH_CONFIG_ITEM="${SSH_CONFIG_ITEM:-dotfiles-ssh-config}"
 SSH_KEY_ITEM="${SSH_KEY_ITEM:-SSH}"
 SSH_CONFIG_PATH="${HOME}/.ssh/config"
-LOCK_TIMEOUT="${RBW_LOCK_TIMEOUT:-300}"
+# rbw's own default. A short timeout locks the vault mid-session and every
+# ssh then fails with a bare "Permission denied (publickey)".
+LOCK_TIMEOUT="${RBW_LOCK_TIMEOUT:-3600}"
 
 # Hosts that authenticate by public key but have no authorized_keys file
 SKIP_HOSTS_RE='^(github\.com|gitlab\.com|bitbucket\.org|ssh\.dev\.azure\.com)$'
@@ -347,7 +349,7 @@ Environment:
   SSH_CONFIG_ITEM    Vault item holding the config (default: dotfiles-ssh-config)
   SSH_KEY_ITEM       Vault item holding the key (default: SSH)
   RBW_LOCK_TIMEOUT   Seconds before the master password is required again
-                     (default: 300)
+                     (default: 3600)
 EOF
 }
 
