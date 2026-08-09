@@ -1,43 +1,37 @@
-# ----------------- env --------------------
-if type nvim > /dev/null 2>&1; then
-  export EDITOR='nvim'
-fi
+# ----------------- PATH --------------------
+# Must come first: the checks below rely on a complete PATH
 
 case ${OSTYPE} in
     darwin*)
-        # path_helper を先に実行してから追加
+        # path_helper first, then prepend our own entries
         eval "$(/usr/libexec/path_helper)"
-        export PATH="/opt/homebrew/bin:/usr/local/Homebrew/bin:$HOME/.local/bin:$PATH"
-        
-        # pyenv を遅延読み込み
-        if command -v pyenv >/dev/null 2>&1; then
-            eval "$(pyenv init --path)"
-        fi
+        export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/.local/bin:$PATH"
+        export PATH="$HOME/.bun/bin:$HOME/.lmstudio/bin:$PATH"
 
-        (( ${+commands[gdate]} )) && alias date='gdate'
-        (( ${+commands[gls]} )) && alias ls='gls'
-        (( ${+commands[gmkdir]} )) && alias mkdir='gmkdir'
-        (( ${+commands[gcp]} )) && alias cp='gcp'
-        (( ${+commands[gmv]} )) && alias mv='gmv'
-        (( ${+commands[grm]} )) && alias rm='grm'
-        (( ${+commands[gdu]} )) && alias du='gdu'
-        (( ${+commands[ghead]} )) && alias head='ghead'
-        (( ${+commands[gtail]} )) && alias tail='gtail'
-        (( ${+commands[gsed]} )) && alias sed='gsed'
-        (( ${+commands[ggrep]} )) && alias grep='ggrep'
-        (( ${+commands[gfind]} )) && alias find='gfind'
-        (( ${+commands[gdirname]} )) && alias dirname='gdirname'
-        (( ${+commands[gxargs]} )) && alias xargs='gxargs'
+        # Prefer GNU tools over the BSD variants. (N) skips uninstalled ones.
+        for _gnubin in /opt/homebrew/opt/{coreutils,findutils,gnu-sed,grep,gnu-tar}/libexec/gnubin(N); do
+            export PATH="$_gnubin:$PATH"
+        done
+        unset _gnubin
         ;;
     linux*)
         ;;
 esac
 
-[[ -f $HOME/.secrets ]] && zsh-defer source $HOME/.secrets
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
+
+# ----------------- env --------------------
+
+(( ${+commands[nvim]} )) && export EDITOR='nvim'
+
+export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=75
+export CLAUDE_CODE_NO_FLICKER=1
+
+[[ -f $HOME/.secrets ]] && source $HOME/.secrets
 
 # ----------------- alias --------------------
 
-if [[ $(command -v eza) ]]; then
+if (( ${+commands[eza]} )); then
   alias l='eza --icons'
   alias ls='eza --icons'
   alias la='eza --icons -a'
@@ -45,21 +39,12 @@ if [[ $(command -v eza) ]]; then
   alias lla='eza --icons -lah'
 fi
 
-if [[ $(command -v bat) ]]; then
-  alias cat='bat'
-fi
-
-if [[ $(command -v hexyl) ]]; then
-  alias od='hexyl'
-fi
-
-if [[ $(command -v procs) ]]; then
-  alias ps='procs'
-fi
-
-if [[ $(command -v ranger) ]]; then
-  alias ranger='TERM=xterm-256color ranger'
-fi
+(( ${+commands[bat]} ))   && alias cat='bat'
+(( ${+commands[hexyl]} )) && alias od='hexyl'
+(( ${+commands[procs]} )) && alias ps='procs'
+(( ${+commands[yazi]} ))  && alias f='yazi'
+# delta is not a drop-in for diff(1); it only takes two paths
+(( ${+commands[delta]} )) && alias diff='delta'
 
 alias tree='tree -C'
 alias rm='rm -i'
@@ -67,7 +52,6 @@ alias mv='mv -i'
 alias df='df -h'
 alias q='exit'
 alias c='clear'
-alias f='yazi'
 
 alias claude='claude --permission-mode auto'
 alias auto-commit='claude -p "/commit"'
@@ -82,10 +66,15 @@ alias ..5='\cd ../../../../..'
 
 # ----------------- function -----------------
 
-# do_enter (pwd, ls, git status)
+# Empty Enter shows pwd, ls and git status
 function do_enter() {
-    if [ -n "$BUFFER" ]; then
-        zle accept-line
+    if [[ -n "$BUFFER" ]]; then
+        # Delegate to zeno so snippet expansion still happens on Enter
+        if (( ${+widgets[zeno-auto-snippet-and-accept-line]} )); then
+            zle zeno-auto-snippet-and-accept-line
+        else
+            zle accept-line
+        fi
         return 0
     fi
     echo
@@ -106,40 +95,30 @@ function do_enter() {
 }
 
 zle -N do_enter
+
+# ----------------- zeno -----------------
+
+# sheldon sources zeno before this file, so its widgets already exist
+if (( ${+widgets[zeno-auto-snippet]} )); then
+    bindkey ' '    zeno-auto-snippet
+    bindkey '^I'   zeno-completion
+    bindkey '^P'   zeno-completion
+    bindkey '^r'   zeno-history-selection
+    bindkey '^x^s' zeno-insert-snippet
+    bindkey '^x^f' zeno-ghq-cd
+fi
+
+# Bound last: do_enter hands off to zeno itself
 bindkey '^m' do_enter
 
 # ----------------- Rust -----------------
-if [ "$(uname -s)" = "Darwin" ]; then
-    export RUSTC_WRAPPER=/opt/homebrew/bin/sccache
-else
-    export RUSTC_WRAPPER=/usr/bin/sccache
-fi
 
-# ----------------- zatta-zone (TBR) -----------------
-# fzf-tmux
-# export FZF_TMUX=1
-# export FZF_TMUX_OPTS="-p 80%"
-# export ENHANCD_FILTER='fzf-tmux -p'
+(( ${+commands[sccache]} )) && export RUSTC_WRAPPER=sccache
 
-# zeno
-export ZENO_HOME="$HOME/.config/zeno"
-export ZENO_ENABLE_SOCK=1
-export ZENO_DISABLE_EXECUTE_CACHE_COMMAND=1
-#
-# export ZENO_ENABLE_FZF_TMUX=1
-# export ZENO_FZF_TMUX_OPTIONS="-p 50%"
+# ----------------- fzf -----------------
 
+# ZENO_* are exported in .zshrc, before sheldon sources the plugin
 export FZF_DEFAULT_OPTS="--height 30% --layout=reverse --border --ansi --margin 1,3"
-export ZENO_DISABLE_BUILTIN_COMPLETION=1
-export ZENO_GIT_CAT="bat --color=always"
-export ZENO_GIT_TREE="eza --tree"
-
-export CLAUDE_CODE_NO_FLICKER=1
-
-# ----------------- plugins -----------------
-## -> .zinitrc
-
-source ~/.zinitrc
 
 # ----------------- autoloads -----------------
 
@@ -149,11 +128,12 @@ autoload -Uz add-zsh-hook
 
 add-zsh-hook chpwd chpwd_recent_dirs
 
-# 補完システムの初期化（遅延読み込み）
-# 24時間以内なら補完ダンプのチェックをスキップして高速化
+# ----------------- completion -----------------
+
+# Skip the security check while the dump is fresh (< 24h)
 autoload -Uz compinit
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
-  zsh-defer compinit
+  compinit
 else
-  zsh-defer compinit -C
+  compinit -C
 fi

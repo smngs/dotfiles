@@ -5,11 +5,12 @@ return {
   },
 
   { -- colorscheme
-    'cocopon/iceberg.vim',
+    'oahlen/iceberg.nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd([[colorscheme iceberg]])
+      vim.o.background = 'dark'
+      vim.cmd.colorscheme('iceberg')
     end
   },
 
@@ -53,90 +54,48 @@ return {
     },
   },
 
-  -- { -- Bar (Buffer)
-  --   'romgrk/barbar.nvim',
-  --   dependencies = {
-  --     { 'lewis6991/gitsigns.nvim', },
-  --     { 'nvim-tree/nvim-web-devicons', },
-  --   },
-  --   config = function()
-  --     vim.api.nvim_set_keymap('n', '<C-j>', '<Cmd>BufferPrevious<CR>', { noremap = true, silent = true })
-  --     vim.api.nvim_set_keymap('n', '<C-k>', '<Cmd>BufferNext<CR>', { noremap = true, silent = true })
-  --   end
-  -- },
-
-  { -- fuzzy finder (telescope)
-    'nvim-telescope/telescope.nvim',
-    cmd = { 'Telescope' },
+  { -- fuzzy finder
+    'ibhagwan/fzf-lua',
+    cmd = { 'FzfLua' },
     keys = {
-      { 'ge', '<cmd>Telescope find_files<cr>', desc = 'Find files' },
-      { '<leader>fg', '<cmd>Telescope live_grep<cr>', desc = 'Live grep' },
-      { '<leader>fb', '<cmd>Telescope buffers<cr>', desc = 'Buffers' },
+      { 'ge', '<cmd>FzfLua files<cr>', desc = 'Find files' },
+      { '<leader>fg', '<cmd>FzfLua live_grep<cr>', desc = 'Live grep' },
+      { '<leader>fb', '<cmd>FzfLua buffers<cr>', desc = 'Buffers' },
     },
-    dependencies = {
-      { 'nvim-lua/plenary.nvim', },
-      { 'tsakirist/telescope-lazy.nvim', },
-      { 'nvim-telescope/telescope-file-browser.nvim', },
-    },
-    config = function()
-      require("plugins.telescope")
-    end
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {},
   },
 
   -- Markdown
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    ft = { "markdown", "Avante" },
+    ft = { "markdown" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons"
     },
-    config = function()
-      require('render-markdown').setup ({
-        file_types = { "Avante" },
-      })
-    end
+    opts = {},
   },
 
   -- LSP
   { -- Mason
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     cmd = { 'Mason', 'MasonInstall', 'MasonUpdate' },
+    opts = {},
   },
 
   { --Mason-lspconfig
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      {
-        'williamboman/mason.nvim',
-        config = function()
-          require('mason').setup()
-        end
-      },
+      { 'mason-org/mason.nvim', opts = {} },
       { 'neovim/nvim-lspconfig', },
+      { 'saghen/blink.cmp', },
     },
     config = function()
       require("plugins.mason-lspconfig")
     end,
   },
-
-  -- { -- mason-null-ls
-  --   "jay-babu/mason-null-ls.nvim",
-  --   dependencies = {
-  --     "nvimtools/none-ls.nvim",
-  --   },
-  --   config = function()
-  --     local null_ls = require("null-ls")
-  --     null_ls.setup({
-  --         sources = {
-  --             null_ls.builtins.diagnostics.textlint.with({
-  --               filetypes = { "markdown", "tex" }
-  --             })
-  --         },
-  --     })
-  --   end,
-  -- },
 
   {
     "rust-lang/rust.vim",
@@ -166,11 +125,12 @@ return {
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "vim-denops/denops.vim",
-      "rinx/cmp-skkeleton"
     },
     config = function()
+      -- Fetched by bin/install.sh; skip it when absent so skkeleton still loads
+      local dict = vim.fn.expand('~/.local/share/skk/SKK-JISYO.L')
       vim.fn["skkeleton#config"]({
-        globalDictionaries = { '~/dotfiles/skk/SKK-JISYO.L' },
+        globalDictionaries = vim.fn.filereadable(dict) == 1 and { dict } or {},
         eggLikeNewline = true,
         keepState = true,
         sources = { "google_japanese_input" }
@@ -193,36 +153,64 @@ return {
     opts = {}
   },
 
-  { -- nvim-cmp
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+  { -- Completion
+    "saghen/blink.cmp",
+    version = '1.*',
     dependencies = {
-      { "hrsh7th/cmp-nvim-lsp", },
-      { "onsails/lspkind.nvim", },
-      { "hrsh7th/cmp-nvim-lsp-signature-help", },
-      { "hrsh7th/cmp-nvim-lsp-document-symbol", },
-      { "hrsh7th/cmp-path", },
-      { "ray-x/cmp-treesitter", },
+      { 'L3MON4D3/LuaSnip', },
+      -- Bridges the nvim-cmp source for skkeleton, which has no native port
+      { 'saghen/blink.compat', version = '2.*', lazy = true, opts = {} },
+      { 'rinx/cmp-skkeleton', },
     },
-    config = function()
-      require("plugins.nvim-cmp")
-    end
+    opts = {
+      keymap = {
+        preset = 'none',
+        ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<C-n>'] = { 'select_next', 'fallback' },
+        ['<C-l>'] = { 'show', 'fallback' },
+        ['<C-e>'] = { 'hide', 'fallback' },
+        ['<CR>'] = { 'accept', 'fallback' },
+        ['<C-f>'] = { 'snippet_forward', 'fallback' },
+        ['<C-k>'] = { 'snippet_forward', 'fallback' },
+        ['<C-b>'] = { 'snippet_backward', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      },
+      snippets = { preset = 'luasnip' },
+      appearance = { nerd_font_variant = 'mono' },
+      completion = {
+        ghost_text = { enabled = true },
+        -- Match the previous cmp behaviour: Enter only confirms an explicit pick
+        list = { selection = { preselect = false } },
+        documentation = { auto_show = true },
+      },
+      signature = { enabled = true },
+      sources = {
+        default = { 'skkeleton', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          skkeleton = {
+            name = 'skkeleton',
+            module = 'blink.compat.source',
+            score_offset = 100,
+          },
+        },
+      },
+    },
+    opts_extend = { 'sources.default' },
   },
 
   { -- Snippet
     "L3MON4D3/LuaSnip",
     event = "InsertEnter",
     dependencies = {
-      { 'saadparwaiz1/cmp_luasnip', },
-      {
-        'rafamadriz/friendly-snippets',
-        config = function()
-          require("luasnip/loaders/from_vscode").lazy_load()
-        end
-      },
+      { 'rafamadriz/friendly-snippets', },
     },
     config = function()
-      require("luasnip.loaders.from_vscode").lazy_load({ paths = {"./snippets"} })
+      require("luasnip.loaders.from_vscode").lazy_load()
+      -- Relative paths resolve against cwd, so anchor to the config dir
+      require("luasnip.loaders.from_vscode").lazy_load({
+        paths = { vim.fn.stdpath("config") .. "/snippets" },
+      })
     end
   },
 
@@ -231,8 +219,14 @@ return {
     ft = { "tex", "latex" },
     init = function()
       if vim.fn.has("mac") == 1 then
-        -- vim.g.vimtex_view_method = "skim"
-        vim.g.vimtex_view_method = "zathura"
+        -- macOS: use Skim as the PDF viewer
+        vim.g.vimtex_view_method = "skim"
+        -- forward search (jump to cursor position) after successful compilation
+        vim.g.vimtex_view_skim_sync = 1
+        -- bring Skim to the foreground and give it focus after forward search
+        vim.g.vimtex_view_skim_activate = 1
+        -- highlight the current line in the PDF
+        vim.g.vimtex_view_skim_reading_bar = 1
       else
         vim.g.vimtex_view_method = "zathura"
       end
@@ -246,7 +240,6 @@ return {
       require("copilot").setup({
         suggestion = { enabled = false },
         panel = { enabled = false },
-        copilot_node_command = 'node'
       })
     end
   },

@@ -29,14 +29,14 @@ dotfiles_logo='
 
 backup () {
 	# Backup home directory dotfiles.
-	cd "${DOT_DIRECTORY}" || exit
+	cd "${DOT_DIRECTORY}/${DOT_HOME_DIRECTORY}" || exit
 	if [ -e "${HOME}/dotfiles-backup" ]; then
     notice "dotfiles-backup is already exist. Do you want to overwrite? [Y/n]:"
 		read -r answer
 		case $answer in
 			"" | [Yy]* )
-				rm -rf "${HOME}/dotfiles-backup/*"
-				mkdir "${HOME}/dotfiles-backup/*"
+				rm -rf "${HOME:?}/dotfiles-backup"
+				mkdir -p "${HOME}/dotfiles-backup"
         info "Rewrite ${HOME}/dotfiles-backup."
 				;;
 			* )
@@ -54,8 +54,7 @@ backup () {
 		[ "$f" = ".git" ] && continue
 		[ "$f" = "bin" ] && continue
 		if [ -e "${HOME}/$f" ]; then
-			sudo cp -r "${HOME}/$f" "${HOME}/dotfiles-backup/" 
-			if [ ! $? == 0 ]; then
+			if ! cp -r "${HOME}/$f" "${HOME}/dotfiles-backup/"; then
         err "Backup aborted!"
 				exit 1
 			fi
@@ -71,7 +70,7 @@ download () {
   else
     info "Downloading dotfiles..."
     
-    if [ -x "$(which git)" ]; then
+    if command -v git >/dev/null 2>&1; then
       git clone "$DOT_URL" "$DOT_DIRECTORY"
       info "Download dotfiles completed."
     else
@@ -91,43 +90,28 @@ deploy () {
         [ "$f" = "bin" ] && continue
         [ "$f" = ".config" ] && continue
         [ "$f" = "host" ] && continue
-        [ "$f" = ".alacritty-font-darwin.toml" ] && continue
-        [ "$f" = ".alacritty-font-linux.toml" ] && continue
         [ "$f" = ".claude" ] && continue
 
         ln -snfv "${DOT_DIRECTORY}"/${DOT_HOME_DIRECTORY}/"${f}" "${HOME}"/"${f}"
     done
-
-    # Deploy platform-specific alacritty font config.
-    case "$(uname)" in
-        Darwin*)
-            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOME_DIRECTORY}/.alacritty-font-darwin.toml "${HOME}"/.alacritty-font.toml
-            ;;
-        Linux*)
-            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOME_DIRECTORY}/.alacritty-font-linux.toml "${HOME}"/.alacritty-font.toml
-            ;;
-    esac
     info "Deploy home directory dotfiles complete."
 
     # Deploy .config directory dotfiles.
+    mkdir -p "${HOME}/.${DOT_CONFIG_DIRECTORY}"
     cd "${DOT_DIRECTORY}/${DOT_CONFIG_DIRECTORY}" || exit
-    for file in $(\find . -maxdepth 1 -type d | sed '1d'); do
-        # make .config directory if not exists.
-        [ "$file" = ".config" ] && continue
-
-        if [ ! -e "${HOME}/.${DOT_CONFIG_DIRECTORY}" ]; then
-            mkdir "${HOME}/.${DOT_CONFIG_DIRECTORY}"
-        fi
-
-        ln -snfv "${DOT_DIRECTORY}"/${DOT_CONFIG_DIRECTORY}/"${file:2}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${file:2}"
+    for dir in */; do
+        dir="${dir%/}"
+        [ -e "$dir" ] || continue
+        ln -snfv "${DOT_DIRECTORY}"/${DOT_CONFIG_DIRECTORY}/"${dir}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${dir}"
     done
     info "Deploy .config dotfiles complete."
 
     if [ -d "${DOT_DIRECTORY}"/${DOT_HOST_DIRECTORY}/"$(hostname -s)" ]; then
     warn "hostname == $(hostname -s), Install depended dotfiles."
         cd "${DOT_DIRECTORY}"/${DOT_HOST_DIRECTORY}/"$(hostname -s)" || exit
-        for file in $(\find . -maxdepth 1 | sed '1d'); do
-            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOST_DIRECTORY}/"$(hostname -s)"/"${file:2}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${file:2}"
+        for entry in * .??*; do
+            [ -e "$entry" ] || continue
+            ln -snfv "${DOT_DIRECTORY}"/${DOT_HOST_DIRECTORY}/"$(hostname -s)"/"${entry}" "${HOME}"/.${DOT_CONFIG_HOST_DIRECTORY}/"${entry}"
         done
     fi
     info "Deploy .config depended dotfiles complete."
@@ -177,16 +161,40 @@ init () {
 	esac
 }
 
-install () {
-  if [ "$(uname)" == 'Darwin' ]; then
-    echo "Your platform: MacOS"
-    "${SCRIPT_DIR}"/homebrew_install.sh
-  elif [ "$(expr substr "$(uname -s)" 1 5)" == 'Linux' ]; then
-    echo "Your platform: Linux"
-    "${SCRIPT_DIR}"/arch_install.sh
-  else
-    echo "Your platform ($(uname -a)) is not supported. Skipping..."
+install_skk_dict () {
+  # skkeleton needs a plain SKK dictionary; it is not packaged by Homebrew
+  SKK_DICT="${HOME}/.local/share/skk/SKK-JISYO.L"
+  if [ -f "${SKK_DICT}" ]; then
+    info "SKK dictionary already exists at ${SKK_DICT}. Skipping."
+    return
   fi
+
+  info "Downloading SKK-JISYO.L..."
+  mkdir -p "$(dirname "${SKK_DICT}")"
+  if curl -fsSL https://skk-dev.github.io/dict/SKK-JISYO.L.gz | gunzip > "${SKK_DICT}"; then
+    info "SKK dictionary installed: ${SKK_DICT}"
+  else
+    rm -f "${SKK_DICT}"
+    warn "Failed to download SKK-JISYO.L. Skipping."
+  fi
+}
+
+install () {
+  install_skk_dict
+
+  case "$(uname -s)" in
+    Darwin*)
+      echo "Your platform: MacOS"
+      "${SCRIPT_DIR}"/homebrew_install.sh
+      ;;
+    Linux*)
+      echo "Your platform: Linux"
+      "${SCRIPT_DIR}"/arch_install.sh
+      ;;
+    *)
+      echo "Your platform ($(uname -a)) is not supported. Skipping..."
+      ;;
+  esac
 }
 		
 update () {
