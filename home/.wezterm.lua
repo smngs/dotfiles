@@ -15,6 +15,8 @@ config.window_padding = {
   bottom = 0,
 }
 config.window_close_confirmation = "NeverPrompt"
+config.front_end = "WebGpu"
+config.freetype_load_flags = "NO_HINTING"
 config.initial_cols = 160
 config.initial_rows = 48
 
