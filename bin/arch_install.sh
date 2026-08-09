@@ -38,7 +38,10 @@ fi
 # with it the Enter key). The upstream build bundles its own SQLite.
 if [ ! -x "${HOME}/.deno/bin/deno" ]; then
     echo "installing the official deno build..."
-    DENO_INSTALL="${HOME}/.deno" sh -c "$(curl -fsSL https://deno.land/install.sh)" -- -y
+    # --no-modify-path: the installer otherwise appends a `. ~/.deno/env` line
+    # to .zshrc, which is a tracked file in this repository. PATH is handled
+    # in .zshrc.lazy instead.
+    DENO_INSTALL="${HOME}/.deno" sh -c "$(curl -fsSL https://deno.land/install.sh)" -- -y --no-modify-path
 fi
 
 if pacman -Qq deno >/dev/null 2>&1; then
