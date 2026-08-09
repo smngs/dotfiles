@@ -95,6 +95,20 @@ function do_enter() {
 }
 
 zle -N do_enter
+
+# ----------------- zeno -----------------
+
+# sheldon sources zeno before this file, so its widgets already exist
+if (( ${+widgets[zeno-auto-snippet]} )); then
+    bindkey ' '    zeno-auto-snippet
+    bindkey '^I'   zeno-completion
+    bindkey '^P'   zeno-completion
+    bindkey '^r'   zeno-history-selection
+    bindkey '^x^s' zeno-insert-snippet
+    bindkey '^x^f' zeno-ghq-cd
+fi
+
+# Bound last: do_enter hands off to zeno itself
 bindkey '^m' do_enter
 
 # ----------------- Rust -----------------
@@ -103,13 +117,8 @@ bindkey '^m' do_enter
 
 # ----------------- fzf -----------------
 
-# ZENO_* are set in .zinitrc when the plugin loads
+# ZENO_* are exported in .zshrc, before sheldon sources the plugin
 export FZF_DEFAULT_OPTS="--height 30% --layout=reverse --border --ansi --margin 1,3"
-
-# ----------------- plugins -----------------
-## -> .zinitrc
-
-source ~/.zinitrc
 
 # ----------------- autoloads -----------------
 

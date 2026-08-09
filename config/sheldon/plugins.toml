@@ -1,0 +1,31 @@
+shell = "zsh"
+
+[templates]
+defer = """{% for file in files %}zsh-defer source "{{ file }}"
+{% endfor %}"""
+
+# zsh-defer must be sourced eagerly: everything below defers through it
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+
+# pure.zsh depends on async.zsh, which the default match would skip
+[plugins.pure]
+github = "sindresorhus/pure"
+use = ["async.zsh", "pure.zsh"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+apply = ["defer"]
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+dir = "src"
+apply = ["fpath"]
+
+[plugins.fast-syntax-highlighting]
+github = "zdharma-continuum/fast-syntax-highlighting"
+apply = ["defer"]
+
+[plugins.zeno]
+github = "yuki-yano/zeno.zsh"
+apply = ["defer"]

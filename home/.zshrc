@@ -12,18 +12,10 @@ export LANG=ja_JP.UTF-8
 # TERM is left to the terminal emulator; overriding it here breaks
 # truecolor / undercurl detection inside zellij and nvim.
 
-# ----------------- setup zinit --------------------
+# ----------------- PATH --------------------
 
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
-
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+# Only what is needed to find sheldon; the full PATH is built in .zshrc.lazy
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:$PATH"
 
 # ----------------- setopt --------------------
 
@@ -39,19 +31,33 @@ HISTFILE=$HOME/.zsh-history
 HISTSIZE=1000000
 SAVEHIST=1000000
 
-# ----------------- theme --------------------
-
-zinit light-mode for \
-    zsh-users/zsh-autosuggestions \
-    sindresorhus/pure \
-    romkatv/zsh-defer
-
 # ----------------- completion --------------------
 
 # fpath must be complete before compinit, which runs in .zshrc.lazy
 fpath+=~/.zfunc
 zstyle ':completion:*' menu select
 
+# ----------------- plugins --------------------
+
+# zeno reads these while sheldon sources it below
+export ZENO_HOME="$HOME/.config/zeno"
+export ZENO_ENABLE_SOCK=1
+export ZENO_DISABLE_EXECUTE_CACHE_COMMAND=1
+export ZENO_DISABLE_BUILTIN_COMPLETION=1
+export ZENO_GIT_CAT="bat --color=always"
+export ZENO_GIT_TREE="eza --tree"
+
+if (( ${+commands[sheldon]} )); then
+    eval "$(sheldon source)"
+else
+    print -P "%F{160}sheldon is not installed. Run 'make install' or 'brew install sheldon'.%f"
+fi
+
 ## -> .zshrc.lazy (lazy-loading)
 
-zsh-defer source $HOME/.zshrc.lazy
+# Queued after the plugins above, so zeno's widgets exist by the time it runs
+if (( ${+functions[zsh-defer]} )); then
+    zsh-defer source $HOME/.zshrc.lazy
+else
+    source $HOME/.zshrc.lazy
+fi

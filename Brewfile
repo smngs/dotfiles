@@ -83,6 +83,8 @@ brew "rust"
 brew "rustup"
 # Used as a compiler wrapper and avoids compilation when possible
 brew "sccache"
+# Fast, configurable, shell plugin manager
+brew "sheldon"
 # Add a public key to a remote machine's authorized_keys file
 brew "ssh-copy-id"
 # Text interface for Git repositories
