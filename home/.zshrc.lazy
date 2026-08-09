@@ -15,6 +15,14 @@ case ${OSTYPE} in
         unset _gnubin
         ;;
     linux*)
+        # Official deno build. Arch links its package against the system
+        # libsqlite3, which then collides with the copy @db/sqlite dlopens
+        # over FFI and segfaults; the upstream binary bundles its own.
+        [[ -d "$HOME/.deno/bin" ]] && export PATH="$HOME/.deno/bin:$PATH"
+
+        # OSS CAD Suite (yosys / nextpnr / openFPGALoader / gowin_pack).
+        # Appended, not prepended, so the system python keeps priority.
+        [[ -d "$HOME/oss-cad-suite/bin" ]] && export PATH="$PATH:$HOME/oss-cad-suite/bin"
         ;;
 esac
 
@@ -70,11 +78,12 @@ alias ..5='\cd ../../../../..'
 function do_enter() {
     if [[ -n "$BUFFER" ]]; then
         # Delegate to zeno so snippet expansion still happens on Enter
+        # zeno's socket server can fail to start (deno, XDG_RUNTIME_DIR), and
+        # a dead Enter key is far worse than losing snippet expansion.
         if (( ${+widgets[zeno-auto-snippet-and-accept-line]} )); then
-            zle zeno-auto-snippet-and-accept-line
-        else
-            zle accept-line
+            zle zeno-auto-snippet-and-accept-line && return 0
         fi
+        zle accept-line
         return 0
     fi
     echo

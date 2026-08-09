@@ -15,8 +15,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term "WINIT_UNIX_BACKEND=x11 vblank_mode=1 alacritty"
-# set $term alacritty
+set $term "WINIT_UNIX_BACKEND=x11 vblank_mode=1 wezterm"
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.

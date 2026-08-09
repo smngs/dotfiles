@@ -1,0 +1,3 @@
+# polaris keeps the claude config as a nested repository here; macOS clones it
+# to ~/.claude instead. Either way dotfiles should not track it.
+home/.claude/

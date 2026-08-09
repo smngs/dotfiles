@@ -47,8 +47,12 @@ export ZENO_DISABLE_BUILTIN_COMPLETION=1
 export ZENO_GIT_CAT="bat --color=always"
 export ZENO_GIT_TREE="eza --tree"
 
-if (( ${+commands[sheldon]} )); then
+# Check for the config too: sheldon aborts when ~/.config/sheldon is missing,
+# which happens on a machine that has the binary but has not run `make deploy`.
+if (( ${+commands[sheldon]} )) && [[ -f ${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml ]]; then
     eval "$(sheldon source)"
+elif (( ${+commands[sheldon]} )); then
+    print -P "%F{160}sheldon has no config; run 'make deploy'.%f"
 else
     print -P "%F{160}sheldon is not installed. Run 'make install' or 'brew install sheldon'.%f"
 fi
