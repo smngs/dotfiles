@@ -9,13 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install shellcheck
-        run: sudo apt-get install -y shellcheck
+      - uses: actions/checkout@v5
 
       - name: Check bin/install.sh
-        run: shellcheck -e SC1091,SC2181,SC2308 bin/install.sh
+        run: shellcheck -e SC1091 bin/install.sh
 
       - name: Check bin/homebrew_install.sh
         run: shellcheck bin/homebrew_install.sh
