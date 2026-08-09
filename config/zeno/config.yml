@@ -74,9 +74,9 @@ snippets:
     keyword: c
     snippet: clear
 
-  - name: ranger 
+  - name: yazi
     keyword: r
-    snippet: ranger 
+    snippet: yazi
 
   # date
   - name: yyyymmdd
@@ -138,7 +138,7 @@ completions:
     sourceCommand: fd --color=always --hidden --type=d -E '.git/*'
     options:
       <<: *default-options
-      --preview: exa -T {}
+      --preview: eza -T {}
     callback: sed -E 's/ /\\ /g; s,/?$,/,'
 
   # simple sourceCommand, no callback
