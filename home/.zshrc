@@ -2,15 +2,15 @@
 #    _______| |__  _ __ ___
 #   |_  / __| '_ \| '__/ __|
 #  _ / /\__ \ | | | | | (__
-# (_)___|___/_| |_|_|  \___|
+# (_)___|___/_| |_|_|_|\___|
 
-# ----------------- PATH --------------------
+# ----------------- locale --------------------
 
-# TBD
+# LANG only. LC_ALL would force every LC_* category, including collation.
 export LANG=ja_JP.UTF-8
-export LC_ALL=ja_JP.UTF-8
-export TERM=xterm-256color
-# EDITOR は .zshrc.lazy で設定
+
+# TERM is left to the terminal emulator; overriding it here breaks
+# truecolor / undercurl detection inside zellij and nvim.
 
 # ----------------- setup zinit --------------------
 
@@ -46,29 +46,12 @@ zinit light-mode for \
     sindresorhus/pure \
     romkatv/zsh-defer
 
-## -> .zshrc-lazy (lazy-loading)
+# ----------------- completion --------------------
 
-zsh-defer source $HOME/.zshrc.lazy
-
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
-
+# fpath must be complete before compinit, which runs in .zshrc.lazy
+fpath+=~/.zfunc
 zstyle ':completion:*' menu select
 
-# ----------------- aliases --------------------
+## -> .zshrc.lazy (lazy-loading)
 
-alias diff='delta'
-
-# Claude Code
-export CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=75
-
-# bun completions
-[ -s "/Users/smngs/.bun/_bun" ] && source "/Users/smngs/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/smngs/.lmstudio/bin"
-# End of LM Studio CLI section
-
+zsh-defer source $HOME/.zshrc.lazy
