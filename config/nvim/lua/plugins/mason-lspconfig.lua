@@ -1,7 +1,4 @@
-local mason_lspconfig = require("mason-lspconfig");
-local lspconfig = require("lspconfig")
-
-require('mason-lspconfig').setup({
+require("mason-lspconfig").setup({
   ensure_installed = {
     'clangd',
     'denols',
@@ -11,21 +8,12 @@ require('mason-lspconfig').setup({
     'pyright',
     'rust_analyzer',
   },
-  automatic_installation = true
 })
 
--- local pio_driver = vim.fn.expand("~/.platformio/packages/**/bin/*")
--- 
--- vim.lsp.config("clangd", {
---   cmd = {
---     "clangd",
---     "--background-index",
---     "--clang-tidy",
---     "--completion-style=detailed",
---     "--query-driver=" .. pio_driver,
---   },
--- })
-
+-- Advertise nvim-cmp capabilities to every server (nvim 0.11+)
+vim.lsp.config('*', {
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
 
 -- Display error/warnings as hover.
 vim.o.updatetime = 200

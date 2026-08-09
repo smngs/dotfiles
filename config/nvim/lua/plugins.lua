@@ -53,18 +53,6 @@ return {
     },
   },
 
-  -- { -- Bar (Buffer)
-  --   'romgrk/barbar.nvim',
-  --   dependencies = {
-  --     { 'lewis6991/gitsigns.nvim', },
-  --     { 'nvim-tree/nvim-web-devicons', },
-  --   },
-  --   config = function()
-  --     vim.api.nvim_set_keymap('n', '<C-j>', '<Cmd>BufferPrevious<CR>', { noremap = true, silent = true })
-  --     vim.api.nvim_set_keymap('n', '<C-k>', '<Cmd>BufferNext<CR>', { noremap = true, silent = true })
-  --   end
-  -- },
-
   { -- fuzzy finder (telescope)
     'nvim-telescope/telescope.nvim',
     cmd = { 'Telescope' },
@@ -86,57 +74,33 @@ return {
   -- Markdown
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    ft = { "markdown", "Avante" },
+    ft = { "markdown" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons"
     },
-    config = function()
-      require('render-markdown').setup ({
-        file_types = { "Avante" },
-      })
-    end
+    opts = {},
   },
 
   -- LSP
   { -- Mason
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     cmd = { 'Mason', 'MasonInstall', 'MasonUpdate' },
+    opts = {},
   },
 
   { --Mason-lspconfig
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      {
-        'williamboman/mason.nvim',
-        config = function()
-          require('mason').setup()
-        end
-      },
+      { 'mason-org/mason.nvim', opts = {} },
       { 'neovim/nvim-lspconfig', },
+      { 'hrsh7th/cmp-nvim-lsp', },
     },
     config = function()
       require("plugins.mason-lspconfig")
     end,
   },
-
-  -- { -- mason-null-ls
-  --   "jay-babu/mason-null-ls.nvim",
-  --   dependencies = {
-  --     "nvimtools/none-ls.nvim",
-  --   },
-  --   config = function()
-  --     local null_ls = require("null-ls")
-  --     null_ls.setup({
-  --         sources = {
-  --             null_ls.builtins.diagnostics.textlint.with({
-  --               filetypes = { "markdown", "tex" }
-  --             })
-  --         },
-  --     })
-  --   end,
-  -- },
 
   {
     "rust-lang/rust.vim",
@@ -169,8 +133,10 @@ return {
       "rinx/cmp-skkeleton"
     },
     config = function()
+      -- Fetched by bin/install.sh; skip it when absent so skkeleton still loads
+      local dict = vim.fn.expand('~/.local/share/skk/SKK-JISYO.L')
       vim.fn["skkeleton#config"]({
-        globalDictionaries = { '~/dotfiles/skk/SKK-JISYO.L' },
+        globalDictionaries = vim.fn.filereadable(dict) == 1 and { dict } or {},
         eggLikeNewline = true,
         keepState = true,
         sources = { "google_japanese_input" }
@@ -214,15 +180,14 @@ return {
     event = "InsertEnter",
     dependencies = {
       { 'saadparwaiz1/cmp_luasnip', },
-      {
-        'rafamadriz/friendly-snippets',
-        config = function()
-          require("luasnip/loaders/from_vscode").lazy_load()
-        end
-      },
+      { 'rafamadriz/friendly-snippets', },
     },
     config = function()
-      require("luasnip.loaders.from_vscode").lazy_load({ paths = {"./snippets"} })
+      require("luasnip.loaders.from_vscode").lazy_load()
+      -- Relative paths resolve against cwd, so anchor to the config dir
+      require("luasnip.loaders.from_vscode").lazy_load({
+        paths = { vim.fn.stdpath("config") .. "/snippets" },
+      })
     end
   },
 
@@ -231,8 +196,14 @@ return {
     ft = { "tex", "latex" },
     init = function()
       if vim.fn.has("mac") == 1 then
-        -- vim.g.vimtex_view_method = "skim"
-        vim.g.vimtex_view_method = "zathura"
+        -- macOS: use Skim as the PDF viewer
+        vim.g.vimtex_view_method = "skim"
+        -- forward search (jump to cursor position) after successful compilation
+        vim.g.vimtex_view_skim_sync = 1
+        -- bring Skim to the foreground and give it focus after forward search
+        vim.g.vimtex_view_skim_activate = 1
+        -- highlight the current line in the PDF
+        vim.g.vimtex_view_skim_reading_bar = 1
       else
         vim.g.vimtex_view_method = "zathura"
       end
@@ -246,7 +217,6 @@ return {
       require("copilot").setup({
         suggestion = { enabled = false },
         panel = { enabled = false },
-        copilot_node_command = 'node'
       })
     end
   },
