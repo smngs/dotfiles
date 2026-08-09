@@ -69,10 +69,14 @@ brew "opensc"
 brew "platformio"
 # Object-relational database system
 brew "postgresql@18", link: true
+# Passphrase entry dialog for GnuPG (used by rbw)
+brew "pinentry-mac"
 # Modern replacement for ps written in Rust
 brew "procs"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Unofficial Bitwarden CLI with a built-in SSH agent
+brew "rbw"
 # Python library for creating static, animated, and interactive visualizations
 brew "python-matplotlib"
 # Interpreted, interactive, object-oriented programming language

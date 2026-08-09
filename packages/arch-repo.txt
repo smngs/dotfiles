@@ -74,6 +74,7 @@ openrgb
 opensc
 openssh
 pavucontrol
+pinentry
 pipewire
 pipewire-alsa
 pipewire-pulse
@@ -94,6 +95,7 @@ python-scipy
 python-typer
 qemu-system-riscv
 qt5-wayland
+rbw
 ripgrep
 riscv64-elf-gcc
 sbt
