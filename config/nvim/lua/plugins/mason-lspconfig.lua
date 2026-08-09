@@ -10,9 +10,9 @@ require("mason-lspconfig").setup({
   },
 })
 
--- Advertise nvim-cmp capabilities to every server (nvim 0.11+)
+-- Advertise blink.cmp capabilities to every server (nvim 0.11+)
 vim.lsp.config('*', {
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+  capabilities = require('blink.cmp').get_lsp_capabilities(),
 })
 
 -- Display error/warnings as hover.

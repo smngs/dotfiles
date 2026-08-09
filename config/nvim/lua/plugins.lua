@@ -5,11 +5,12 @@ return {
   },
 
   { -- colorscheme
-    'cocopon/iceberg.vim',
+    'oahlen/iceberg.nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd([[colorscheme iceberg]])
+      vim.o.background = 'dark'
+      vim.cmd.colorscheme('iceberg')
     end
   },
 
@@ -53,22 +54,16 @@ return {
     },
   },
 
-  { -- fuzzy finder (telescope)
-    'nvim-telescope/telescope.nvim',
-    cmd = { 'Telescope' },
+  { -- fuzzy finder
+    'ibhagwan/fzf-lua',
+    cmd = { 'FzfLua' },
     keys = {
-      { 'ge', '<cmd>Telescope find_files<cr>', desc = 'Find files' },
-      { '<leader>fg', '<cmd>Telescope live_grep<cr>', desc = 'Live grep' },
-      { '<leader>fb', '<cmd>Telescope buffers<cr>', desc = 'Buffers' },
+      { 'ge', '<cmd>FzfLua files<cr>', desc = 'Find files' },
+      { '<leader>fg', '<cmd>FzfLua live_grep<cr>', desc = 'Live grep' },
+      { '<leader>fb', '<cmd>FzfLua buffers<cr>', desc = 'Buffers' },
     },
-    dependencies = {
-      { 'nvim-lua/plenary.nvim', },
-      { 'tsakirist/telescope-lazy.nvim', },
-      { 'nvim-telescope/telescope-file-browser.nvim', },
-    },
-    config = function()
-      require("plugins.telescope")
-    end
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {},
   },
 
   -- Markdown
@@ -95,7 +90,7 @@ return {
     dependencies = {
       { 'mason-org/mason.nvim', opts = {} },
       { 'neovim/nvim-lspconfig', },
-      { 'hrsh7th/cmp-nvim-lsp', },
+      { 'saghen/blink.cmp', },
     },
     config = function()
       require("plugins.mason-lspconfig")
@@ -130,7 +125,6 @@ return {
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "vim-denops/denops.vim",
-      "rinx/cmp-skkeleton"
     },
     config = function()
       -- Fetched by bin/install.sh; skip it when absent so skkeleton still loads
@@ -159,27 +153,56 @@ return {
     opts = {}
   },
 
-  { -- nvim-cmp
-    "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+  { -- Completion
+    "saghen/blink.cmp",
+    version = '1.*',
     dependencies = {
-      { "hrsh7th/cmp-nvim-lsp", },
-      { "onsails/lspkind.nvim", },
-      { "hrsh7th/cmp-nvim-lsp-signature-help", },
-      { "hrsh7th/cmp-nvim-lsp-document-symbol", },
-      { "hrsh7th/cmp-path", },
-      { "ray-x/cmp-treesitter", },
+      { 'L3MON4D3/LuaSnip', },
+      -- Bridges the nvim-cmp source for skkeleton, which has no native port
+      { 'saghen/blink.compat', version = '2.*', lazy = true, opts = {} },
+      { 'rinx/cmp-skkeleton', },
     },
-    config = function()
-      require("plugins.nvim-cmp")
-    end
+    opts = {
+      keymap = {
+        preset = 'none',
+        ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<C-n>'] = { 'select_next', 'fallback' },
+        ['<C-l>'] = { 'show', 'fallback' },
+        ['<C-e>'] = { 'hide', 'fallback' },
+        ['<CR>'] = { 'accept', 'fallback' },
+        ['<C-f>'] = { 'snippet_forward', 'fallback' },
+        ['<C-k>'] = { 'snippet_forward', 'fallback' },
+        ['<C-b>'] = { 'snippet_backward', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      },
+      snippets = { preset = 'luasnip' },
+      appearance = { nerd_font_variant = 'mono' },
+      completion = {
+        ghost_text = { enabled = true },
+        -- Match the previous cmp behaviour: Enter only confirms an explicit pick
+        list = { selection = { preselect = false } },
+        documentation = { auto_show = true },
+      },
+      signature = { enabled = true },
+      sources = {
+        default = { 'skkeleton', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          skkeleton = {
+            name = 'skkeleton',
+            module = 'blink.compat.source',
+            score_offset = 100,
+          },
+        },
+      },
+    },
+    opts_extend = { 'sources.default' },
   },
 
   { -- Snippet
     "L3MON4D3/LuaSnip",
     event = "InsertEnter",
     dependencies = {
-      { 'saadparwaiz1/cmp_luasnip', },
       { 'rafamadriz/friendly-snippets', },
     },
     config = function()
